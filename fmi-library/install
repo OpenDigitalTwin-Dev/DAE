@@ -1,3 +1,5 @@
+sudo apt install cmake make gcc g++
+
 mkdir build
 cd build
 cmake .. -DCMAKE_INSTALL_PREFIX=$PWD/../../install/fmi_library_install
