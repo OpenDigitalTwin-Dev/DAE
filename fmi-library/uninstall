@@ -1,0 +1,2 @@
+rm -rf build
+rm -rf ../install/fmi_library_install
