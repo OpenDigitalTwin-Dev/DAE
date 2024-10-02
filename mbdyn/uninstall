@@ -1,0 +1,6 @@
+make clean
+rm -rf manual
+rm -rf tests
+rm configure
+rm -rf autom4te.cache
+rm -rf ../install/mbdyn_install/
