@@ -1,4 +1,7 @@
-sudo apt -y install gcc g++ make cmake p7zip-full
+sudo apt update
+sudo apt -y install make gcc g++ gfortran p7zip-full
+sudo apt -y install libltdl-dev liblapack-dev libsuitesparse-dev libnetcdf-dev libnetcdf-c++4-dev
+sudo apt -y install autoconf automake libtool autotools-dev
 
 7za x manual.7z -o/$PWD/
 7za x tests.7z -o/$PWD/
