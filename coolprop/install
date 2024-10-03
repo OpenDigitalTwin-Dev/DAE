@@ -1,0 +1,7 @@
+sudo apt -y install gcc g++ cmake make libmsgpack-dev libeigen3-dev
+
+mkdir build
+cd build
+cmake .. -DCOOLPROP_INSTALL_PREFIX=$PWD/../../install/coolprop_install -DCOOLPROP_SHARED_LIBRARY=ON
+make -j4
+make install
