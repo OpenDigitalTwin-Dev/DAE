@@ -1,0 +1,7 @@
+sudo apt -y install gcc g++ cmake make
+
+mkdir build
+cd build
+cmake ..
+make
+make install
