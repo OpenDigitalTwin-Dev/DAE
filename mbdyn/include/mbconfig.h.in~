@@ -1,0 +1,841 @@
+/* include/mbconfig.h.in.  Generated from configure.ac by autoheader.  */
+
+
+/*
+ * MBDyn (C) is a multibody analysis code.
+ * http://www.mbdyn.org
+ *
+ * Copyright (C) 1996-2023
+ *
+ * Pierangelo Masarati  <pierangelo.masarati@polimi.it>
+ * Paolo Mantegazza     <paolo.mantegazza@polimi.it>
+ *
+ * Dipartimento di Ingegneria Aerospaziale - Politecnico di Milano
+ * via La Masa, 34 - 20156 Milano, Italy
+ * http://www.aero.polimi.it
+ *
+ * Changing this copyright notice is forbidden.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation (version 2 of the License).
+ *
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+
+/* define this to add debugging code */
+#undef DEBUG
+
+/* define this to add memory debugging code */
+#undef DEBUG_MEMMANAGER
+
+/* define this to add MPI debugging code */
+#undef DEBUG_MPI
+
+/* define if variable environ needs to be declared */
+#undef ENVIRON_NEEDS_DECLARATION
+
+/* define if variable environ needs _GNU_SOURCE and unistd.h */
+#undef ENVIRON_NEEDS_GNU_SOURCE_AND_UNISTD_H
+
+/* define if variable environ needs unistd.h */
+#undef ENVIRON_NEEDS_UNISTD_H
+
+/* Define to dummy `main' function (if any) required to link to the Fortran
+   libraries. */
+#undef FC_DUMMY_MAIN
+
+/* Define if F77 and FC dummy `main' functions are identical. */
+#undef FC_DUMMY_MAIN_EQ_F77
+
+/* define if aligned_alloc can be used */
+#undef HAVE_ALIGNED_ALLOC
+
+/* define if _aligned_malloc and _aligned_free can be used */
+#undef HAVE_ALIGNED_MALLOC
+
+/* define if alloca can be used */
+#undef HAVE_ALLOCA
+
+/* Define to 1 if you have the <alloca.h> header file. */
+#undef HAVE_ALLOCA_H
+
+/* Define to 1 if you have the <Amesos_BaseSolver.h> header file. */
+#undef HAVE_AMESOS_BASESOLVER_H
+
+/* Define to 1 if you have the <Amesos.h> header file. */
+#undef HAVE_AMESOS_H
+
+/* define to use ANN */
+#undef HAVE_ANN
+
+/* Define to 1 if you have the <ANN/ANN.h> header file. */
+#undef HAVE_ANN_ANN_H
+
+/* Define to 1 if you have the <ANN.h> header file. */
+#undef HAVE_ANN_H
+
+/* Define to 1 if you have the <arpa/inet.h> header file. */
+#undef HAVE_ARPA_INET_H
+
+/* Define to 1 if you have the `atoi' function. */
+#undef HAVE_ATOI
+
+/* Define to 1 if you have the `atol' function. */
+#undef HAVE_ATOL
+
+/* define to use HP's atomic_ops library */
+#undef HAVE_ATOMIC_OPS
+
+/* Define to 1 if you have the <atomic_ops.h> header file. */
+#undef HAVE_ATOMIC_OPS_H
+
+/* Define to 1 if you have the <AztecOO.h> header file. */
+#undef HAVE_AZTECOO_H
+
+/* define if BLAS are available */
+#undef HAVE_BLAS
+
+/* define if bool is defined */
+#undef HAVE_BOOL
+
+/* Define to 1 if you have the <boost/config.hpp> header file. */
+#undef HAVE_BOOST_CONFIG_HPP
+
+/* Define to 1 if you have the <boost/graph/adjacency_list.hpp> header file.
+   */
+#undef HAVE_BOOST_GRAPH_ADJACENCY_LIST_HPP
+
+/* Define to 1 if you have the <boost/graph/bandwidth.hpp> header file. */
+#undef HAVE_BOOST_GRAPH_BANDWIDTH_HPP
+
+/* Define to 1 if you have the <boost/graph/cuthill_mckee_ordering.hpp> header
+   file. */
+#undef HAVE_BOOST_GRAPH_CUTHILL_MCKEE_ORDERING_HPP
+
+/* Define to 1 if you have the <boost/graph/king_ordering.hpp> header file. */
+#undef HAVE_BOOST_GRAPH_KING_ORDERING_HPP
+
+/* Define to 1 if you have the <boost/graph/minimum_degree_ordering.hpp>
+   header file. */
+#undef HAVE_BOOST_GRAPH_MINIMUM_DEGREE_ORDERING_HPP
+
+/* Define to 1 if you have the <boost/graph/properties.hpp> header file. */
+#undef HAVE_BOOST_GRAPH_PROPERTIES_HPP
+
+/* Define to 1 if you have the <boost/graph/sloan_ordering.hpp> header file.
+   */
+#undef HAVE_BOOST_GRAPH_SLOAN_ORDERING_HPP
+
+/* Define to 1 if you have the <boost/graph/wavefront.hpp> header file. */
+#undef HAVE_BOOST_GRAPH_WAVEFRONT_HPP
+
+/* define if CBLAS are available */
+#undef HAVE_CBLAS
+
+/* define to build CHARM WP module */
+#undef HAVE_CHARM
+
+/* Define to 1 if you have the `chdir' function. */
+#undef HAVE_CHDIR
+
+/* define if clean_up_and_exit can be used */
+#undef HAVE_CLEAN_UP_AND_EXIT
+
+/* define if clock_gettime can be used */
+#undef HAVE_CLOCK_GETTIME
+
+/* Define to 1 if you have the `copysign' function. */
+#undef HAVE_COPYSIGN
+
+/* define if crypt(3) can be linked */
+#undef HAVE_CRYPT
+
+/* Define to 1 if you have the <cxxabi.h> header file. */
+#undef HAVE_CXXABI_H
+
+/* define to use LAPACK's dgecon in newton raphson solver */
+#undef HAVE_DGECON
+
+/* define to use LAPACK's dgegv in Eig */
+#undef HAVE_DGEGV
+
+/* define to use LAPACK's dgelsd function */
+#undef HAVE_DGELSD
+
+/* define to use LAPACK's dgesvd in GPC */
+#undef HAVE_DGESVD
+
+/* define to use LAPACK's dgetrf in newton raphson solver */
+#undef HAVE_DGETRF
+
+/* define to use LAPACK's dgetri function */
+#undef HAVE_DGETRI
+
+/* define to use LAPACK's dgetrs function */
+#undef HAVE_DGETRS
+
+/* define to use LAPACK's dggev in Eig */
+#undef HAVE_DGGEV
+
+/* define to use LAPACK's dlamch in dgeequ */
+#undef HAVE_DLAMCH
+
+/* define if do_octave_atexit can be used */
+#undef HAVE_DO_OCTAVE_ATEXIT
+
+/* Define to 1 if you have the <dsp_defs.h> header file. */
+#undef HAVE_DSP_DEFS_H
+
+/* define to use LAPACK's dsyev function */
+#undef HAVE_DSYEV
+
+/* define to use LAPACK's dtrtrs in SPQR */
+#undef HAVE_DTRTRS
+
+/* define if variable environ is declared */
+#undef HAVE_ENVIRON
+
+/* Define to 1 if you have the <Epetra_Comm.h> header file. */
+#undef HAVE_EPETRA_COMM_H
+
+/* Define to 1 if you have the <Epetra_CrsMatrix.h> header file. */
+#undef HAVE_EPETRA_CRSMATRIX_H
+
+/* Define to 1 if you have the <Epetra_Operator.h> header file. */
+#undef HAVE_EPETRA_OPERATOR_H
+
+/* Define to 1 if you have the <Epetra_SerialComm.h> header file. */
+#undef HAVE_EPETRA_SERIALCOMM_H
+
+/* Define to 1 if you have the <Epetra_Vector.h> header file. */
+#undef HAVE_EPETRA_VECTOR_H
+
+/* Define to 1 if you have the <exception> header file. */
+#undef HAVE_EXCEPTION
+
+/* define if a Fortran 77 compiler is available */
+#undef HAVE_FC_F77
+
+/* Define to 1 if you have the `feenableexcept' function. */
+#undef HAVE_FEENABLEEXCEPT
+
+/* Define to 1 if you have the <fenv.h> header file. */
+#undef HAVE_FENV_H
+
+/* Define to 1 if you have the `finite' function. */
+#undef HAVE_FINITE
+
+/* define if class ios has 'fmtflags' type */
+#undef HAVE_FMTFLAGS_IN_IOS
+
+/* Define to 1 if you have the `getaddrinfo' function. */
+#undef HAVE_GETADDRINFO
+
+/* Define to 1 if you have the `getcwd' function. */
+#undef HAVE_GETCWD
+
+/* Define to 1 if you have the `gethostbyname' function. */
+#undef HAVE_GETHOSTBYNAME
+
+/* Define to 1 if you have the `gethostbyname2' function. */
+#undef HAVE_GETHOSTBYNAME2
+
+/* Define to 1 if you have the `getopt' function. */
+#undef HAVE_GETOPT
+
+/* Define to 1 if you have the <getopt.h> header file. */
+#undef HAVE_GETOPT_H
+
+/* Define to 1 if you have the `getopt_long' function. */
+#undef HAVE_GETOPT_LONG
+
+/* Define to 1 if you have the `getpid' function. */
+#undef HAVE_GETPID
+
+/* Define to 1 if you have the `get_ncpus' function. */
+#undef HAVE_GET_NCPUS
+
+/* define if get_nprocs is available */
+#undef HAVE_GET_NPROCS
+
+/* Define to 1 if you have the `get_nprocs_conf' function. */
+#undef HAVE_GET_NPROCS_CONF
+
+/* Define to 1 if you have the <gtest/gtest.h> header file. */
+#undef HAVE_GTEST_GTEST_H
+
+/* Define to 1 if you have the `inet_aton' function. */
+#undef HAVE_INET_ATON
+
+/* Define to 1 if you have the <inttypes.h> header file. */
+#undef HAVE_INTTYPES_H
+
+/* Define to 1 if you have the <klu.h> header file. */
+#undef HAVE_KLU_H
+
+/* Define to 1 if you have the `ws2_32' library (-lws2_32). */
+#undef HAVE_LIBWS2_32
+
+/* Define to 1 if you have the `localtime' function. */
+#undef HAVE_LOCALTIME
+
+/* define if you have <ltdl.h> */
+#undef HAVE_LTDL_H
+
+/* define if memalign can be used */
+#undef HAVE_MEMALIGN
+
+/* Define to 1 if you have the `memmove' function. */
+#undef HAVE_MEMMOVE
+
+/* Define to 1 if you have the `memset' function. */
+#undef HAVE_MEMSET
+
+/* Define to 1 if you have the <metis.h> header file. */
+#undef HAVE_METIS_H
+
+/* Define to 1 if you have the <MGIS/Behaviour/BehaviourData.hxx> header file.
+   */
+#undef HAVE_MGIS_BEHAVIOUR_BEHAVIOURDATA_HXX
+
+/* Define to 1 if you have the <MGIS/Behaviour/Behaviour.hxx> header file. */
+#undef HAVE_MGIS_BEHAVIOUR_BEHAVIOUR_HXX
+
+/* Define to 1 if you have the <MGIS/Behaviour/Integrate.hxx> header file. */
+#undef HAVE_MGIS_BEHAVIOUR_INTEGRATE_HXX
+
+/* Define to 1 if you have the <MGIS/Behaviour/State.hxx> header file. */
+#undef HAVE_MGIS_BEHAVIOUR_STATE_HXX
+
+/* Define to 1 if you have the `mkstemp' function. */
+#undef HAVE_MKSTEMP
+
+/* Define to 1 if you have the `mlockall' function. */
+#undef HAVE_MLOCKALL
+
+/* Define to 1 if you have the <mpicxx.h> header file. */
+#undef HAVE_MPICXX_H
+
+/* Define to 1 if you have the <mpi.h> header file. */
+#undef HAVE_MPI_H
+
+/* Define to 1 if you have the <mpi++.h> header file. */
+#undef HAVE_MPI___H
+
+/* Define to 1 if you have the `nanosleep' function. */
+#undef HAVE_NANOSLEEP
+
+/* Define to 1 if you have the <netdb.h> header file. */
+#undef HAVE_NETDB_H
+
+/* Define to 1 if you have the <netinet/in.h> header file. */
+#undef HAVE_NETINET_IN_H
+
+/* Define to 1 if you have the <net_rpc.h> header file. */
+#undef HAVE_NET_RPC_H
+
+/* define if the compiler accept noexcept */
+#undef HAVE_NOEXCEPT
+
+/* Define to 1 if you have the <NOX_Epetra.H> header file. */
+#undef HAVE_NOX_EPETRA_H
+
+/* Define to 1 if you have the <NOX_Epetra_Interface_Jacobian.H> header file.
+   */
+#undef HAVE_NOX_EPETRA_INTERFACE_JACOBIAN_H
+
+/* Define to 1 if you have the <NOX_Epetra_Interface_Preconditioner.H> header
+   file. */
+#undef HAVE_NOX_EPETRA_INTERFACE_PRECONDITIONER_H
+
+/* Define to 1 if you have the <NOX_Epetra_Interface_Required.H> header file.
+   */
+#undef HAVE_NOX_EPETRA_INTERFACE_REQUIRED_H
+
+/* Define to 1 if you have the <NOX_Epetra_LinearSystem_AztecOO.H> header
+   file. */
+#undef HAVE_NOX_EPETRA_LINEARSYSTEM_AZTECOO_H
+
+/* Define to 1 if you have the <NOX_Epetra_Vector.H> header file. */
+#undef HAVE_NOX_EPETRA_VECTOR_H
+
+/* Define to 1 if you have the <NOX.H> header file. */
+#undef HAVE_NOX_H
+
+/* Define to 1 if you have the <NOX_Solver_Generic.H> header file. */
+#undef HAVE_NOX_SOLVER_GENERIC_H
+
+/* Define to 1 if you have the <numerics/MCP_cst.h> header file. */
+#undef HAVE_NUMERICS_MCP_CST_H
+
+/* Define to 1 if you have the <numerics/MixedComplementarityProblem.h> header
+   file. */
+#undef HAVE_NUMERICS_MIXEDCOMPLEMENTARITYPROBLEM_H
+
+/* Define to 1 if you have the <numerics/Newton_methods.h> header file. */
+#undef HAVE_NUMERICS_NEWTON_METHODS_H
+
+/* Define to 1 if you have the <numerics/NonSmoothDrivers.h> header file. */
+#undef HAVE_NUMERICS_NONSMOOTHDRIVERS_H
+
+/* Define to 1 if you have the <numerics/NumericsMatrix.h> header file. */
+#undef HAVE_NUMERICS_NUMERICSMATRIX_H
+
+/* Define to 1 if you have the <numerics/NumericsVerbose.h> header file. */
+#undef HAVE_NUMERICS_NUMERICSVERBOSE_H
+
+/* Define to 1 if you have the <numerics/SolverOptions.h> header file. */
+#undef HAVE_NUMERICS_SOLVEROPTIONS_H
+
+/* define if offsetof() works */
+#undef HAVE_OFFSETOF
+
+/* Define to 1 if you have the <pam_misc.h> header file. */
+#undef HAVE_PAM_MISC_H
+
+/* Define to 1 if you have the `pastixFinalize' function. */
+#undef HAVE_PASTIXFINALIZE
+
+/* Define to 1 if you have the `pastixInit' function. */
+#undef HAVE_PASTIXINIT
+
+/* Define to 1 if you have the `pastixInitParam' function. */
+#undef HAVE_PASTIXINITPARAM
+
+/* Define to 1 if you have the `pastix_task_analyze' function. */
+#undef HAVE_PASTIX_TASK_ANALYZE
+
+/* Define to 1 if you have the `pastix_task_numfact' function. */
+#undef HAVE_PASTIX_TASK_NUMFACT
+
+/* Define to 1 if you have the `pastix_task_refine' function. */
+#undef HAVE_PASTIX_TASK_REFINE
+
+/* Define to 1 if you have the `pastix_task_solve' function. */
+#undef HAVE_PASTIX_TASK_SOLVE
+
+/* Define to 1 if you have the <pdsp_defs.h> header file. */
+#undef HAVE_PDSP_DEFS_H
+
+/* define if posix_memalign can be used */
+#undef HAVE_POSIX_MEMALIGN
+
+/* Define to 1 if you have the `pstat_getdynamic' function. */
+#undef HAVE_PSTAT_GETDYNAMIC
+
+/* Define to 1 if you have the `pstat_getprocessor' function. */
+#undef HAVE_PSTAT_GETPROCESSOR
+
+/* Define if you have POSIX threads libraries and header files. */
+#undef HAVE_PTHREAD
+
+/* Define to 1 if you have the <pthread.h> header file. */
+#undef HAVE_PTHREAD_H
+
+/* Have PTHREAD_PRIO_INHERIT. */
+#undef HAVE_PTHREAD_PRIO_INHERIT
+
+/* define to use pthread_sigmask */
+#undef HAVE_PTHREAD_SIGMASK
+
+/* Define to 1 if you have the `putenv' function. */
+#undef HAVE_PUTENV
+
+/* Define to 1 if you have the <pwd.h> header file. */
+#undef HAVE_PWD_H
+
+/* If available, contains the Python version number currently in use. */
+#undef HAVE_PYTHON
+
+/* Define to 1 if you have the <rtai_lxrt.h> header file. */
+#undef HAVE_RTAI_LXRT_H
+
+/* Define to 1 if you have the <rtai_lxrt_user.h> header file. */
+#undef HAVE_RTAI_LXRT_USER_H
+
+/* Define to 1 if you have the <rtai_netrpc.h> header file. */
+#undef HAVE_RTAI_NETRPC_H
+
+/* define to use Cyrus SASL2 */
+#undef HAVE_SASL2
+
+/* Define to 1 if you have the <sasl.h> header file. */
+#undef HAVE_SASL_H
+
+/* Define to 1 if you have the <sasl/sasl.h> header file. */
+#undef HAVE_SASL_SASL_H
+
+/* Define to 1 if you have the <sched.h> header file. */
+#undef HAVE_SCHED_H
+
+/* Define to 1 if you have the `sched_setaffinity' function. */
+#undef HAVE_SCHED_SETAFFINITY
+
+/* Define to 1 if you have the <security/pam_appl.h> header file. */
+#undef HAVE_SECURITY_PAM_APPL_H
+
+/* Define to 1 if you have the <security/pam_misc.h> header file. */
+#undef HAVE_SECURITY_PAM_MISC_H
+
+/* Define to 1 if you have the <semaphore.h> header file. */
+#undef HAVE_SEMAPHORE_H
+
+/* Define to 1 if you have the `setenv' function. */
+#undef HAVE_SETENV
+
+/* Define to 1 if you have the `shmget' function. */
+#undef HAVE_SHMGET
+
+/* Define to 1 if you have the `signal' function. */
+#undef HAVE_SIGNAL
+
+/* Define to 1 if you have the <signal.h> header file. */
+#undef HAVE_SIGNAL_H
+
+/* define if sig_atomic_t is available */
+#undef HAVE_SIG_ATOMIC_T
+
+/* Define to 1 if you have the `sleep' function. */
+#undef HAVE_SLEEP
+
+/* define if socket() is available */
+#undef HAVE_SOCKET
+
+/* define if typedef socklen_t is defined */
+#undef HAVE_SOCKLEN_T
+
+/* Define to 1 if you have the `spmCheckAxb' function. */
+#undef HAVE_SPMCHECKAXB
+
+/* Define to 1 if you have the `spmExit' function. */
+#undef HAVE_SPMEXIT
+
+/* Define to 1 if you have the `spmNorm' function. */
+#undef HAVE_SPMNORM
+
+/* Define to 1 if you have the `spmScalMatrix' function. */
+#undef HAVE_SPMSCALMATRIX
+
+/* Define to 1 if you have the `spmScalVector' function. */
+#undef HAVE_SPMSCALVECTOR
+
+/* Define to 1 if you have the <stdexcept> header file. */
+#undef HAVE_STDEXCEPT
+
+/* Define to 1 if you have the <stdint.h> header file. */
+#undef HAVE_STDINT_H
+
+/* Define to 1 if you have the <stdio.h> header file. */
+#undef HAVE_STDIO_H
+
+/* Define to 1 if you have the <stdlib.h> header file. */
+#undef HAVE_STDLIB_H
+
+/* Define to 1 if you have the `strftime' function. */
+#undef HAVE_STRFTIME
+
+/* Define to 1 if you have the <strings.h> header file. */
+#undef HAVE_STRINGS_H
+
+/* Define to 1 if you have the <string.h> header file. */
+#undef HAVE_STRING_H
+
+/* Define to 1 if you have the `strtod' function. */
+#undef HAVE_STRTOD
+
+/* Define to 1 if you have the `strtol' function. */
+#undef HAVE_STRTOL
+
+/* Define to 1 if you have the `strtoul' function. */
+#undef HAVE_STRTOUL
+
+/* Define to 1 if you have the <StrumpackSparseSolver.hpp> header file. */
+#undef HAVE_STRUMPACKSPARSESOLVER_HPP
+
+/* Define to 1 if you have the <SuiteSparseQR.hpp> header file. */
+#undef HAVE_SUITESPARSEQR_HPP
+
+/* Define to 1 if you have the <sys/ioctl.h> header file. */
+#undef HAVE_SYS_IOCTL_H
+
+/* Define to 1 if you have the <sys/ipc.h> header file. */
+#undef HAVE_SYS_IPC_H
+
+/* Define to 1 if you have the <sys/mman.h> header file. */
+#undef HAVE_SYS_MMAN_H
+
+/* Define to 1 if you have the <sys/param.h> header file. */
+#undef HAVE_SYS_PARAM_H
+
+/* Define to 1 if you have the <sys/poll.h> header file. */
+#undef HAVE_SYS_POLL_H
+
+/* Define to 1 if you have the <sys/pstat.h> header file. */
+#undef HAVE_SYS_PSTAT_H
+
+/* Define to 1 if you have the <sys/select.h> header file. */
+#undef HAVE_SYS_SELECT_H
+
+/* Define to 1 if you have the <sys/shm.h> header file. */
+#undef HAVE_SYS_SHM_H
+
+/* Define to 1 if you have the <sys/socket.h> header file. */
+#undef HAVE_SYS_SOCKET_H
+
+/* Define to 1 if you have the <sys/stat.h> header file. */
+#undef HAVE_SYS_STAT_H
+
+/* Define to 1 if you have the <sys/sysinfo.h> header file. */
+#undef HAVE_SYS_SYSINFO_H
+
+/* Define to 1 if you have the <sys/times.h> header file. */
+#undef HAVE_SYS_TIMES_H
+
+/* Define to 1 if you have the <sys/types.h> header file. */
+#undef HAVE_SYS_TYPES_H
+
+/* define if usable threads are available */
+#undef HAVE_THREADS
+
+/* Define to 1 if you have the `time' function. */
+#undef HAVE_TIME
+
+/* Define to 1 if you have the `times' function. */
+#undef HAVE_TIMES
+
+/* Define to 1 if you have the <time.h> header file. */
+#undef HAVE_TIME_H
+
+/* Define to 1 if you have the <umfpack.h> header file. */
+#undef HAVE_UMFPACK_H
+
+/* Define to 1 if you have the <unistd.h> header file. */
+#undef HAVE_UNISTD_H
+
+/* Define to 1 if you have the `unsetenv' function. */
+#undef HAVE_UNSETENV
+
+/* Define to 1 if you have the `usleep' function. */
+#undef HAVE_USLEEP
+
+/* Define to 1 if you have the <util.h> header file. */
+#undef HAVE_UTIL_H
+
+/* Define to 1 if you have the <values.h> header file. */
+#undef HAVE_VALUES_H
+
+/* Define to 1 if you have the <winsock2.h> header file. */
+#undef HAVE_WINSOCK2_H
+
+/* define to enable features under development */
+#undef MBDYN_DEVEL
+
+/* define if BLAS/ATLAS are not available to KLU */
+#undef NBLAS
+
+/* define if bool needs bool.h */
+#undef NEED_BOOL_H
+
+/* define if CHARM WP module needs shipwake */
+#undef NEED_CHARM_SHIPWAKE
+
+/* define if you want to use new Metis API */
+#undef NEW_METIS_INTERFACE
+
+/* if defined, operator new will return memory initilized to 0xFF */
+#undef OVERRIDE_OPERATOR_NEW
+
+/* Name of package */
+#undef PACKAGE
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION
+
+/* Define to necessary symbol if this constant uses a non-standard name on
+   your system. */
+#undef PTHREAD_CREATE_JOINABLE
+
+/* define to statically build modules */
+#undef STATIC_MODULES
+
+/* Define to 1 if all of the C90 standard headers exist (not just the ones
+   required in a freestanding environment). This macro is provided for
+   backward compatibility; new code need not use it. */
+#undef STDC_HEADERS
+
+/* define Fortran 77 aerodynamic routines can be used */
+#undef USE_AEROD2_F
+
+/* define to use ANN */
+#undef USE_ANN
+
+/* define to use ARPACK libraries */
+#undef USE_ARPACK
+
+/* define to use BOOST */
+#undef USE_BOOST
+
+/* define this to enable bullet <http://bulletphysics.com> */
+#undef USE_BULLET
+
+/* define if you want to use Chaco */
+#undef USE_CHACO
+
+/* define if you want to use GPC/DeadBeat control */
+#undef USE_DBC
+
+/* define if you want to enable direct eigensolution */
+#undef USE_EIG
+
+/* define if GiNaC is available */
+#undef USE_GINAC
+
+/* define if you want to use GoogleTest */
+#undef USE_GTEST
+
+/* define to use Harwell sparse LU library */
+#undef USE_HARWELL
+
+/* define to use JDQZ library */
+#undef USE_JDQZ
+
+/* define if you want to use KLU */
+#undef USE_KLU
+
+/* define to use LAPACK libraries */
+#undef USE_LAPACK
+
+/* define if you want to use Metis */
+#undef USE_METIS
+
+/* define if you want to use MFrontGenericInterfaceSupport */
+#undef USE_MFRONT
+
+/* define to use mkl_set_num_threads_local */
+#undef USE_MKL_SET_NUM_THREADS_LOCAL
+
+/* define if you want to use MPI */
+#undef USE_MPI
+
+/* define to enable multithreaded solution */
+#undef USE_MULTITHREAD
+
+/* define to enable multithread naive solver */
+#undef USE_NAIVE_MULTITHREAD
+
+/* define this to enable NetCDF4 based output */
+#undef USE_NETCDF
+
+/* define if octave can be used */
+#undef USE_OCTAVE
+
+/* define if you want to use PAM */
+#undef USE_PAM
+
+/* define to use Intel MKL Pardiso library */
+#undef USE_PARDISO
+
+/* Define if PaStiX can be used */
+#undef USE_PASTIX
+
+/* define to use pthread_setaffinity_np */
+#undef USE_PTHREAD_SETAFFINITY_NP
+
+/* define if you want to use QRUPDATE */
+#undef USE_QRUPDATE
+
+/* define to use POSIX realtime */
+#undef USE_RT
+
+/* define to use RTAI */
+#undef USE_RTAI
+
+/* define if you want to load runtime */
+#undef USE_RUNTIME_LOADING
+
+/* define if you want to use Schur parallel solver */
+#undef USE_SCHUR
+
+/* define if you want to use Siconos */
+#undef USE_SICONOS
+
+/* define if sleep is usable with C++ (issue with MinGW) */
+#undef USE_SLEEP
+
+/* define if socket() can be used */
+#undef USE_SOCKET
+
+/* define if you want to use STRUMPACK */
+#undef USE_STRUMPACK
+
+/* define if you want to use SuiteSparseQR */
+#undef USE_SUITESPARSE_QR
+
+/* define if you want to use SuperLU */
+#undef USE_SUPERLU
+
+/* define if you want to use multithreaded SuperLU */
+#undef USE_SUPERLU_MT
+
+/* define this to use external symbol table (default) */
+#undef USE_TABLE
+
+/* define to use Taucs libraries */
+#undef USE_TAUCS
+
+/* define if you want to use Trilinos */
+#undef USE_TRILINOS
+
+/* define this to enable udunits in NetCDF based output */
+#undef USE_UDUNITS
+
+/* define if you want to use Umfpack */
+#undef USE_UMFPACK
+
+/* define if need to use umfpack_dl_* calls */
+#undef USE_UMFPACK_LONG
+
+/* append underscore to fortran calls */
+#undef USE_UNDERSCORE
+
+/* define to use IBM Watson wsmp library */
+#undef USE_WSMP
+
+/* define to use Y12 sparse LU library */
+#undef USE_Y12
+
+/* define if C++ compiler allows namespace std */
+#undef USING_STD
+
+/* Version number of package */
+#undef VERSION
+
+
+/* this file must be included by every .c/.cc file */
+#include "mbdyn.h"
+

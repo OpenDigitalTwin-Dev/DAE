@@ -1,0 +1,5 @@
+superluwrap.lo: superluwrap.cc /usr/include/stdc-predef.h \
+ ../../include/mbconfig.h ../../mbdyn/mbdyn.h
+/usr/include/stdc-predef.h:
+../../include/mbconfig.h:
+../../mbdyn/mbdyn.h:

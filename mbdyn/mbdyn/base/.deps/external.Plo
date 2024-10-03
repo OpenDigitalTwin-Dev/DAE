@@ -1,0 +1,6 @@
+external.lo: external.cc /usr/include/stdc-predef.h \
+ ../../include/mbconfig.h ../../mbdyn/mbdyn.h external.h
+/usr/include/stdc-predef.h:
+../../include/mbconfig.h:
+../../mbdyn/mbdyn.h:
+external.h:

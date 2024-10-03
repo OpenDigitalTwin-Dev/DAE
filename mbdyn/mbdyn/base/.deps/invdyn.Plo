@@ -1,0 +1,6 @@
+invdyn.lo: invdyn.cc /usr/include/stdc-predef.h ../../include/mbconfig.h \
+ ../../mbdyn/mbdyn.h invdyn.h
+/usr/include/stdc-predef.h:
+../../include/mbconfig.h:
+../../mbdyn/mbdyn.h:
+invdyn.h:
