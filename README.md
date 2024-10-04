@@ -1,4 +1,4 @@
-# Differential Algebraic Equations Suite
+# Differential Algebraic Equations
 
 sundials
 ``` 
