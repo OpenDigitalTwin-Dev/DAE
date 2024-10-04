@@ -1,0 +1,135 @@
+/**
+  @page credits-index Credits
+  @brief People and third-party software who make Rodin possible
+
+  @tableofcontents
+
+  @section credits-index-3rd-party Third-party Software
+
+  @subsection credits-index-boost Boost
+
+  Boost libraries are intended to be widely useful, and usable across a broad
+  spectrum of applications. The libraries are licensed under the [Boost
+  Software License](https://www.boost.org/users/license.html), which is the
+  same license Rodin utilizes.
+
+  @par Links
+  @parblock
+  - https://www.boost.org/
+  - https://www.boost.org/users/license.html
+  @endparblock
+
+  @subsection credits-index-eigen Eigen
+
+  Eigens is C++ template library for linear algebra. Eigen provides a wide
+  range of mathematical operations, data structures, and algorithms for
+  performing linear algebra operations efficiently and with a syntax that
+  resembles mathematical notation. It is especially useful for tasks such as
+  matrix and vector operations, solving linear systems, eigenvalue problems,
+  and more. Eigen is
+  [Free Software](https://www.gnu.org/philosophy/free-sw.html).
+  Starting from the 3.1.1 version, it is licensed under the
+  [MPL2](https://www.mozilla.org/en-US/MPL/2.0/),
+  which is a simple weak copyleft license. Common questions about the MPL2 are
+  answered in the official [MPL2 FAQ](https://www.mozilla.org/en-US/MPL/2.0/FAQ/).
+
+  @par Links
+  @parblock
+  - https://eigen.tuxfamily.org/
+  - https://eigen.tuxfamily.org/index.php?title=Main_Page#License
+  @endparblock
+
+  @subsection credits-index-mmg MMG
+
+
+  MMG is an open source software for bidimensional and tridimensional surface
+  and volume remeshing. It is licensed under the
+  [LGPL](https://github.com/MmgTools/mmg/blob/master/LICENSE) and is originally
+  based on @cite dapogny2014three .
+
+  @par Links
+  @parblock
+  - https://www.mmgtools.org/
+  @endparblock
+
+  @subsection credits-index-mfem MFEM
+
+
+    MFEM is a modular parallel C++ library for finite element methods. Its goal
+    is to enable high-performance scalable finite element discretization
+    research and application development on a wide variety of platforms,
+    ranging from laptops to supercomputers. It is licensed under the
+    [BSD-3-Clause License](https://github.com/mfem/mfem/blob/master/LICENSE).
+
+  @par Links
+  @parblock
+  - https://mfem.org/
+  - https://glvis.org/
+  @endparblock
+
+  @subsection credits-index-iscd ISCD Toolbox
+
+  The institute of computing and data sciences (ISCD) is dedicated to exploring
+  and developing the potential of computational and data-driven research and
+  training across science, humanities and medicine at Sorbonne Université. They
+  have created a series of repositories containing various tools for various
+  different computational tasks.
+
+  @par Links
+  @parblock
+  - https://github.com/ISCDtoolbox
+  - https://iscd.sorbonne-universite.fr/
+  @endparblock
+
+  @subsubsection credits-index-iscd-mshdist Mshdist
+
+  Mshdist is a simple algorithm to generate the signed distance function to
+  given objects in two and three space dimensions. It is licensed under the
+  [GPL-3.0
+  License](https://github.com/ISCDtoolbox/Mshdist/blob/master/LICENSE.md) and
+  is originally based on @cite dapogny2012computation.
+
+  The original authors of the software are [Charles
+  Dapogny](https://membres-ljk.imag.fr/Charles.Dapogny/) and [Pascal
+  Frey](https://www.ljll.math.upmc.fr/frey/).
+
+  @par Links
+  @parblock
+  - https://github.com/ISCDtoolbox/Mshdist
+  - https://github.com/cbritopacheco/Mshdist
+  @endparblock
+
+  @subsubsection credits-index-iscd-advection Advection
+
+  Advection is a program for solving linear advection problems in two and three
+  dimensions. It is licensed under the [GPL-3.0
+  License](https://github.com/ISCDtoolbox/Mshdist/blob/master/LICENSE.md)
+
+  The orignal authors of the software are [Thi Thu Cuc
+  Bui](https://www.ljll.math.upmc.fr/~bui/), [Charles
+  Dapogny](https://membres-ljk.imag.fr/Charles.Dapogny/), and [Pascal
+  Frey](https://www.ljll.math.upmc.fr/frey/).
+
+  @par Links
+  @parblock
+  - https://github.com/ISCDtoolbox/Advection
+  - https://github.com/cbritopacheco/Advection
+  @endparblock
+
+  @subsection credits-index-suitesparse SuiteSparse
+
+  SuiteSparse is a suite of sparse matrix algorithms.
+  Each package has its own individual
+  [license](https://github.com/DrTimothyAldenDavis/SuiteSparse/blob/master/LICENSE.txt).
+
+  @par Links
+  @parblock
+  - https://people.engr.tamu.edu/davis/suitesparse.html
+  @endparblock
+
+  @section References
+
+  See the @link citelist full reference list @endlink  to the scientific papers which have been
+  used or provide sources of inspiration for the library.
+*/
+

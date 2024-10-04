@@ -1,0 +1,358 @@
+/**
+  @dir rodin/src/
+  @brief Source directory for Rodin.
+ */
+
+/**
+  @dir rodin/src/Rodin
+  @brief Namespace @ref Rodin
+ */
+
+/**
+  @namespace Rodin
+  @brief The Rodin library for Shape and Topology Optimization
+ */
+
+/**
+  @dir Rodin/Context
+  @brief Namespace @ref Rodin::Context
+ */
+
+/**
+  @namespace Rodin::Context
+  @brief Module for serial, multi-threaded, distributed, and/or parallel
+  computation.
+ */
+
+/**
+  @dir Rodin/Geometry
+  @brief Namespace @ref Rodin::Geometry
+ */
+
+/**
+  @namespace Rodin::Geometry
+  @brief Module for dealing with geometries.
+ */
+
+/**
+  @dir Rodin/Assembly
+  @brief Namespace @ref Rodin::Assembly
+ */
+
+/**
+  @namespace Rodin::Assembly
+  @brief Module for performing the assembly of linear algebra objects from
+  variational expressions.
+ */
+
+/**
+  @dir Rodin/Threads
+  @brief Namespace @ref Rodin::Threads
+ */
+
+/**
+  @namespace Rodin::Threads
+  @brief Module containing various tools for working with threads.
+ */
+
+/**
+  @dir Rodin/Geometry/Euclidean
+  @brief Namespace @ref Rodin::Geometry::Euclidean
+ */
+
+/**
+  @namespace Rodin::Geometry::Euclidean
+  @brief Module for dealing with Euclidean geometries.
+ */
+
+/**
+  @dir Rodin/IO
+  @brief Namespace @ref Rodin::IO
+ */
+
+/**
+  @namespace Rodin::IO
+  @brief Module for dealing with I/O functionality.
+ */
+
+/**
+  @dir Rodin/Plot
+  @brief Namespace @ref Rodin::Plot
+ */
+
+/**
+  @namespace Rodin::Plot
+  @brief Module for visualization tools.
+ */
+
+/**
+  @dir Rodin/Plot/Artist
+  @brief Namespace @ref Rodin::Plot::Artist
+ */
+
+/**
+  @namespace Rodin::Plot::Artist
+  @brief Module for Rodin::Plot artists.
+ */
+
+/**
+  @dir Rodin/Plot/Artist/Axes
+  @brief Namespace @ref Rodin::Plot::Artist::Axes
+ */
+
+/**
+  @namespace Rodin::Plot::Artist::Axes
+  @brief Contains artist functionality for Axes.
+ */
+
+/**
+  @dir Rodin/Plot/Artist/Axis
+  @brief Namespace @ref Rodin::Plot::Artist::Axis
+ */
+
+/**
+  @namespace Rodin::Plot::Artist::Axis
+  @brief Contains artist functionality for Axis.
+ */
+
+/**
+  @dir Rodin/Plot/Artist/Lines
+  @brief Namespace @ref Rodin::Plot::Artist::Lines
+ */
+
+/**
+  @namespace Rodin::Plot::Artist::Lines
+  @brief Contains artist functionality for Lines.
+ */
+
+/**
+  @dir Rodin/Plot/Backend
+  @brief Namespace @ref Rodin::Plot::Backend
+ */
+
+/**
+  @namespace Rodin::Plot::Backend
+  @brief Module for the Rodin::Plot backend.
+ */
+
+/**
+  @dir Rodin/Plot/Backend/Bases
+  @brief Namespace @ref Rodin::Plot::Backend::Bases
+ */
+
+/**
+  @namespace Rodin::Plot::Backend::Bases
+  @brief Contains base backend functionality.
+ */
+
+/**
+  @dir Rodin/Plot/Backend/Renderer
+  @brief Namespace @ref Rodin::Plot::Backend::Event
+ */
+
+/**
+  @namespace Rodin::Plot::Backend::Renderer
+  @brief Contains backend renderer functionality.
+ */
+
+/**
+  @dir Rodin/Plot/Backend/Renderer/Drawables
+  @brief Namespace @ref Rodin::Plot::Backend::Renderer::Drawables
+ */
+
+/**
+  @namespace Rodin::Plot::Backend::Renderer::Drawables
+  @brief Contains backend renderer for drawables.
+ */
+
+/**
+  @dir Rodin/Plot/Backend/Event
+  @brief Namespace @ref Rodin::Plot::Backend::Event
+ */
+
+/**
+  @namespace Rodin::Plot::Backend::Event
+  @brief Contains backend event functionality.
+ */
+
+/**
+  @dir Rodin/Plot/GUI
+  @brief Namespace @ref Rodin::Plot::GUI
+ */
+
+/**
+  @namespace Rodin::Plot::GUI
+  @brief Contains GUI functionality.
+ */
+
+
+/**
+  @dir Rodin/Variational
+  @brief Namespace @ref Rodin::Variational
+ */
+
+/**
+  @namespace Rodin::Variational
+  @brief Module which provides the necessary tools for constructing variational problems.
+
+  The Rodin::Variational module aids in the general construction of variational
+  problems:
+
+  @f[
+    \text{Find} \quad u \in U \quad \text{ s.t. } \quad \forall v \in V \quad
+    a(u, v) = b(v) \ ,
+  @f]
+
+  which then can be translated into linear algebra problems of the type:
+
+  @f[
+    \mathbf{A} \mathbf{x} = \mathbf{b}
+  @f]
+
+  where @f$ \mathbf{A} @f$ represents the stiffness operator.
+ */
+
+/**
+  @dir Rodin/Models
+  @brief Namespace @ref Rodin::Models
+ */
+
+/**
+  @namespace Rodin::Models
+  @brief Module which provides implementation of various variational models.
+ */
+
+/**
+  @dir Rodin/Models/Distance
+  @brief Namespace @ref Rodin::Models::Distance
+ */
+
+/**
+  @namespace Rodin::Models::Distance
+  @brief Module which provides models for computation of the distance function.
+ */
+
+/**
+  @dir Rodin/Models/Hilbert
+  @brief Namespace @ref Rodin::Models::Hilbert
+ */
+
+/**
+  @namespace Rodin::Models::Hilbert
+  @brief Module which provides models and tools for the Hilbertian
+  extension-regularization procedure.
+ */
+
+/**
+  @dir Rodin/Models/Advection
+  @brief Namespace @ref Rodin::Models::Advection
+ */
+
+/**
+  @namespace Rodin::Models::Advection
+  @brief Module which provides models for the resolution of unsteady advection
+  equations.
+ */
+
+/**
+  @dir Rodin/QF
+  @brief Namespace @ref Rodin::QF
+ */
+
+/**
+  @namespace Rodin::QF
+  @brief Module for defining quadrature formulae.
+ */
+
+/**
+  @dir Rodin/FormLanguage
+  @brief Namespace @ref Rodin::FormLanguage
+ */
+
+/**
+  @namespace Rodin::FormLanguage
+  @brief Module for writing high level abstract expressions.
+ */
+
+/**
+  @dir Rodin/Math
+  @brief Namespace @ref Rodin::Math
+ */
+
+/**
+  @namespace Rodin::Math
+  @brief Module for general mathematical operations.
+ */
+
+
+/**
+  @dir Rodin/Solver
+  @brief Namespace @ref Rodin::Solver
+ */
+
+/**
+  @namespace Rodin::Solver
+  @brief Module for linear algebra systems.
+ */
+
+/**
+  @namespace Rodin::Test
+  @brief Module containing various utilities and classes for writing tests
+ */
+
+/**
+  @dir Rodin/Test
+  @brief Namespace @ref Rodin::Test
+ */
+
+/**
+  @namespace Rodin::Utility
+  @brief Module containing general purpose and language support utility
+  classes.
+ */
+
+/**
+  @dir Rodin/Utility
+  @brief Namespace @ref Rodin::Utility
+ */
+
+/**
+  @namespace Rodin::Traits
+  @brief Module containing metaprogramming facilities
+ */
+
+/**
+  @dir Rodin/Traits
+  @brief Namespace @ref Rodin::Traits
+ */
+
+/**
+  @dir rodin/src/RodinExternal
+  @brief Namespace @ref Rodin::External
+ */
+
+/**
+  @namespace Rodin::External
+  @brief Third-party library integrations with Rodin
+ */
+
+/**
+  @dir RodinExternal/MMG
+  @brief Namespace @ref Rodin::External::MMG
+ */
+
+/**
+  @namespace Rodin::External::MMG
+  @brief MMG integration with Rodin
+
+  The Rodin::External::MMG module has a wide variety of uses which ranges from
+  optimization of the mesh, to implicit domain meshing. It provides many C++
+  wrappers to execute the functionality of the [Mmg
+  Platform](https://www.mmgtools.org/).
+ */
+
+/**
+  @namespace Rodin::External::MFEM
+  @brief MFEM integration with Rodin
+ */
+

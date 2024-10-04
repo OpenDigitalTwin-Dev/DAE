@@ -1,0 +1,9 @@
+/**
+  @page examples-pdes-index Partial differential equations
+  @brief Showcases how to use Rodin to solve PDEs
+
+  - @subpage examples-pdes-poisson
+  - @subpage examples-pdes-elasticity
+  - @subpage examples-pdes-surface_meshes
+
+  */
