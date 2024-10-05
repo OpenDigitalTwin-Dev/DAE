@@ -1,0 +1,30 @@
+/*!
+
+\mainpage Hopsan Users Manual
+-# \subpage page_usinghopsangui
+-# \subpage page_usinghopsancli
+-# \subpage page_componentdevelopment
+
+
+\page page_componentdevelopment Component Library Development
+-# \subpage userTransmissionLineModelingMethodPage
+-# \subpage userModelingInHopsanPage
+-# \subpage page_setuplibrarydevelopmentenvironment
+-# \subpage devWritingCppComponentsPage
+-# \subpage userAutomaticCodeGenerationPage
+-# \subpage userUnitTestModelsAndComponentsPage
+
+\page page_usinghopsangui Using The Hopsan GUI Application
+-# \subpage userGettingStartedPage
+-# \subpage userAnalysisToolsPage
+-# \subpage userOptimizationPage
+-# \subpage userAnimationPage
+-# \subpage userModelExportPage
+-# \subpage userScriptingPage
+-# \subpage userMultiThreadedPage
+-# \subpage userShortkeysPage
+
+\page page_hopsandevelopment For Hopsan Developers
+-# \subpage page_codingconventions
+
+*/

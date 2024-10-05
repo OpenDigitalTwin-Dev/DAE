@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hopsanobjectappearance version="0.3">
+    <modelobject typename="MyExampleVolume" displayname="MyExampleVolume" sourcecode="MyExampleVolume.hpp">
+        <icons>
+            <icon scale="1" path="volume_user.svg" iconrotation="ON" type="user"/>
+        </icons>
+        <ports>
+            <port x="0" y="0.5" a="0" name="P1"/>
+            <port x="1" y="0.5" a="0" name="P2"/>
+        </ports>
+		<parametersets>
+            <parameterset name="Small volume (1 l)" path="smallvolume.ssv"/>
+            <parameterset name="Medium volume (2 l) " path="mediumvolume.ssv"/>
+			<parameterset name="Large volume (5 l) " path="largevolume.ssv"/>
+        </parametersets>
+    </modelobject>
+</hopsanobjectappearance>

@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<hopsanobjectappearance version="0.3">
+    <modelobject sourcecode="SignalAnimationSlider.hpp" typename="SignalAnimationSlider" displayname="Adjustable Slider">
+        <icons>
+            <icon scale="1" path="slider_user.svg" iconrotation="ON" type="user"/>
+        </icons>
+        <help>
+            <md>SignalAnimationSlider.md</md>
+        </help>
+        <ports>
+            <port x="0" y="0.5" a="180" name="in"/>
+            <port x="1" y="0.5" a="0" name="out"/>
+        </ports>
+        <animation>
+            <icon userpath="slider_user_base.svg"/>
+            <movable>
+                <icon userpath="slider_user_movable.svg"/>
+                <data port="out" dataname="Value" idx="0"/>
+                <movement x="0" y="97" a="0" idx="0"/>
+                <start x="6.5" y="6.5" a="0"/>
+                <transformorigin x="0" y="0"/>
+                <adjustable xgain="0" port="in" ygain="0.010309278" ymin="0" xmin="0" ymax="97" xmax="0" dataname="Value"/>
+            </movable>
+        </animation>
+    </modelobject>
+</hopsanobjectappearance>

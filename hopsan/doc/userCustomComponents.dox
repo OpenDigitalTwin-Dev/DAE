@@ -1,0 +1,91 @@
+/*!
+\page userAutomaticCodeGenerationPage Automatically generating Component Code
+\section component-generator Component Generator Dialog
+Hopsan has a component skeleton generator functionality, from where new components can be written without deeper knowledge of the Hopsan simulation core interface. You will find it by choosing "Create external library" in the library widget.
+After a library has been created you can right click it and select to "Add new component".
+__Note__ This functionality was previously present in the separate HoLC (Hopsan Library Creator) application, which has now been removed from Hopsan. The functionality is replaced by the generator and editor in the regular graphical user interface.
+
+In this dialog it is possible to specify component type (used by simulation core, must be unique not contain spaces), display name (shown in graphical interface) and component type (C,Q or S - see the \ref userTransmissionLineModelingMethodPage "transmission line element method"). It is also possible to add ports, parameters, utility functions and static variables. Finally, the code for the component can be written in two ways, either directly from C++ code, or from algebraic equations using a subset of the Modelica language.
+
+When writing C++ code, there are three functions available: Initialize, SimulateOneTimeStep and Finalize. Initialize runs before the first time step of the simulation, SimulateOneTimeStep runs every time step, and finalize runs after the simulation is finished. Available and sought parameters are displayed above the code boxes. When clicking compile, the component will be converted to Hopsan interface syntax and compiled to an external library.
+
+The other option is to use equations. This function is currently an experimental feature, and full functionality is not guaranteed. Equation-based modeling has several advantages over plain code modeling. It allows equations written in arbitrary ways, i.e. more than one variable on the left side. Equations can also be written in any order, as long as the number of equations equals the number of unknown variables. The language used is a subset of Modelica. It allows most basic functionality in the equation section. There is also an algorithm section, that will be executed prior to the equation solver each time step. This section does not support all Modelica algorithm functionality, and is basically intended only for defining explicit expressions that does not need to be part of the equation system. When compiling, a symbolic Jacobian matrix is generated and displayed in a popup window. This is then transformed to Hopsan syntax, together with a fixed-step equation system solver.
+
+To be able to use the created components, you must have the Hopsan version with a compiler included or have configured Hopsan to use the system compiler (must be compatible, same used to build Hopsan).
+*/
+
+/*!
+\page userUnitTestModelsAndComponentsPage Model and Component Regression Testing
+When you have finished a component and/or model and you are satisfied with the simulation results you can save you model and some of the simulation results as a test model.
+You can later run this model again and automatically compare the simulation results.
+This is very important if you want to make sure that your component and models do not change their behaviour when new versions of Hopsan are released.
+__Remember__ that if you want to make new changes (that affect simulation results) in the modeled component, your validation data must be recreated.
+
+\section userUnitTestModelsAndComponentsPage-components_howtocreateCLI How to Create a Validation Model in Hopsan CLI
+The HopsanCLI can automatically create a validation data set based on all scopes in your model. If no scopes are available, no data set will be created.
+-# Use the HopsanCLI (Hopsan CommandLineInterface) with the -m and --createValidationData switches according to the following examples:\n
+   The -d (destination directory) switch is optional
+  -# Windows: hopsancli.exe -m pathto\\ExampleModel.hmf --createValidationData -d outputDirectoryPath
+  -# Ubuntu:  ./hopsancli -m pathto/ExampleModel.hmf --createValidationData -d outputDirectoryPath
+-# Store the model, dataset and hvc file in a safe place. 
+
+\section userUnitTestModelsAndComponentsPage-components_howtocreateGUI How to Create a Validation Model in Hopsan GUI
+-# Open your model in HopsanGUI and simulate it.
+  -# Add the variables (from ports) that you want to use as validation data to a plot window.
+  -# Export the data as <b>hvc</b>, <b>hvd</b> (Hopsan Validation Configuration and Data) files.
+-# The generated <b>hvc</b> file contains default entries. You may want to manually edit it, see format description below.
+-# Store the model, dataset and hvc file in a safe place. 
+
+\section userUnitTestModelsAndComponentsPage-components_howtotestCLI How to Test a Validation Model in Hopsan CLI
+-# Use the HopsanCLI (Hopsan CommandLineInterface) with the -t (for test) switch according to:
+  -# Windows: hopsancli.exe -t "MyHVCFile.hvc"
+  -# Ubuntu:  ./hopsancli -t "MyHVCFile.hvc"
+-# If you want to automatically test multiple models, then you should write a script that goes through all of your hvc files.
+
+\section userUnitTestModelsAndComponentsPage-components_howtotestGUI How to Test a Validation Model in Hopsan GUI
+-# Open the Model Validation Widget in the <b>Tools</b> menu.
+  -# Load your Hopsan Validation Configuration <b>.hvc</b> file. The widget will show you what variables will be tested.
+  -# \e Note! The widget is not yet fully implemented but you can compare data
+  -# Click the compare button to simulate the model and generate plots comparing the data. You must manually check the data to make sure that the simulated result is the same as the validation data.
+
+\section userUnitTestModelsAndComponentsPage-components_hvc-format The HVC (Hopsan Validation Configuration) Format
+This is an example HVC File. Note that you can have multiple \<validation\> and \<variable\> tags to perform multiple tests from the same configuration file.
+
+\verbatim
+<?xml version="1.0" encoding="UTF-8"?>
+<hopsanvalidationconfiguration hvcversion="0.2">
+    <validation hopsancliversion="0.6.x_r6964" time="141140" date="20140430" hopsancoreversion="0.6.x_r6964">
+        <!--Optional path to model file, if not specified the same name (excluding suffix) and path as this file will be used-->
+        <modelfile>../Example Models/Position Servo.hmf</modelfile>
+        <!--<parameterset>Not yet supported!</parameterset>-->
+        <!--Optional path to Hopsan validation data file, if not specified the same name (excluding suffix) and path as this file will be used-->
+        <hvdfile>Position Servo.hvd</hvdfile>
+        <!-- The name attribute contains the full name including subsystem hierarchy. Ex: System$Subsystem$Component#Port#Variable -->
+        <variable name="Position_Servo$Position_Sensor#out#Value">
+            <!--The time column in the hvd file for this variable. Column indexing begins at 0-->
+            <timecolumn>0</timecolumn>
+            <!--The data column in the hvd file for this variable. Column indexing begins at 0-->
+            <column>1</column>
+            <!--Tolerance, allowed deviation 0.01==1%-->
+            <tolerance>0.01</tolerance>
+        </variable>
+        <variable name="Position_Servo$Step#out#Value">
+            <timecolumn>0</timecolumn>
+            <column>2</column>
+            <tolerance>0.01</tolerance>
+        </variable>
+        <variable name="Position_Servo$4_3_Servo_Valve#xv#Value">
+            <timecolumn>0</timecolumn>
+            <column>3</column>
+            <tolerance>0.01</tolerance>
+        </variable>
+        <variable name="Position_Servo$Pressure_Relief_Valve#xv#Value">
+            <timecolumn>0</timecolumn>
+            <column>4</column>
+            <tolerance>0.01</tolerance>
+        </variable>
+    </validation>
+</hopsanvalidationconfiguration>
+\endverbatim
+
+*/

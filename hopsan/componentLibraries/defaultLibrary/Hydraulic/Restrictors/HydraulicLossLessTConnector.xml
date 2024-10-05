@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<hopsanobjectappearance version="0.3">
+    <modelobject sourcecode="HydraulicLossLessTConnector.hpp" typename="HydraulicLosslessTConnector" displayname="Lossless Q-type T-Connector">
+        <icons>
+            <icon scale="1" path="losslesstconnector_user.svg" iconrotation="ON" type="user"/>
+            <icon scale="1" path="losslesstconnector_iso.svg" iconrotation="ON" type="iso"/>
+        </icons>
+        <help>
+            <md>HydraulicLossLessTConnector.md</md>
+        </help>
+        <ports>
+            <port x="0.95" y="0.079365079" a="0" name="P1"/>
+            <port x="0.05" y="0.079365079" a="180" name="P2"/>
+            <port x="0.5" y="0.95" a="270" name="P3"/>
+        </ports>
+    </modelobject>
+</hopsanobjectappearance>

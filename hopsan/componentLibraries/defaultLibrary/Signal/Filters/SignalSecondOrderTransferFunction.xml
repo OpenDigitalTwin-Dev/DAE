@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<hopsanobjectappearance version="0.3">
+    <modelobject sourcecode="SignalSecondOrderTransferFunction.hpp" typename="SignalSecondOrderTransferFunction" displayname="General second order transfer function">
+        <icons>
+            <icon scale="1" path="SignalSecondOrderTransferFunction.svg" iconrotation="ON" type="user"/>
+        </icons>
+        <help>
+            <md>SignalSecondOrderTransferFunction.md</md>
+        </help>
+        <replacables>
+            <replacable typename="SignalFirstOrderFilter"/>
+            <replacable typename="SignalHP1Filter"/>
+            <replacable typename="SignalHP2Filter"/>
+            <replacable typename="SignalIntegrator2"/>
+            <replacable typename="SignalLP1Filter"/>
+            <replacable typename="SignalLP2Filter"/>
+            <replacable typename="SignalSecondOrderFilter"/>
+        </replacables>
+        <ports>
+            <port x="0" y="0.5" a="180" name="in"/>
+            <port x="1" y="0.5" a="0" name="out"/>
+        </ports>
+    </modelobject>
+</hopsanobjectappearance>

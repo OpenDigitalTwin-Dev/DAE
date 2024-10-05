@@ -1,0 +1,5 @@
+rm -rf CompgenModels
+rm -rf Models
+rm -rf HopsanCore/dependencies
+rm -rf ../build-HopsanNG-Desktop_Qt_5_12_10_GCC_64bit-Debug/
+rm -rf bin

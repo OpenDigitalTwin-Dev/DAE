@@ -1,0 +1,850 @@
+/*!
+\page userScriptingPageHcomPage HCOM Scripting
+HCOM is the built-in scripting language in Hopsan. It can control most parts of the program, either from the terminal widget or through external script files. 
+Use the \c help command to list all available commands or \c help \c \<command\> to get help for a specific command.<br>
+
+\section controlflow Control Flow
+
+When HCOM scripts are loaded from a file, multi-line control flow can be used
+
+\subsection ifstatements If statements
+You can use if statements, with one optional else clause.
+
+    if( condition_expression )
+      .
+      .
+    [else]
+      .
+      .
+    endif
+
+Example:
+Assign b = 1 if a is greater then 4, else assign b = 0
+
+    a = 5
+    if( a > 4 )
+      b = 1
+    else
+      b = 0
+    endif
+
+\subsection whileloops While loops
+You can use a while loop to repeat an expression until the condition is fulfilled
+
+    while (condition)
+      .
+      .
+    repeat
+
+Example:
+Loop an expression five times, in this case summing the five first elements from a data vector
+
+    sum = 0
+    i = 0
+    while (i < 5)
+      sum = sum + peek(data_vector, i)
+      i = i+1
+    repeat
+
+\subsection foreachloops Foreach loops
+You can use foreach to loop over multiple plot variables matching a filter_pattern
+Each resolved plot variable name will end up in the loop variable 'var'.
+Use $var to resolve the matched plot variable name
+Note! This function only works with plot variables right now
+
+    foreach var filter_pattern
+      .
+      .
+    endforeach
+
+Example:
+Take the sum of the average value from all plot variables matching the pattern Step*.out.y
+
+    sum = 0
+    foreach v Step*.out.y
+      sum = sum + aver($v)
+    endforeach
+
+
+\section simulationcommands Simulation Commands
+
+\subsection sim sim
+Simulates current model (or all open models)<br>
+ Usage: sim<br>
+ Usage: sim all<br>
+ Usage: sim -loadstate file<br>
+ Usage: sim -loadsv file<br>
+  -loadsv will load start values from a saved simulation state file<br>
+  -loadstate will do the same but also offset the simulation time
+
+\subsection chss chss
+Change simulation settings<br>
+ Usage: chss [starttime] [timestep] [stoptime] [samples]<br>
+ Usage: chss [starttime] [timestep] [stoptime]
+
+\subsection chts chts
+Change time step of sub-component<br>
+ Usage: chts [component] [timestep]
+
+\subsection ints ints
+Inherit time step of sub-component from system time step<br>
+ Usage: ints [component]
+
+\section plotcommands Plot Commands
+
+\subsection chpv chpv
+Change plot variables in current plot<br>
+ Usage: chpv [leftvar1{s,c,t} leftvar2{s,c,t} ...] -r [rightvar1{s,c,t} rightvar2{s,c,t} ... ]<br>
+ Usage: chpv [leftvar1{s,c,t} leftvar2{s,c,t} ...]<br>
+ Usage: chpv -r [rightvar1{s,c,t} rightvar2{s,c,t} ... ]<br>
+<br>
+ Line appearance (optional):<br>
+  Style (s): 1 = solid, 2 = dotted, 3 = dashed, 4 = dash-dotted<br>
+  Color (c): red, darkblue, lightgreen...<br>
+  Thickness (t): Thickness of line (integer value)<br>
+  Symbol (y): 1 = cross, 2 = ellipse, 3=xcross, 4=triangle...<br>
+<br>
+ Example:<br>
+  \>\> chpv Pump.P1.p -r Pump.P1.q{2,blue,2}
+
+\subsection adpv adpv
+Add plot variables in current plot<br>
+ Usage: adpv [leftvar1{s,c,t} leftvar2{s,c,t} ...] -r [rightvar1{s,c,t} rightvar2{s,c,t} ... ]<br>
+ Usage: adpv [leftvar1{s,c,t} leftvar2{s,c,t} ...]<br>
+ Usage: adpv -r [rightvar1{s,c,t} rightvar2{s,c,t} ... ]<br>
+<br>
+ Line appearance (optional):<br>
+  Style (s): 1 = solid, 2 = dotted, 3 = dashed, 4 = dash-dotted<br>
+  Color (c): red, darkblue, lightgreen...<br>
+  Thickness (t): Thickness of line (integer value)<br>
+  Symbol (y): 1 = cross, 2 = ellipse, 3=xcross, 4=triangle...<br>
+<br>
+ Example:<br>
+  \>\> adpv Pump.P1.p -r Pump.P1.q{2,blue,2}
+
+\subsection adpvl adpvl
+Adds plot variables on left axis in current plot<br>
+ Usage: adpvl [var1{s,c,t} var2{s,c,t} ... ]<br>
+<br>
+ Line appearance (optional):<br>
+  Style (s): 1 = solid, 2 = dotted, 3 = dashed, 4 = dash-dotted<br>
+  Color (c): red, darkblue, lightgreen...<br>
+  Thickness (t): Thickness of line (integer value)<br>
+  Symbol (y): 1 = cross, 2 = ellipse, 3=xcross, 4=triangle...<br>
+<br>
+ Example:<br>
+  \>\> adpvl Pump.P1.p Pump.P1.q{2,blue,2}
+
+\subsection adpvr adpvr
+Adds plot variables on right axis in current plot<br>
+ Usage: adpvr [var1{s,c,t} var2{s,c,t} ... ]<br>
+<br>
+ Line appearance (optional):<br>
+  Style (s): 1 = solid, 2 = dotted, 3 = dashed, 4 = dash-dotted<br>
+  Color (c): red, darkblue, lightgreen...<br>
+  Thickness (t): Thickness of line (integer value)<br>
+  Symbol (y): 1 = cross, 2 = ellipse, 3=xcross, 4=triangle...<br>
+<br>
+ Example:<br>
+  \>\> adpvl Pump.P1.p Pump.P1.q{2,blue,2}
+
+\subsection chds chds
+Change diagram size (and position)<br>
+ Usage: chds [width] [height]<br>
+ Usage: chds [x] [y] [width] [height]<br>
+
+
+\subsection chdl chdl
+Change (and lock) diagram limits in the current plot<br>
+ Usage: chdl [xLow] [xHigh]<br>
+ Usage: chdl [xLow] [xHigh] [xTicks] <br>
+ Usage: chdl [xLow] [xHigh] [xTicks] [ylLow] [ylHigh] [ylTicks] <br>
+ Usage: chdl [xLow] [xHigh] [xTicks] [ylLow] [ylHigh] [ylTicks] [yrLow] [yrHigh] [yrTicks] <br>
+ Usage: chdl reset
+
+\subsection chdlyl chdlyl
+Change (and lock) diagram left y-axis limits in the current plot<br>
+ Usage: chdlyl [ylLow] [ylHigh]<br>
+ Usage: chdlyl [ylLow] [ylHigh] [ylTicks]<br>
+ Usage: chdlyl reset
+
+\subsection chdlyr chdlyr
+Change (and lock) diagram right y-axis limits in the current plot<br>
+ Usage: chdlyr [yrLow] [yrHigh]<br>
+ Usage: chdlyr [yrLow] [yrHigh] [yrTicks]<br>
+ Usage: chdlyr reset
+
+\subsection logx logx
+Turn on and off logarithmic x-axis scale<br>
+ Usage: logx on <br>
+ Usage: logx off
+
+\subsection logyl logyl
+Turn on and off logarithmic left y-axis scale<br>
+ Usage: logyl on <br>
+ Usage: logyl off
+
+\subsection logyr logyr
+Turn on and off logarithmic right y-axis scale<br>
+ Usage: logyr on <br>
+ Usage: logyr off
+
+\subsection sapw sapw
+Save the current plotwinow as an image<br>
+ Usage: sapw [fileName.ext] [width] [height] [dimUnit] [dpi] <br>
+ Usage: sapw [fileName.ext] [width] [height] [dimUnit]       <br>
+ Usage: sapw [fileName.ext] [width] [height]                 Pixels size<br>
+ Usage: sapw [fileName.ext]                                  Use screen size<br>
+  ext:     png, pdf, svg, ps, jpeg<br>
+  dimUnit: px, mm, cm, in<br>
+  'dpi' (actually pixels/inch) is ignored for vector formats or when dimunit is 'px' (pixels)
+
+\subsection chpw chpw
+Changes current terminal plot window<br>
+ Usage: chpw [name]
+
+\subsection dipw dipw
+Displays current terminal plot window<br>
+ Usage: dipw [no arguments]
+
+\subsection chpvl chpvl
+Changes plot variables on left axis in current plot<br>
+ Usage: chpvl [var1{s,c,t} var2{s,c,t} ... ]<br>
+<br>
+ Line appearance (optional):<br>
+  Style (s): 1 = solid, 2 = dotted, 3 = dashed, 4 = dash-dotted<br>
+  Color (c): red, darkblue, lightgreen...<br>
+  Thickness (t): Thickness of line (integer value)<br>
+  Symbol (y): 1 = cross, 2 = ellipse, 3=xcross, 4=triangle...<br>
+<br>
+ Example:<br>
+  \>\> chpvl Pump.P1.p Pump.P1.q{2,blue,2}
+
+\subsection chpvr chpvr
+Changes plot variables on right axis in current plot<br>
+ Usage: chpvr [var1{s,c,t} var2{s,c,t,y} ... ] Line appearance (optional):<br>
+  Style (s): 1 = solid, 2 = dotted, 3 = dashed, 4 = dash-dotted<br>
+  Color (c): red, darkblue, lightgreen...<br>
+  Thickness (t): Thickness of line (integer value)<br>
+  Symbol (y): 1 = cross, 2 = ellipse, 3=xcross, 4=triangle...<br>
+<br>
+ Example:<br>
+  \>\> chpvr Pump.P1.p Pump.P1.q{2,blue,2}
+
+\subsection chpvx chpvx
+Changes xdata plot variable in current plot<br>
+ Usage: chpvx [varname]<br>
+ Usage: chpvx -c      Clear Custom x-data
+
+\subsection chto chto
+Change time plot offset for the current or specified generation<br>
+ Usage: chto [offset] [generation]<br>
+ Time offset should be given in the unit selected as the default time unit<br>
+ The generation specifier is optional, you can use c,a,*,h,l specifiers
+
+\subsection dito dito
+Display time plot offset of specified generation<br>
+ Usage: dito [generation]<br>
+ Time offset will be shown in the chose default time unit<br>
+ The "ans" variable will be offset in seconds (the base unit)
+
+\subsection sapl sapl
+Save log variables to file. Filename suffix determins format<br>
+ Usage: sapl [filepath] [-flags] [variables]<br>
+  Flags (optional):<br>
+   -csv    Force CSV format<br>
+   -plo    Force PLO format<br>
+   -h5     Force H5 (HDF5) format
+
+\subsection repl repl
+Loads plot files from .csv or .plo<br>
+ Usage: repl [-flags] [filepath]<br>
+  Flags (optional):<br>
+   -csv    Force CSV (, or ;) format<br>
+   -ssp    Force CSV (space separated) format<br>
+   -plo    Force PLO format
+
+\subsection bode bode
+Creates a bode plot from specified curves<br>
+ Usage: bode [invar] [outvar] [maxfreq] [windowfunction] [mintime] [maxtime]
+
+\subsection nyquist nyquist
+Creates a Nyquist plot from specified curves<br>
+ Usage: nyquist [invar] [outvar]
+
+\subsection lock lock
+Locks or unlocks all axes in current plot window<br>
+ Usage: lock [flag] [on/off]<br>
+ See also: lockyl, lockyr, lockr
+
+\subsection lockyl lockyl
+Locks or unlocks left y-axis in current plot window<br>
+ Usage: lockyl [on/off]<br>
+ See also: lock, lockyr, lockr
+
+\subsection lockyr lockyr
+Locks or unlocks right y-axis in current plot window<br>
+ Usage: lockyr [on/off]<br>
+ See also: lock, lockyl, lockr
+
+\subsection lockx lockx
+Locks or unlocks x-axis in current plot window<br>
+ Usage: lockx [on/off]<br>
+ See also: lock, lockyl, lockyr
+
+\section parametercommands Parameter Commands
+
+\subsection dipa dipa
+Display parameter value<br>
+ Usage: dipa<br>
+ Usage: dipa [parameter]<br>
+ Usage: dipa [parameter] [condition]<br>
+<br>
+ Example: Display all parameters starting with "Mass" and a value greater than 10:<br>
+ \>\> dipa Mass* >10
+
+\subsection adpa adpa
+Add (system) parameter<br>
+ Usage: adpa [parameter] [value]
+
+\subsection chpa chpa
+Change parameter value<br>
+ Usage: chpa [parameter] [value]
+
+\subsection sapa sapa
+Save model or component parameter values to XML file (.hpf)<br>
+ Usage: sapa [filepath]<br>
+ Usage: sapa [filepath] [componentname]<br>
+ Usage: sapa [filepath] [-c]<br>
+  Flag -c for current visible system
+
+\subsection repa repa
+Load model or component parameters values from XML file (.hpf)<br>
+ Usage: repa [filepath]<br>
+ Usage: repa [filepath] [componentname]<br>
+ Usage: repa [filepath] [-c] <br>
+  Flag -c for current visible system
+
+\section filecommands File Commands
+
+\subsection exec exec
+Executes a script file<br>
+ Usage: exec [filepath]
+
+\subsection wrhi wrhi
+Writes history to file<br>
+ Usage: wrhi [filepath]
+
+\subsection wrtf wrtf
+Writes text string to file<br>
+ Usage: wrtf [-flag] [filepath] ["string"]<br>
+  Flags (optional):<br>
+   -a Append at end of file<br>
+   -e Erase existing contents before writing<br>
+  Variables can be written by putting them in dollar signs.<br>
+  Example:<br>
+   \>\> wrtf -a output.txt "x=$x$"<br>
+
+
+\subsection pwd pwd
+Displays present working directory<br>
+ Usage: pwd [no arguments]
+
+\subsection mwd mwd
+Displays working directory of current model<br>
+ Usage: mwd [no arguments]
+
+\subsection cd cd
+Changes present working directory<br>
+ Path may be relative or absolute and must be contained withing quotes " " if it contains spaces<br>
+ Usage: cd [directory]<br>
+ Usage: cd -mwd        Switch to current model working directory
+
+\subsection mkdir mkdir
+Creates directory and all parent directories<br>
+ Path may be relative or absolute and must be contained withing quotes " " if it contains spaces<br>
+ Usage: mkdir [path]
+
+\subsection ls ls
+List files in current directory<br>
+ Usage: ls Usage: ls [wildcard]
+
+\subsection edit edit
+Open file in external editor<br>
+ Usage: edit [filepath]
+
+\section variablecommands Variable Commands
+
+\subsection disp disp
+Shows a list of all variables matching specified name filter (using asterisks)<br>
+ Usage: disp [filter]
+
+\subsection peek peek
+Shows the value at a specified index in a specified data variable<br>
+ Usage: peek [variable] [index]
+
+\subsection poke poke
+Changes the value at a specified index in a specified data variable<br>
+ Usage: poke [variable] [index] [newvalue]
+
+\subsection alias alias
+Defines an alias for a variable<br>
+ Usage: alias [variable] [alias]
+
+\subsection rmvar rmvar
+Removes specified variable<br>
+ Usage: rmvar [variables]<br>
+ Usage: rmvar [variables] -n [variables]<br>
+  Flags (optional):<br>
+   -n Exclude specified variables   -noalias Exclude all alias variables
+
+\subsection dihg dihg
+Display highest generation<br>
+ Usage: dihg<br>
+
+
+\subsection sequ sequ
+Set quantity on specified variable(s)<br>
+ Usage: sequ [variable] [quantityname]<br>
+ Usage: sequ [variable] -<br>
+  The second example clears the quantity
+
+\subsection ivpv ivpv
+Toggle invert plot of specified variable<br>
+ Usage: ivpv [variable]
+
+\subsection sepl sepl
+Set plot label<br>
+ Usage: sepl [variable] [label]
+
+\subsection dlog dlog
+Disables logging in specified ports<br>
+ Usage: dlog [ports]
+
+\subsection elog elog
+Enables logging in specified ports<br>
+ Usage: elog [ports]
+
+\section modelcommands Model Commands
+
+\subsection dico dico
+Display components
+ Usage: dico<br>
+ Usage: dico [component]<br>
+ <br>
+ Example: Display all components starting with "x":<br>
+ \>\> dico x*
+ 
+\subsection load load
+Loads a model file<br>
+ Usage: load [filepath]
+
+\subsection revert revert
+Revert the current model<br>
+ Usage: revert
+
+\subsection loadr loadr
+Loads most recent model file<br>
+ Usage: loadr [no arguments]
+
+\subsection save save
+Saves current model<br>
+ Usage: save<br>
+ Usage: save [filepath]<br>
+  If no file path is specified, current model file is overwritten.
+
+\subsection reco reco
+Renames a component<br>
+ Usage: reco [oldname] [newname]
+
+\subsection rmco rmco
+Removes specified component(s)<br>
+ Usage: rmco [component]
+
+\subsection chtab chtab
+Changes current model tab<br>
+ Usage: chtab [index]
+
+\subsection adco adco
+Adds a new component to current model<br>
+ Usage: adco [typename] [name] -a [x-coord] [y-coord] [rot-angel]<br>
+ Usage: adco [typename] [name] -e [other] [east-offset] [rot-angel]<br>
+ Usage: adco [typename] [name] -w [other] [west-offset] [rot-angel]<br>
+ Usage: adco [typename] [name] -n [other] [north-offset] [rot-angel]<br>
+ Usage: adco [typename] [name] -s [other] [south-offset] [rot-angel]
+
+\subsection rpco rpco
+Replaces a component with a different type<br>
+ Usage: rpco [name] [typename]
+
+\subsection coco coco
+Connect components in current model<br>
+ Usage: coco [comp1] [port1] [comp2] [port2]
+
+\subsection unco unco
+List unconnected ports in current model<br>
+ Usage: unco [wildcard]
+
+\subsection crmo crmo
+Creates a new model<br>
+ Usage: crmo [no arguments]
+
+\section othercommands Other Commands
+
+\subsection help help
+Shows help information<br>
+ Usage: help [command]
+
+\subsection info info
+Show information about specified variable<br>
+Usage: info [variable]
+
+\subsection exit exit
+Exits the program<br>
+ Usage: exit [no arguments]
+
+\subsection print print
+Prints arguments on the screen<br>
+ Usage: print [-flag] ["string"]<br>
+ Usage: print [-flag] [expression]<br>
+  Flags (optional):<br>
+   -i Info message<br>
+   -w Warning message<br>
+   -e Error message<br>
+  Variables can be included in strings by putting them in dollar signs.<br>
+  Example:<br>
+   \>\> print -w "x=$x$"<br>
+   Warning: x=12
+
+\subsection eval eval
+Evaluate string expression<br>
+ Usage: eval ["expression"]<br>
+  Variable evaluation can be included by putting them within dollar signs<br>
+  Example:<br>
+   \>\> eval "chpv Gain$i$.out.y"
+
+\subsection set set
+Sets Hopsan preferences<br>
+ Usage: set [preference] [value]<br>
+  Available preferences:<br>
+   multicore        [on/off]<br>
+   threads          [number]<br>
+   cachetodisk      [on/off]<br>
+   generationlimit  [number]<br>
+   samples          [number]<br>
+   undo             [on/off]<br>
+   backup           [on/off]<br>
+   progressbar      [on/off]<br>
+   progressbarstep  [number]
+
+\subsection get get
+Shows current Hopsan preferences<br>
+ Usage: get [preference]<br>
+  No argument prints all preferences.<br>
+  Available preferences:<br>
+   multicore      <br>
+   threads        <br>
+   cachetodisk    <br>
+   generationlimit<br>
+   samples        <br>
+   undo           <br>
+   backup         <br>
+   progressbar    <br>
+   progressbarstep<br>
+
+
+\subsection close close
+Closes current model<br>
+ Usage: close Usage: close all
+
+\subsection fmu fmu
+Exports current model to Functional Mockup Unit (FMU)<br>
+ Usage: fmu [path]
+
+\subsection opt opt
+Initialize an optimization<br>
+ Usage: opt [algorithm] [partype] [parnum] [parmin] [parmax] -flags]<br>
+  Algorithms:   Flags:<br>
+  complex       alpha
+
+\subsection call call
+Calls a pre-defined function<br>
+ Usage: call [funcname]
+
+\subsection echo echo
+Sets terminal output on or off<br>
+ Usage: echo [on/off]
+
+\subsection semt semt
+Change mutli-trheading settings<br>
+ Usage: semt [on/off] [numThreads] [algorithm]<br>
+ Usage: semt [on/off] [numThreads]
+
+\subsection sleep sleep
+Pause execution for a number of seconds<br>
+ Usage: sleep [seconds]<br>
+ The sleep argument has millisecond accuracy
+
+\section functions Local Functions
+
+\subsection abs abs()
+The absolute value of each vector element<br>
+Usage: abs(vector)
+
+\subsection ans ans()
+Returns the answer from the previous computation<br>
+Usage: ans()
+
+\subsection aver aver()
+Calculate average value of vector<br>
+Usage: aver(vector)
+
+\subsection bdf1 bdf1()
+Transforms derivatives in a symbolic expression using the first order backward differentiation formula (implicit Euler)<br>
+Usage: e = bdf1(f)
+
+\subsection bdf2 bdf2()
+Transforms derivatives in a symbolic expression using the second order backward differentiation formula<br>
+Usage: e = bdf2(f)
+
+\subsection ceil ceil()
+Rounds the value of each vector element to the smallest integer larger than the value<br>
+Usage: ceil(vector)
+
+\subsection cut cut()
+Removes all samples x[i] for which y[i]<0.5<br>
+Usage: cut(x, y)
+
+\subsection ddt ddt()
+Differentiates vector with respect to time (or to custom vector)<br>
+Usage: ddt(vector)<br>
+Usage: ddt(vector, timevector)
+
+\subsection der der()
+Differentiates a symbolic expression with respect to another one<br>
+Usage: e = der(f1,f2)
+
+\subsection eq eq()
+Index-wise fuzzy equal check between vectors and/or scalars  (equivalent to "==" operator)<br>
+Usage: eq(varName, threshold, eps)<br>
+Usage: eq(var1, var2, eps)
+
+\subsection esd esd()
+Generates energy spectral density from vector<br>
+Usage: esd(vector, [timevector], [windowing]([rectangular]/flattop/hann), [mintime], [maxtime])<br>
+
+
+\subsection euler euler()
+Transforms derivatives in a symbolic expression using the forward Euler method<br>
+Usage: e = euler(f)
+
+\subsection eval eval()
+Evaluates a symbolic expression using local variables<br>
+Usage: y = expr(f)
+
+\subsection exists exists()
+Returns whether or not specified component exists in model<br>
+Usage: exists(name)
+
+\subsection expand expand()
+Expands all parentheses in a symbolic expression<br>
+Usage: e = expand(f)
+
+\subsection expandpowers expandPowers()
+Expands all powers in a symbolic expression to multiplications<br>
+Usage: e = expandPowers(f)
+
+\subsection expr expr()
+Defines a new symbolic expression<br>
+Usage: e = expr(...)
+
+\subsection factor factor()
+Factors a symbolic expression with respect to another one<br>
+Usage: e = factor(f1,f2)
+
+\subsection fc fc()
+Fuzzy compare, returns 1 if the values of the arguments are almost the same<br>
+Usage: fc(expr, expr, tolerance)
+
+\subsection fd fd()
+Converts variable to frequency domain.<br>
+Usage: y = fd(x)
+
+\subsection fft fft()
+Generates frequency spectrum plot from vector (deprecated)<br>
+Usage: fft(vector, [type]([power]/energy/rms), [windowing]([rectangular]/flattop/hann), [min], [max])<br>
+Usage: fft(vector, [timevector], [type]([power]/energy/rms), [windowing]([rectangular]/flattop/hann), [min], [max])
+
+\subsection floor floor()
+Rounds the value of each vector element to the largest integer smaller than the value<br>
+Usage: floor(vector)
+
+\subsection gt gt()
+Index-wise greater than check between vectors and/or scalars (equivalent to ">" operator)<br>
+Usage: gt(varName, threshold)<br>
+Usage: gt(var1, var2)
+
+\subsection hg hg()
+Returns highest generation number<br>
+Usage: hg()
+
+\subsection imax imax()
+Calculate index of maximum value of vector<br>
+Usage: imax(vector)
+
+\subsection imin imin()
+Calculate index of minimum value of vector<br>
+Usage: imin(vector)
+
+\subsection int int()
+Integrates vector with respect to time (or to custom vector)<br>
+Usage: int(vector)<br>
+Usage: int(vector, timevector)
+
+\subsection latex latex()
+Prints a symbolic expression with LaTeX syntax<br>
+Usage: latex(e)
+
+\subsection left left()
+Returns the left-hand side of a SymHop equation<br>
+Usage: e = left(f)
+
+\subsection linearize linearize()
+Linearizes a SymHop equation by multiplying with all divisors<br>
+Usage: e = linearize(f)
+
+\subsection linspace linspace()
+Linearly spaced vector<br>
+Usage: linspace(min, max, numSamples)
+
+\subsection logspace logspace()
+Logarithmicly spaced vector<br>
+Usage: logspace(min, max, numSamples)
+
+\subsection lp1 lp1()
+Applies low-pass filter of first degree to vector<br>
+Usage: lp1(vector, frequency)<br>
+Usage: lp1(vector, timevector, frequency)
+
+\subsection lt lt()
+Index-wise less than check between vectors and/or scalars  (equivalent to "<" operator)<br>
+Usage: lt(varName, threshold)<br>
+Usage: lt(var1,var2)
+
+\subsection max max()
+Calculate maximum value of vector<br>
+Usage:max(vector)
+
+\subsection maxof maxof()
+Returns the element-wise maximum values of x and y vectors<br>
+Usage: maxof(x,y)
+
+\subsection maxpar maxpar()
+Returns the maximum value of specified parameter for specified component type<br>
+Usage: maxpar(type,par)
+
+\subsection min min()
+Calculate minimum value of vector<br>
+Usage: min(vector)
+
+\subsection minof minof()
+Returns the element-wise minimum values of x and y vectors<br>
+Usage: minof(x,y)
+
+\subsection minpar minpar()
+Returns the minimum value of specified parameter for specified component type<br>
+Usage: minpar(type,par)
+
+\subsection obj obj()
+Returns optimization objective function value with specified index<br>
+Usage: obj(idx)
+
+\subsection ones ones()
+Create a vector of ones<br>
+Usage: ones(size)
+
+\subsection optpar optpar()
+Returns specified optimization parameter<br>
+Usage: optpar(idx)
+
+\subsection optvar optvar()
+Returns specified optimization variable<br>
+Usage: optvar(idx)
+
+\subsection peek peek()
+Returns vector value at specified index<br>
+Usage: peek(vector, idx)
+
+\subsection psd psd()
+Generates power spectral density from vector<br>
+Usage: psd(vector, [timevector], [windowing]([rectangular]/flattop/hann), [mintime], [maxtime])<br>
+
+
+\subsection rand rand()
+Generates a random value between 0 and 1<br>
+Usage: rand()
+
+\subsection removedivisors removeDivisors()
+Removes all divisors in a symbolic expression<br>
+Usage: e = removeDivisors(f)
+
+\subsection right right()
+Returns the right-hand side of a SymHop equation<br>
+Usage: e = right(f)
+
+\subsection rms rms()
+Computes the root mean square of given vector<br>
+Usage: rms(vector)
+
+\subsection rmsd rmsd()
+Generates root mean square spectral density from vector<br>
+Usage: rmsd(vector, [timevector], [windowing]([rectangular]/flattop/hann), [mintime], [maxtime])<br>
+
+
+\subsection round round()
+Rounds the value of each vector element to closest integer value<br>
+Usage: round(vector)
+
+\subsection simplify simplify()
+Simplifies a symbolic expression<br>
+Usage: e = simplify(f)
+
+\subsection size size()
+Calculate the size of a vector<br>
+Usage: size(vector)
+
+\subsection ssi ssi()
+Identifies steady-state for specified variable<br>
+Usage: ssi(vector, method, arguments)<br>
+       Method 0 (rectangular window):<br>
+         ssi(vector, 0, tolerance, windowlength)<br>
+       Method 1 (ratio of differently estimated variances):<br>
+         ssi(vector, 1, tolerance, windowlength, noiseamplitude<br>
+       Method 2 (ratio of differently estimated variances using weighted moving average):<br>
+         ssi(vector, 2, tolerance, lambda1, lambda2, lambda3, noiseamplitude)
+
+\subsection td td()
+Converts variable to time domain.<br>
+Usage: y = td(x)
+
+\subsection time time()
+Returns last simulation time<br>
+Usage: time()
+
+\subsection trapezoid trapezoid()
+Transforms derivatives in a symbolic expression using the trapezoid method<br>
+Usage: e = trapezoid(f)
+
+\subsection vector vector()
+Create a vector with specified values<br>
+Usage: vector(1,2,3,4,5,6,...)
+
+\subsection x x()
+Returns the X-vector of the specified variable.<br>
+Usage: x(vector)
+
+\subsection zeros zeros()
+Create a vector of zeros<br>
+Usage: zeros(size)
+
+*/

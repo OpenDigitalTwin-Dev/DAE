@@ -1,0 +1,20 @@
+#Simulate worst points and evaluate objective function
+define evalworst
+    opt set evalid optvar(worstid)
+    call setpars
+    sim
+    call obj
+enddefine
+
+
+#Simulate to get initial objective values
+define evalall
+    i=0
+    while (i<optvar(npoints))
+        opt set evalid i
+        call setpars
+        sim
+        call obj
+        i=i+1
+    repeat
+enddefine

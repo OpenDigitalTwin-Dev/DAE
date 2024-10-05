@@ -1,0 +1,2387 @@
+﻿******************************
+    Important Information
+******************************
+
+- See the issue-tracker https://github.com/Hopsan/hopsan/issues for all known issues.
+  You can also report new issues, if you first create a GitHub account.
+
+- There is no guarantee that the included component models are working under all conditions,
+  you must decide for yourself if you trust the simulation results.
+
+- When you load models saved with an older version of Hopsan, follow these recommendations to avoid loosing information:
+  - Deactivate "Group Similar Messages" in the message widget at the bottom before loading a model.
+  - Pay attention to any Warnings or Errors you may receive when loading your old model.
+    If parameters fail to load they will be discarded.
+  - Parameters and ports may have changed name, in such cases you have to manually set the parameter value that could
+    not be loaded (according to messages).
+
+- Sometime when exporting a model as PNG or PDF some components "vanish" or become very small. We have not been able to
+  fix this problem. If this is a problem, take a screen-shot instead. You can quickly hide all of the side widgets with
+  a button on the left pane.
+
+- Hopsan internally relies on using the U.S English locale ( decimal separator '.' ) and should internally switch to
+  this mode. Problems have been observed on some Ubuntu installations running with a different locale. Hopsan fails to
+  interpret values with decimal separator '.' (it usually expects ','). If you do not want to change your system
+  settings you can start Hopsan with the following command to locally ensure that U.S English numeric locale is used.
+  Example:
+    cd /opt/hopsan/bin
+    LC_NUMERIC=C; ./hopsangui
+
+******************************
+    Version History
+******************************
+2.22.1 (2024-09-26)
+----- Bug Fixes -----
+- HopsanGUI
+  - Fixed problem with workspace size
+  - Animation mode now keeps worksapce size
+  - FMIWrapper components now appear at the center of the model
+  - "adco" command in terminal will now add components on correct place
+  - Fixed minor problems with splash screen
+  - Model can no longer be edited during simulation
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+2.22.0 (2024-05-27)
+
+----- Bug Fixes -----
+- HopsanCore
+  - Fixed crash in clustered fork-join parallel algorithm
+  - Fix crash when using non-existing variables in FMIWrapper port specifications
+  - Fix bugs with collecting log data during multithreaded simulations
+  - Added missing call to finalize after measuring simulation time
+  - Multiple variables with same value reference is now supported by FMIWrapper
+  - Added missing quotation marks around include directories in FMI export Makefile
+  - Fixed broken pi() function in HCOM/SymHop
+  - Correct typenames are now used when regenerating component libraries  
+  - Fixed problem with merging divisors after removing factor in SymHop
+  - Fixed crash when connecting non-existing ports in HCOM
+  - Fix mixup between system parameters and local variables in HCOM
+  - Fix FMI export of models without .hmf extension
+
+----- Enhancements -----
+
+- HopsanGUI
+  - Option to log results during simulation (experimental)
+  - Image widgets
+  - Changes to simulation time settings are now supported by undo/redo
+  - New HCOM command: "dipa" - display components
+  - Weird multicache error was clarified and converted to a warning
+  - Existing log data is now automatically removed at startup if no other instance of Hopsan is running
+  - "log2" function is now supported by HCOM/SymHop
+  - New HCOM function: "r2d()" - radians to degrees
+  - New HCOM function: "d2r()" - degrees to radians
+  - FMIWrappers are now automatically renamed to the FMU base file name
+  - Real variable names are now used in Matlab (.m) export
+  - Variable aliases are now shown in Bode plot dialog
+  - Local HCOM functions can now be used in temporary expression evaluations
+  
+- HopsanGenerator  
+  - Timestep can now be controlled in exported FMUs
+  - Recompilation of a library can now be prevented with XML flag  
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+2.21.1 (2023-06-20)
+
+----- Bug Fixes -----
+
+- DefaultComponentLibrary:
+  - Remove external library file for the included ActivityDiagram sub directory
+    This prevents compilation error of non-existing external library when the Windows version of Hopsan starts
+    The library has been embedded into the default component library
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+2.21.0 (2023-06-10)
+
+----- Important Change -----
+
+- From this version onward, 32-bit releases are no longer built by default. If you need a 32-bit version, you will need to build it yourself or ask kindly in the issue tracker.
+- This version replaces the FMI import functionality, so instead of compiling a specific FMU wrapper on import, an existing FMIWrapper component shall be used instead. It is available in the default library under the Connectivity category. This means that any model that included a generated FMI component from previous versions will not longer work. You need to replace that generated component with the new FMIWrapper component.
+
+----- Enhancements -----
+
+- Packaging:
+  - Hopsan was added to Chocolatey, a package manager for Windows, see https://community.chocolatey.org/packages/hopsan for details
+    Note! This package was added by an external contributor and is not directly built by the developers of Hopsan.
+
+- HopsanCore:
+  - Added connection-not-required argument to addSystemPort() function. This will only affect hand-coded "subsystem components"
+    Default behavior is to require a connection
+  - Extend pneumatic node type with density, density wave variable and density characteristic impedance
+    This is required for correct computation of temperature and heat flow
+
+- HopsanGenerator:
+  - Support inline transformation of Laplace operator
+  - FMI: Added FMI 3.0 import and export support
+  - FMI: All FMI import is now handled through the FMIWrapper component (instead of regenerating and compiling a custom wrapper every time)
+  - FMI: Added fmi4c dependency (FMILibrary is still kept for backwards compatibility)
+  - FMI: Harmonized FMI export for 1.0, 2.0 and 3.0 and removed unused template files
+
+- HopsanGUI:
+  - Improved find widget behavior when pressing Ctrl-F
+  - Home button will now move to beginning of line if there are only spaces before cursor in the text editor
+  - Do not add closing parenthesis when it has already been added in  the text editor
+  - HCOM: New function ans() returns the answer from the previous computation. Only works for scalars
+  - HCOM: New command rpco() which replaces a component by specified type. Replacement type must be specified in component appearance XML
+  - HCOM: Support decimal number without decimal part bwfore e in expressions such as in x=14.e-3
+
+----- Bug Fixes -----
+
+- SymHop:
+  - Only expand powers for integer exponents in SymHop
+
+- HopsanGUI
+  - Fix text editor parenthesis crash
+  - Fix text file constant warnings that file has changed on disk, even if it was saved by Hopsan
+  - Fix severe delays when saving text files
+  - Fix crashes when attempting to view the source of a missing component
+  - Fix crash when replacing subtype components with missing component
+  - FMU Export would fail on Linux when using deb package installation as the required zip was not in the dependency list
+  - Saving XML models and other XML data to Windows network drive share would take an extremely and unreasonably long time, it is now significantly faster
+  - Remember original data when saving models with missing components
+    This both eliminates the problem of accidentally saving a model with missing components and thereby losing data, and with the backup models being damaged during a failed library recompilation
+  - HCOM: Fix undesired abort of script when using if statement without else
+
+----- Component Libraries -----
+
+- The component Q-type ground in the Electric->Sources was actually a C-type ground, it has been renamed
+- A new component which is actually a Q-type ground has been added
+- Fixed several potential "free of dangling uninitialized pointers" in generated components
+  They apparently worked fine when built with GCC, but other compilers may have behaved differently
+- Add activity diagram components to the default library
+- Replaced old cavitation check i variable Q-type machine with a new check. Essentially, pressures are limited to zero implicitly by first limiting the flows to values required to get positive pressures. This solves problems with very large negative wave variables.
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+2.20.0 (2022-07-11)
+
+----- Enhancements -----
+
+- HopsanCore
+  - Move real-time simulation main loop into HopsanCore (from GUI) resulting in much better performance (animation mode)
+  - Temporary files created by lookup components are now deleted on Linux systems when the model is closed
+    (On Windows they will remain in the temp directory)
+
+- HopsanGUI
+  - Show HTML description in FMIWrapper component (extension library) if available in FMU
+  - Replace functionality added to FindWidget for text files
+  - Import/export parameter data to/from SSV format
+  - Support SSV parameter sets for components (can be specified in component xml)
+  - Add 'Energy Density Spectrum', 'Power Density Spectrum' and 'Root Mean Square' of vector to frequency analysis
+  - Added "Open model file" option in right-click menu for subsystem components in library widget
+  - Hide "Open source code" option for components that have no source code specified
+  - Double-clicking on subsystem components opens model file
+  - HCOM: Add steady-state identification, function ssi()
+  - HCOM: New function: cut()
+  - HCOM: Support elseif and nested if-statements
+  - Make GUI fall back to empty port icon graphics for unknown node types
+    This makes it possibly to register and use custom node types in custom component libraries
+    Note! Custom nodes may not yet work in all cases, such as in code generation
+
+- Ops
+  - Support for surrogate models in Ops algorithms
+    Surrogate models are fast numerical approximations of the objective functions.
+    The implementation is based on polynomial response surfaces, as described by: https://doi.org/10.1007/s11081-014-9247-9
+    To active surrogate models, add the command surrogatemodel <interval> in the HCOM script.
+    The interval setting specifies how many evaluations the surrogate model is used before it is updated.
+
+----- Bug Fixes -----
+
+- HopsanGUI
+  - Update default parameters when changing FMU in FMIWrapper component 
+  - Ignore file change warning after saving a file. At least on Windows the file would otherwise be reported as modified
+  - Loading HMF components as internal subsystems was forgotten when saving the model
+  - HCOM: Fix SymHop evaluation of model parameters ending with 'e'
+  - HCOM: Fix symhop evaluation of power if variable contains underscore, ex: a_b^2
+  - HCOM: Fix hg() (highest generation) function, it did always return 0
+  - Fix crash when adding new component to library
+  - Ensure that error and warning messages about missing files when loading libraries actually contain the missing path
+  - Spectrum/FFT dialog Crashes GUI if simulation was stopped by stop component
+    time data was not truncated to actual number of simulated samples
+  
+- HopsanCore
+  - Fix signal component sorting when a ReadMultiPort with multiple connections is present
+  
+----- Component Libraries -----
+  - Standard Component Library: MechanicTranslationalLosslessConnector XML file error
+  - Standard Component Library: SignalSteadyStateIdentifier
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+2.19.1 (2021-11-05)
+
+----- Bug Fixes -----
+
+- HopsanGenerator
+  - FMU, S-Function and EXE export all failed to compile due to missing default library source code files
+    They were not included due to a bug in packaging in 2.19.0
+  - FMI ModelExchange import would not compile due to errors in the template code parameter type handling
+
+- HopsanGUI
+  - Energy loss calculation showed wrong value for domain-specific losses, and alternated between runs
+    Also clarified added energy text
+  - HopsanGUI would crash when a connected input variable port was disabled (removed)
+    The checkbox is now disabled for connected ports
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+2.19.0 (2021-05-10)
+
+--- Important Change ---
+
+The HoLC (Hopsan Library Creator) application has been removed.
+Its functionality has been built into HopsanGUI for some time, and can be accessed from the context menu (right-click)
+in the library widget.
+
+----- Enhancements -----
+
+- HopsanC:
+  - Make it possible to get data vectors by alias name in Python, Julia and Matlab
+
+- HopsanGUI:
+  - Make it possible to view XML and source code for default library components by right-clicking in library widget
+  - Highlight connected connectors when hovering a component
+  - HCOM: Support orphan variables in the chpvx command
+  - HCOM: Enables defining and evaluating SymHop expressions
+          Example: >> a=expr(sin(x)+y)
+                   sin(x)+y
+                   >> b=der(a,expr(x))
+                   cos(x)
+  - HCOM: Convert SymHop expressions to LaTeX
+          Example: >> f=expr((a+b)/(c+d))
+                   (a+b)/(c+d)
+                   >> latex(f)
+                   \dfrac{a+b}{c+d}
+  - Monitor text files in editor tabs for external changes
+  - Add "Always visible" setting for GUI components
+    Use the context menu (right-click) on a component
+  
+- HopsanGenerator:
+  - Various improvements in Simulink generator
+    Hopsan S-functions now also support the "fast restart" option in Simulink
+  - Various fixes and improvements to Modelica generator
+  - Statically link to MinGW libraries for FMI export on Windows
+    Removing dependency to correct version of MinGW DLLs in exported FMUs more 
+
+----- Bug Fixes -----
+
+- HopsanGUI:
+  - Use interpolation-based down sampling to reduce vector size
+    There was an error in reduceVectorSize function due to integer division
+    The fix will affect all frequency analysis plots (spectrum, bode and nyquist)
+  - Preserve rotation and flipping of replaced components
+
+----- Component Libraries -----
+
+- Enable end of stroke limitation in all C-type pistons
+- Add moment of inertia quantity and make use of it in components
+- PID2 component, changed the meaning of the 'de' input signal
+  It is now expected to be a derivative input rather then a "error" delta
+  If you have models using this component they may need to be updated
+- Added markdown descriptions with equations for many commonly used default library components
+  Note! Due to the large amount of added documentation, it has not yet been reviewed
+  If you find something that looks odd, take a look at the component source code
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+2.18.0 (2021-02-25)
+
+----- Enhancements -----
+
+- HopsanCore:
+  - New "filepath" parameter type (variable class HFilePath). It is basically string, but will enable a browse dialog button in
+    the component properties dialog. File paths will be added relative to the model, if you want absolute paths, you will have to
+    copy paste the path into to file path text field (like before)
+
+----- Bug Fixes -----
+
+- HopsanGUI:
+  - Due to the random bug described below, starting optimization would instantly freeze the program
+
+- Ops:
+  - On the Windows version build with MinGW the random generator would return the same value on each call. It now returns actual random values
+  - Due to this random bug, optimization would freeze during initialization (get stuck in an infinite loop)
+
+
+----- Component Libraries -----
+
+- Various improvements and fixes to the experimental FMI wrapper component (Extension library)
+- LookupTable components now use the filepath parameter type to allow browsing for files
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+2.17.0 (2021-02-14)
+
+----- Enhancements -----
+
+- BuildSystem:
+  - CMake build system can now build all Hopsan parts and support for the Microsoft Visual C++ compiler has been added
+    Some issues still remain for CMake / MSVC builds, so this is not yet the default build system
+    Build instructions have been updated, if you wish to use this build method
+
+- Documentation:
+  - Add link to tutorials under the help menu in HopsanGUI. There is now a more in-depth tutorial on the TLM method available.
+
+- HopsanC:
+  - List alternatives when querying for illegal port or variable names
+
+- HopsanCore:
+  - New "quantity" LeakageCoefficient added with various scale factors
+  - Add Component::reconfigure() function that components can overload to reconfigure themselves
+    Reconfigure is triggered when a parameter registered with the Component::setReconfigurationParameter(const HString &rName) function
+    is changed.
+
+- HopsanGUI:
+  - Do not trigger auto complete popup after @
+  - Do not auto select auto complete item while typing, user must press Tab, arrow keys or select with mouse
+    This avoids the very annoying unintentional auto complete
+  - Auto complete now replaces the entire completer prefix, to ensure that case is corrected
+    Example: step.out.y -> Step.out.y
+  - Fix auto complete not recognizing . in names such as Step.out.y
+  - If you invert a plot curve using the curve controls, the setting will be remembered for the next generation
+    If you want the invert curve setting to be persistent, check the box in the component properties instead
+  - HCOM "edit" command now opens supported files in the Hopsan text editor instead of external editor (which quite often is not found)
+
+- Ops:
+  - Add elites parameter in genetic algorithm
+    The best individuals are always carried over to the next generation without crossover and mutation.
+    This helps avoid degradation of solution quality between generations.
+
+----- Bug Fixes -----
+
+- HopsanC:
+  - Header file for hopsanc was not included in release
+  
+- HopsanGUI:
+  - Do not clear undo-stack when a connector can not be found
+  - Prevent renaming subsystem copy twice
+    Fixes invalid name lookup for attached connector in undo
+  - Fix hand icon getting stuck (finally after all these years)
+  - Fix pasting system ports with connections
+    They are no longer lost due to port being renamed
+  - Fix enable/disable undo action syncing with changes in systems
+  - Fix redo for subsystem paste
+  - Process undo items in reverse order
+    So that sub-operations are undone in the correct order
+  - Fix redo for text widgets
+  - Fix model lock-level detection for top-level system
+    Prevents changes to model when model is locked
+  - Prevent paste while left mouse button is pressed
+    It would mess with the positions of the pasted components
+  - Maybe fixed crash when simulation is finished, related to progress bar handling
+    The problem could not be reproduced reliably (by the developers) so hard to know if it is fixed
+  - Remove fade effect on red error flash in terminal, on some systems it would take a long time to fade
+    Replaced by 400 ms solid read background
+  - Fixed lock axis setting was forgotten when browsing to an empty generation
+  - Fix splash screen not including version number and mentioning "development version"
+
+- Ops:
+  - Check for minimum number of candidates in DE algorithm, to avoid crash.
+    DE algorithm requires four points
+
+----- Component Libraries -----
+
+- Renamed ContainerPort to SystemPort
+  Containers (a type of system) were removed from Hopsan several years ago
+- Turn off rotation for various signal component icons with symbols
+- Added missing unit to leakage parameter for all pump/motor components
+  Set the same default value for leakage parameter to 1e-12 for all pump/motor components
+- Use consistent default parameter value for density 870 kg/m^3 in the default component library
+- New component: Hydraulic differential pressure sensor
+- Obsolete CppComponent and ModelicaComponent traces removed (were causing warning messages)
+  The HopsanGenerator can generate proper components, so the old wrappers are no longer needed (and they no longer work)
+- New component: (Extension library) Experimental FMI wrapper using reconfigure rather then requiring recompilation
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+2.16.0 (2020-11-08)
+
+--- Important Change ---
+
+To avoid name collision in HDF5 exports, the following names were reserved: Time, time, Frequency and frequency, 
+HopsanGUI will attempt to automatically rename such components and system parameter when loading a model,
+but HopsanCLI will not, and models must be updated in the GUI first.
+To avoid name collision, the new names will have the _INVALID_NAME suffix appended.
+You will need to change them manually if you wish.
+
+
+--- Enhancements ---
+
+- HopsanCLI:
+  - Add command-line argument -p or --parallel to enable multi-core simulation from command line.
+    Note! Small models do not benefit from multi-core and will in fact run much slower, measure first
+    to decide if is useful for your model
+  - Unify CSV and HDF5 output code to make them behave the same way
+  - HDF5 exporter now uses the --logonly include filter
+  - Only export relevant time vectors when --logonly specifies a subset of variables
+    Example: If only a subsystem variable is exported, then only the time vector for that system is included
+    
+- HopsanGUI:
+  - Updated QWT so that it works with new Qt versions
+  - Make parameter export and import remember last used directory
+  
+- HopsanGenerator:
+  - Update bundled 7z version to 19.00 (Only used on Windows)
+    
+--- Bug Fixes ---
+
+- HopsanCore:
+  - Restore PLO v2 format import to use one less number of data columns
+
+- HopsanCLI:
+  - If simulation is aborted, then the entire pre-allocated time vector will no longer be export. Only up to the last actual sample
+  
+- HopsanGUI:
+  - Restore PLO v2 format export to use one less number of data columns (fix import crash)
+  - System parameters widget was not updated when importing parameters from file
+  - Do not tag model as changed when exporting parameters
+  - Allow HCOM sequ command to change Quantity for particular generation or all generations
+    Use the all option with care, as it will change the apparent unit on old data (without changing the actual data)
+  - After changing quantities from HCOM, the component properties dialogs would not get updated
+    They still need to be closed and opened
+  - Fix ComponentPropertiesDialog not showing when you double-click (try to open it the first time).
+    You were required to open it again, to actually show the dialog, also the model would be frozen in a non-editable state, due to hidden
+    opened properties dialogs.
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+2.15.0 (2020-09-10)
+
+--- Enhancements ---
+
+New C-API shared library wrapper for Hopsan core with Julia, Matlab and Python language wrapper, see:
+  Scripts/Julia/hopsan.j1
+  Scripts/Matlab/hopsan.m
+  Scripts/Python/hopsan.py
+
+Update to Qt 5.9.9 and MinGW-w64 5.4.0 on Windows
+  If you are building component libraries externally from an IDE, make sure that you use the new compiler (included with Hopsan)
+
+- HopsanCore:
+  - Add Kinsol solver (libsundials) for solving algebraic equation systems
+    This library source code is bundled with and compiled into HopsanCore
+
+- HopsanCLI:
+  - Enable HDF5 export of log variables from HopsanCLI
+  - Improved parameter export, with the following changes since previous versions
+     * Parameter export no longer prefix the subsystem name twice to system parameters
+     * System parameters in the top-level systems are prepended with the reserved name "self"
+     This means that old parameter files containing system parameters will no longer import correctly, without manual editing
+     However, parameter import was broken anyway, so that should not be a big problem (fixed in this release)
+  - Enable filtering --logonly results on individual variables in ports
+    The entire port is still logged in memory, but only the desired variables are written to CSV file
+
+- HopsanGUI:
+
+  - The built-in python terminal has been removed, because it never worked well, and caused a lot of maintenance problems
+  - Apply icon scale when adding subsystem components
+  - Add automatic numbering and referencing of equations in markdown (LaTeX) help documentation.
+    Use LABEL=name and EQREF{name} according to the example in:
+    exampleComponentLib\HydraulicComponents\MyExampleOrifice.md
+  - Display highest generation command in HCOM, adds "dihg" command and "hg()" function
+
+- HopsanGenerator:
+
+  - Use standard Modelica attributes for input and output variables in Modelica importer
+  - Complete rewrite of Modelica generator and related functionality
+    See the included ModelicaExampleLib
+
+
+--- Bug Fixes ---
+
+- HopsanCore:
+  - Fix compilation issue and stack overflow when using MSVC compiler
+  - Fix PLO v2 import bugs (import did not work)
+
+- HopsanCLI:
+  - Fixed broken parameter import
+  - The command line argument --logonly, did not consider system ports on subsystems
+
+- HopsanGUI:
+  - Always reload models before starting a new optimization, this avoids running old models if you make changes between optimization runs
+  - Correct tab names and tab indexes after restoring HopsanGUI state, when multiple models and/or text editors were opened
+  - Fixed PLO v2 export bugs
+  - Fixed markdown help not being shown when markdown file does not include equations
+  - Fixed LaTeX rendering of parentheses and brackets in help equations, (Updated to KaTeX 0.12.0)
+
+
+--- Component Libraries ---
+
+  - Add new component "AeroFlightRecorder" to the "AeroComponents" library
+  - Resolves problem in SignalLogger with exponentially increasing simulation time due to appending and reallocating data vector
+  - Fix SignalLogger file stream on Windows, so that all values get written
+  - Fix incorrect equations in Gas Accumulator (HydraulicAckumulator)
+  - Add missing embedded text support to PLOLookupTable
+  - Display components (for animation) now has parameters for description, unit, unit scaling, precision, background color and text color
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+2.14.2 (2020-05-22)
+
+--- Bug Fixes ---
+
+- HopsanGUI:
+  - Fixed new bug that prevented system parameters from automatically being copied into new systems when the
+    component using them was copied
+  - Fixed old bug where system parameters of other types then double would never be copied into a new system
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+2.14.1 (2020-05-17)
+
+--- Enhancements ---
+
+- HopsanGUI:
+  - Add flat top windowing function to frequency analysis
+  - Unset axis lock for the specific axis when changing units or X-axis variable
+  - Optimization can now be aborted while evaluating initial candidates
+
+--- Bug Fixes ---
+
+- Packaging:
+  - Ubuntu Eoan package no longer depends on libpythonqt-qt5-python3-3 which is not available in the package repository
+
+- HopsanCore:
+  - Fix bug in automatic model updater that would incorrectly add self. to constant parameter values if the parameter name and value
+    expression were identical. In this case the intended result would be to use the parent system parameter of the same name
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+2.14.0 (2020-05-01)
+
+This release contains an important change to how parameter referencing is done in start value expressions.
+This change affects embedded scripts (numhop) and parameter value expressions. Previously when a named value was used in an expression,
+the code first checked it the value was another parameter in the same component, then if one could not be found it checked in the parent
+system, and then in the grand parent system, and so on.
+This made it impossible to enforce choosing the parent system parameter if a local one of the same name existed.
+This new change requires that parameters in the own component are prefixed by "self."
+A named value not prefixed by self. is assumed to be part of the parent system, then the grandparent system and so on.
+Parameter expression example:  self.a + self.b + a
+Would add the local parameters 'a' and 'b', to the parent system parameter also named 'a'
+Models saved prior to version 2.14.0 will be auto updated, with the exception for embedded model initialization scripts.
+For these scripts a dialog window (and log message) will list the variables that need to be renamed.
+Note! There are no changes to how components are implemented in C++, this only affects modeling in HopsanGUI.
+
+--- Enhancements ---
+
+- HopsanCore:
+  - Use a more secure temp file generator to avoid security warning when compiling (mkstemp instead of tmpnam)
+    If a "system environment temp" directory is not set, temporary files may end up in the Hopsan installation directory, under bin
+    This is unlikely but may happen when running Hopsan from automated scripts
+  - Make it possible to differentiate between a components own parameters and parameters in the parent or grand parent systems, by
+    prefixing self. before parameter names in parameter expressions. For a components own parameters self. is now required.
+  - It is no longer necessary (but still possible) to specify .Value (in parameterName.Value) when referring to own parameters such
+    as start values in input/output ports
+    Example: "2*self.in" instead of "2*self.in.Value"
+
+- HopsanGUI:
+  - Add HCOM support for self.Name in expressions using parameter values.
+    Note! HCOM will not evaluate parameters in parent systems
+    Note! HCOM will still work without 'self.'
+    Note! HCOM scripts will not be auto updated
+  - Real-time animation can now run at unlimited speed
+  - You must now double-click in the workspace to open the quick-component insert dialog
+  - Make it possible to use common HCOM math function on vectors (will evaluate per element)
+  - Add "Save and Run" button the HCOM script editor
+  - It is now possible to change units in Bode plots for magnitude and frequency
+  - It is now possible to change unit for custom x-axis data (if a Quantity is set for that data)
+  - Add Windowing functions to frequency analysis tools.
+    You can choose a time range of the logged data, and apply rectangular or Hann windowing functions
+    Rectangular is the same as before (add no additional windowing)
+
+- HopsanGenerator:
+  - Export top-level system parameters as FMI parameters in exported FMUs
+  - FMI parameter import is now also available for FMI1 (as well as FMI2)
+  - Use Makefiles when compiling exported FMUs, this enables parallel compilation which is much faster
+
+- Documentation:
+  - Fix user documentation link for frequency analysis
+  - Add missing documentation for HCOM script flow control
+
+--- Bug Fixes ---
+
+- HopsanCore:
+  - Made parameter and system parameter evaluation behave the same way for all supported parameter types
+    This fix is part of the reworked code that introduced self.Name parameter reference
+
+- HopsanGUI:
+  - Fixed auto-update to follow redirects (auto update did not work after moving files to GitHub)
+  - Fixed crash when opening components with markdown documentation
+  - Prevent crash when mixing model and editor tabs (editor tabs will now always open to the right of model tabs)
+  - Fixed using referencing system parameter names for int and bool parameter types
+  - Fixed evaluation of HCOM round() in expressions like round(x)*y
+  - Change Bode plot frequency unit to rad/s, the values were in rad/s but previously the label claimed it was Hz
+  - Fixed invalid unit being shown when mixing multiple different Quantities on the x-axis in plots (you should avoid this anyway)
+
+- HopsanGenerator:
+  - Fix import of parameter values for FMI v1 FMUs
+  - Fix loading of FMUs with different file name and FMU name
+
+--- Component Libraries ---
+
+ - New component for logging signals to external file
+ - Made angular velocity unit a quantity (so that the unit may be changed) for various
+   components where the unit was previously hard-coded
+ - Make many signal components replaceable with each other
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+2.13.0 (2019-11-26)
+
+--- Enhancements ---
+
+- HopsanGUI:
+  - Improved library and code generation / development capabilities in HopsanGUI. It is now the preferred choice for library development.
+    HoLC is deprecated and will not see further development or updates.
+  - Libraries can now include Modelica .mo files (a subset is supported), and the corresponding c++ Hopsan components will be auto generated
+
+--- Bug Fixes ---
+
+- HopsanGUI:
+  - Fixed drag-copying with right mouse button
+  - Fix bug in arguments check for exec HCOM command
+  
+- HopsanGenerator:
+  - Prevent generating header guards starting with digits (would fail for models whose name starts with a number)
+  - Fix model assets export for stand-alone exe-export. Assets will be stored in a directory called modelname-resources
+    This directory must accompany the exe file if it is moved.
+  - Set better default permission for exported files, rw_rw_rw_ for code and rwxrwxr_x for executable files
+  
+--- Component Libraries ---
+
+  - Lookup table components now have the option to add internal csv data as a parameter, this makes it easier to quickly
+    create simple lookup tables without having to deal with external files
+  - Lookup tables no support reading values from white-space padded columns
+    Example:  1.0,  2.0,  3.0
+             10  , 20  , 30  
+  
+
+------------------------------------------------------------------------------------------------------------------------
+2.12.1-snap (2019-07-29)
+
+This is a special release for the snap version of Hopsan.
+
+--- Enhancements ---
+
+- The snap now uses the base snap core18 (Ubuntu 18.04) and includes improvements for desktop theme support.
+  The hopsan.gui and hopsan.holc applications should no longer look like "old software".
+  Unfortunately dark themes are not yet working well, but this is a problem for all variants of Hopsan.
+
+- Hopsan (snap version) will overwrite the compiler path so that the internal snap bundled version of the compiler
+  is used automatically.
+
+------------------------------------------------------------------------------------------------------------------------
+2.12.0 (2019-07-15)
+
+--- Enhancements ---
+
+- HopsanCore:
+  - Added petri net node type
+
+- HopsanGUI:
+  - Various text editor improvements
+  - Enable saving and loading parameter sets to file (.hpf) for the entire model, sub-systems as well as individual components.
+    Right click a component or subsytem to save or load parameter value sets.
+    The HCOM sapa and repa commands have also been updated.
+
+- HopsanCLI:
+  - Made the --logonly command line argument affect only --resultsFullCSV output.
+    --resultsFinalCSV will still include the final values from all ports.
+    The purpose of --logonly is to reduce data amount for long simulations or optimizations with multiple iterations, but
+    the --resultsFinalCSV data is not very large and having access to final values for ports that were not logged may be useful.
+
+- HopsanGenerator:
+  -Export model to black-box executable
+
+--- Bug Fixes ---
+
+- HopsanCore:
+  - Fixed loading of parameter value sets for entire systems (including subsystems)
+
+- HopsanGUI:
+  - Fixed wrong XML tag when saving optimization settings
+
+- HopsanGenerator:
+  - Format of generationDateAndTime in exported FMU is not valid
+  - Unable to recompile libraries when Hopsan installation path contains spaces
+
+--- Component Libraries ---
+
+- Corrected cavitation check for Q-type pumps
+
+------------------------------------------------------------------------------------------------------------------------
+2.11.5-flatpak (2019-04-30)
+
+--- Enhancements ---
+
+- This is a special release for the first Flatpak build
+
+- HopsanGUI:
+  - "Apply & simulate" button in component properties dialog. Will apply all settings and simulate the model without closing the dialog.
+  - Improved point plotting in Optimization
+  - Use tables instead of widgets in layouts for optimization dialog
+  - Launch batch/shell scripts from HCOM
+    Launch .bat and .sh files using exec function in HCOM.
+    Syntax: exec script.bat arg1 arg2 ...
+  - Improved csv import support:
+    Support import column csv with data names on first line
+    Support importing row csv (names in first column)
+    Auto-detect HopsanCLI csv format
+
+
+--- Bug Fixes ---
+
+- HopsanGUI:
+  - Importing plot data in HCOM fails if no model is open
+  - Fix out-of-range crash in DE optimization
+
+------------------------------------------------------------------------------------------------------------------------
+2.11.0 (2019-01-25)
+
+--- Enhancements ---
+
+- HopsanCore:
+  - Add quantity Resistance with base unit Ohm instead of "ohm".
+    Also adds common unit scales to HopsanGUI.
+  - Add common math functions to embedded script (numhop), see users guide for details.
+    You can now write expression like "x=cos(y)" or "a=atan2(b,c+2)"
+
+- HopsanGenerator:
+  - Added generator for compiler commands that should work with both GCC and Clang.
+    This is only used for library import compilation right now. It will be extended to FMU exporting later.
+    This should enable custom library importing on MacOS from HopsanGUI (but this has not been tested).
+
+- HopsanGUI:
+  - Built-in script editor for HCOM scripts.
+  - Improved auto-completer in HCOM terminal.
+  - Case insensitive auto-completer for filter function in component library widget.
+  - It is now possible to add trace variables from multiple selected ports in the "debugging" widget.
+  - Improved find widget Ctrl+F, it now behaves similarly as in other application.
+  - Units scales are now sorted by scale.
+  - Removing three second real-time plotting window limit.
+  - Made it possible to run real-time animation (and plotting) without needing a previous log data generation.
+  - Add "chds" Change diagram size (and position) HCOM command.
+  - Click anywhere on the workspace to quickly add new components. Write the name in the filter box.
+  - The HoLC text editor functionality has been merged into HopsanGUI to improve and simplify the code editing experience.
+  - Improved the save-state functionality so that it is possible to recompile libraries without first closing the models that are using them.
+    Together with the code editor improvements this simplifies component development.
+
+- HoLC:
+  - Short-key Ctrl+G for quickly compiling (G for generate).
+  - Zoom text with Ctrl+MouseWheel
+  - Improved auto-completer, automatically show auto-complete suggestions while user is typing.
+    Force-open auto-completer with Ctrl+Space
+  - Find widget in HoLC text editor, open with Ctrl+F
+
+
+--- Bug Fixes ---
+
+- HopsanGUI:
+  - Program crash after removal of disabled components.
+  - Incorrect "parameter not used" warning when parameter values are given by expressions.
+  - Plot unit selection does not allow a unit with scale one other than the base unit.
+  - Import button in data explorer is now disable when no model is open, to prevent import data from
+    going nowhere.
+  - Crash when double-clicking scope in real-time animation without an existing generation.
+  - Fix "real-time" plotting of play-back data. Now correct data index will be used instead of latest.
+  - System parameters in expressions are not added when copy-pasting components into a new system.
+
+--- Component Libraries ---
+
+  - New spring-loaded switch animation component.
+  - Add min and max limit parameters for animation slider component.
+  - Add controller output limits to SignalPID2.
+  - Add Hidden leakage flow port in CylinderC component.
+
+------------------------------------------------------------------------------------------------------------------------
+2.10.0 (2018-09-28)
+
+--- Important Changes ---
+
+- The component library XML format has been updated.
+  See the included "componentLibraries\exampleComponentLib\exampleComponentLib.xml" for details.
+  Note! Hopsan will still be able to load files of the previous version.
+
+--- Enhancements ---
+
+- Models:
+  - Models will now know what external component libraries they require.
+    Libraries should have an <id> element in their XML file for this to work.
+    See the included "componentLibraries\exampleComponentLib\exampleComponentLib.xml" for details.
+
+- FMU:
+  - When a model is exported to FMU or S-function, any required external component library will be included in the
+    export and compiled into the target.
+    Note! This requires that the source-code for the library is available and that all components, source files or
+    special build flags (if any) are listed in the component library XML. You can use HoLC (Hopsan Library Creator),
+    to add existing component files using a graphical users interface, but you can also update the library XML file
+    manually in a text editor.
+  - When a model that depend on data files (assets) is exported as an FMU, these files will now be included inside
+    the FMU, in the (resources) directory.
+    Note! Currently, any data file is included regardless of its size. This may pose a problem for very large files.
+  - When a model is exported into an FMU, the exported directory structure is much cleaner, and the FMU easier to find.
+    Temporary build and staging files are put into DESTINATION/fmu_build and DESTINATION/fmu_stage.
+    These directories are deleted the next time an FMU is exported to the same directory.
+
+- HoLC:
+  - It is now possible to reload a file that was changed outside of HoLC, without restarting the program.
+  - It is now possible to add multiple existing files at the same time.
+  - Add existing files dialogues will now remember the last used directory.
+
+--- Bug Fixes ---
+
+- HoLC:
+  - It is no longer assumed that the name of library main XML and cpp files are the same as the library.
+    This allows overwriting existing library files on save.
+  - Build flags are now preserved when loading and saving a library XML file.
+    (You must still enter them manually in a text editor)
+  - The file dialog suffix filters should now work.
+
+- FMU:
+  - Hopsan models exported as FMUs will no longer crash after 1/Ts simulation steps.
+
+- HopsanGUI:
+  - Prevent severe slowdown after simulation when result data is collected.
+    This was especially noticable for large model or when many generations had been collected.
+
+- Simulation:
+  - Disabled components are now allowed to have non-connected ports.
+    Note! If you disable components that are connected to enabled ones,
+    the simulation may not behave as you expect.
+
+
+------------------------------------------------------------------------------------------------------------------------
+2.9.0 (2018-07-02)
+
+--- Important Changes ---
+
+- The HopsanGenerator library refactoring. GUI parts were split into a separate library and the library now has a C API
+- All Hopsan source files now use the file suffix '.cpp' rather then mixing '.cpp' and '.cc'.
+- All binaries now use lower-case names (hopsancli.exe instead of HopsanCLI.exe).
+- Continuous integration (Travis CI) and (Appveyor) now builds and tests every change to the Hopsan code.
+  This will reduce the risk of new code breaking old functionality.
+
+--- Updates ---
+
+- Update Qt to 5.6.3 on Windows (official Windows 10 support).
+- Update the 64-bit Windows compiler to MinGW 4.9.4 (from 4.9.3). If you have manually set up a build environment for
+  custom component libraries you are encouraged to update (use one of the Hopsan downloads with compiler included).
+- Update ZeroMQ to 4.2.5
+
+--- Enhancements ---
+
+- Optimization:
+  - Improved script file handling.
+  - Improved variable names in plots.
+  - Points are now sorted by objective value with DE algorithm.
+  - Script generation is now shown in a separate wizard.
+  - Reduced terminal output during optimization.
+  - New algorithm, Genetic Algorithm.
+
+- FMU:
+  - Exported Hopsan FMUs will now report Warning and Error messages. Info messages will be reported as Debug type.
+  - Imported FMUs will now have their messages redirected to the Hopsan core logger instead of standard output.
+    messages should now be visible inside HopsanGUI. Enable Debug messages to see FMU Info messages.
+
+- HopsanGUI:
+  - HCOM:
+    - Add PI constant 'pi()' in HCOM script.
+    - Add argument to filter DIPA output
+    - Add round, floor and ceil functions
+    - Add unco command to list ports that are not connected
+  - Export plot to image dialog will close after successful export.
+  - Generator import/recompilation dialogs will now auto close if the import succeeds. Various improvement have also
+    been made to the generator error handling to prevent importing old leftover files if compilation fails.
+  - Improved Hopsan core log file handling, the log file is now put in the temporary directory next to log cache files.
+  - Debug messages with log data collection speed has been added to help debug severe slowdown problems after the
+    simulation is finish. Enable debug messages to show them.
+  - The 32 bit version now includes openssl libraries so that the news feed can be accessed.
+
+- HopsanCLI:
+  - The HopsanCLI takes a new argument '--log.corelogfile' to specify core log destination.
+    If not specified, the current working directory will be used.
+  - It is now possible to choose what ports to log when simulating using HopsanCLI.
+    Use the '--logonly' command line argument, and specify a comma-separated list of full port names.
+    It is also possible to alternatively specify a text file with one full port name per line.
+    Examples: Gain#out or SubsystemName#Gain#out
+  - When saving results from a HopsanCLI simulation, interface ports (system ports) will also be saved.
+  - Results saved by HopsanCLI now use scientific notation, this may increase precision for small values.
+
+--- Bug Fixes ---
+
+- Optimization:
+  - Plot windows should be reusable.
+  - Progress bars do not show with DE algorithm.
+  - Excessive progress bars are not removed when reducing number of models.
+  - Total progress bar is not updated with PSO algorithm.
+
+- FMU:
+  - An exported Hopsan FMU will not signal failure if initialize or simulate fails.
+  - FMUs from JModelica cannot be imported.
+    The import code now supports 'CS and ME' FMUs. In this case the Co-Simulation variant will be used.
+
+- HopsanGUI:
+  - The auto update link parser ignores Hopsan without compiler links.
+  - Animation crashes when variable is NaN or inf.
+
+--- Component Libraries ---
+
+- Fix inverted port initialization error in HydraulicTLMlossless.
+- Fix error in pilot operated check valve.
+- Fix error in HydraulicPistonAccumulator.
+- The "Extension library" is now included by default with Hopsan. You can load it from the Hopsan installation directory.
+  This library contains experimental new components that have not yet been added to the default library.
+
+------------------------------------------------------------------------------------------------------------------------
+2.8.2 (2018-03-02)
+- Bug fixed: HCOM max(abs(var)) fail to evaluate if var is a vector (also affects min)
+- Bug fixed: Optimization: There should be a comma separator between the numbers in the parameter outputs
+
+- Enhancement: It is now possible to choose what temp directory to use for the Hopsan GUI cache.
+               This may be helpful if the default directory is located on a slow network drive.
+               After each simulation, potentially very large log data cache files will be written here.
+
+------------------------------------------------------------------------------------------------------------------------
+2.8.1 (2017-11-30)
+- Bug fixed: Prevent notifying that a new version is available if Hospan release "revision" is newer then the HopsanGUI "revision" in the same release.
+- Bug fixed: Numbers are inverted in custom unit scale display dialogue. Actually they were not. They were supposed to be part of an equation, this is now shown.
+- Bug fixed: If Hopsan is terminated or crash while the configuration file is saved, it will no longer become corrupt. (The previous version will remain intact)
+- Bug fixed: The Linux version of Hopsan 2.8.0 can not dlopen libHopsanGenerator making it impossible to (re)compile external component libraries
+
+- Enhancement: Auto download of new (Windows) versions will now save installer to the user "temp" directory rather than the "data" directory.
+               You should check your data directory for old installers and delete them manually!
+               Look in "C:\Users\USERNAME\AppData\Local\HopsanGUI" or similar.
+- Enhancement: Greatly improved error/warning  message output while loading external libraries, this should prevent bug: "Sometimes external components fails to load without error message"
+- Enhancement: Added km/h, mph and knot custom speed units (Note! You can add your own in the Options menu if your favorites are missing)
+
+------------------------------------------------------------------------------------------------------------------------
+2.8.0 (2017-10-13)
+- Change: Moved source code to GitHub: https://github.com/Hopsan/hopsan
+          Due to switching source code version control system from Subversion to Git(Hub), significant changes have been made to the build system and version numbering format.
+
+- Change: New version numbering format (we also bumped the epoch number to avoid confusion with the previous generation of Hopsan (Version 1.4 released in 2001)
+          The new full version number format is: EPOCH.MAJOR.MINOR.DATE.TIME~BRANCH_NAME
+          For official releases, only the three first numbers will be shown in the file name, example: 2.8.0. But internally and for snapshots the date and time of the last commit will be appended.
+          This gives a behaviour that is similar to the monotonically increasing revision number used previously when the source code was handled by Subversion.
+          Optionally the branch name may be appended in the end (for experimental or snapshot builds, that do not originate from the "master" branch.
+
+- Change: Re-licensed HopsanCore, HopsanCLI, libOps, libSymHop, libHopsanGenerator and libDefaultLibrary to Apache License 2.0
+          This is a more permissive license than the GPL license previously used.
+          Essentially: If you create derived work of the Hopsan core components (and distribute that work), your work must no longer be released under the GPL license.
+          Note! HopsanGUI and HoLC (the GUI applications) are still GPLv3 licensed.
+          Read the full license notices for details.
+
+- Change: Removed obsolete csv_parser++ library (GPL licensed) from HopsanCore
+          libIndexingCSVParser is used everywhere instead (compiled into HopsanCore)
+
+- Change: Removed Intel Thread Building Blocks library.
+          HopsanCore now relies on C++11 std::threads for multi-threading capabilities.
+
+- Feature: Vector signal nodes. Note! Only realized by 2D node components as of yet.
+           These nodes are still static, so there would have to be a set of components for every vector size.
+- Feature: Bi-directional signal ports (2D) read/write.
+           See external Grafcet example library
+- Feature: HCOM New 'eval' command, Evaluate string expressions.
+           Example: eval "chpv Gain$i$.out.y" would first evaluate the variable i and then execute the 'chpv' command
+- Feature: HCOM New 'mkdir' command, to create directories. 
+           This may be useful when automate saving of data
+
+- Enhancement: The version check and auto update (Windows only) system has been improved. If you have downloaded a version with the compiler included,
+               the auto update will now be able to download the new version also with the compiler included.
+
+- Bug fixed: Prevent crash when copying HVectors of HStrings
+
+------------------------------------------------------------------------------------------------------------------------
+0.7.9 (2017-07-02)
+- Bug fixed: Plot curves default to dashed lines
+- Bug fixed: Reading symbols name from HCOM plot command will always give value 1,2 or 3 for symbol type
+- Bug fixed: Subsytems become randomly disabled when models are loaded by the simulation core model loader, Affects CLI, FMU and Simulink export.
+             Simulation through HopsanGUI was apperantly not affected.
+
+------------------------------------------------------------------------------------------------------------------------
+0.7.8 (2017-04-04)
+- Bug fixed: Plot widget is updated correctly when creating temporary HCOM variables
+- Bug fixed: Fixed annoying warning of incorrect sRGB profile
+- Bug fixed: HCOM "close" command can no longer close welcome screen
+- Bug fixed: Legend setting no longer gets enourmous width
+- Bug fixed: S-function compilation with Visual Studio
+
+- Feature: Optimization can now be autostarted from regular HCOM terminal
+- Feature: It is now possible to unload all external libraries at once
+- Feature: Optimization can now have fixed start values for parameters
+- Feature: Parts of a model can now be deactivated, so that it is not used in the simulation
+- Feature: HCOM "ls" command now accepts wildcards
+- Feature: HCOM "load" command now accepts wildcards
+- Feature: HCOM "load" command now has an "all" option, to close all models
+- Feature: HCOM "load" command now has a force flag, to supress warnings about closing unsaved models
+- Feature: Pi constant in NumHop scripting
+- Feature: It is now possible to load several models at the same time
+
+- New component: 4/2 pressure controlled valve with no closed position
+
+- Fixed component: Several errors in Forks component were solved
+- Fixed component: Added end limitations to rotational inertia components
+- Fixed component: Lossless connector components now stop simulation if connected to zero impedance components
+
+------------------------------------------------------------------------------------------------------------------------
+0.7.7 (2016-10-12)
+- Bug fixed: Undefined reference errors for some functions in Matrix library
+- Bug fixed: Imported FMUs now find their resource files as they should
+- Bug fixed: Relative refencing of system parameters in subsystems
+- Bug fixed: Compilation without TBB support now works properly
+- Bug fixed: Crash when starting optimization if subsystems with container ports are present	
+- Bug fixed: Some incorrect expressions no longer evaluates OK in HCOM
+- Bug fixed: Graphics export from plot window now remembers the path from last export
+- Bug fixed: CylinderQ icon now has a spring
+- Bug fixed: The combo boxes in plotwindow curve info are now set to the correct values if you choose style/color/thickness from a HCOM plot command
+- Bug fixed: Undo and redo removal of a component with an alias will make the component loose alias and crash the program at next simulation
+- Bug fixed: HCOM now ignores everything after comment characters
+
+- Fixed components: C-type pressure source components now handle start values correctly
+
+- Feature:	Plot symbols can now be specify from from plot commands in HCOM
+
+------------------------------------------------------------------------------------------------------------------------
+0.7.6  (2016-07-01)
+- Bug fixed: Numhop +- expressions fail if left-hand variable name ends with e or E
+- Bug fixed: If you close the add-system-parameter widget with the "cross" in the top right corner, it is impossible to open it again
+- Bug fixed: HopsanGUI hangs forever when closing a model with one or more open properties dialogs
+- Bug fixed: Confusion in variable lookup when matching against alias names, causing incorrect behaviour of rmvar HCOM command (and likely others),
+             'rmvar aliasname', will now remove the alias variable itself and unregister the alias name from the actual real variable.
+
+- Enhancement: Increased precision (double to string conversion) of some HCOM scalar outputs and the plot markers display text.
+- Enhancement: The 'to_hstring' utility function now takes an additional 'precision' argument, so that the precision of the resulting string
+               can be chosen. The default value is 17, this resolves issues with evaluated numerical expressions in parameters getting truncated.
+- Enhancement: Limited boolean operator support in numhop, true = 1 and false = 0
+- Enhancement: HCOM's elementwise power function for vectors now support other (positive) powers than 2
+- Enhancement: HCOM's linspace and logspace functions will now evaluate arguments (so that variables can be passed)
+- Enhancement: HCOM's rmvar command has changed behaviour, 'rmvar name' now removes name at CURRENT generations, equal to 'rmvar name@c'
+- Enhancement: The animation speed value is now remembered if the widget is closed and then reopened
+
+------------------------------------------------------------------------------------------------------------------------
+0.7.5  (2016-05-19)
+- Feature: HCOM vector function that can create a vector from input arguments. Ex: "a = vector(1,2,3,4,5)"
+- Feature: It is now possible to import "Space separated value" files into HopsanGUI
+- Feature: Both 64-bit and 32-bit builds are now available for Windows.
+
+- Bug fixed: FFT function would create frequency vector in Hz but the default unit for frequency in Hopsan is rad/s. 
+             Note! Default plot unit can be changed in the global program options dialog.
+- Bug fixed: Incorrect memory deallocation in Delay class (memory leak in components using delay buffers)
+- Bug fixed: Remote server worker would report failure instantly when launching worker thread sometimes (race condition)
+- Bug fixed: Prevent crash after removal of nested system parameters due to dangling pointer in "needs evaluation" list
+- Bug fixed: Prevent crash when incorrect port name is given to logging enable check/set
+- Bug fixed: Fixed HCOM crash if enddefine is missing
+- Bug fixed: Fixed crash bugs in HCOM flow control (if, while, foreach)
+- Bug fixed: Simulink S-function export from Hopsan now has working system parameters (including pre-set default values)
+- Bug fixed: Data file lookup when using relative paths did not work on Windows when paths contained \ during CLI simulation
+- Bug fixed: Editing port positions on a component would affect the entire class of the component (new components would get the changed ports)
+- Bug fixed: Revision information was lost in deb releases
+
+- Enhancement: ServerMonitor can now list completely free servers (use the -f flag)
+- Enhancement: It is now possible to change the receive timeouts in the ServerMonitor and RemoteClient
+               (Useful if you are working over a slow poor connections)
+- Enhancement: It is now possible to decide how many slots are required when starting jobs through the RemoteClient
+- Enhancement: Moved meta info into system tag in xml, so that subsystems in a model can be given author information
+- Enhancement: HCOM flow control condition can now be an expression (that is evaluated)
+- Enhancement: It is now possible to specify import format to the "repl" HCOM command
+- Enhancement: Parameter values are now shown in a tool tip, to allow reading long expressions that do not fit in the parameter value edit box
+- Enhancement: Improvements and fixes in the CLI optimization function
+- Enhancement: Improved handling of "dead workers" by remote server, slots will not remain locked if workers die
+- Enhancement: Console mode is now activated for Windows builds, std. output will now be shown in a terminal window.
+               This can be used for simple debugging of your own components.
+
+- Fixed component: Force was not set to zero in MechanicFreeLengthWall when C-component was not in contact
+- Fixed component: "Translational Spring" C-component now have alpha TLM filter parameter.
+- Fixed component: Improved some "aero" components and example models
+
+------------------------------------------------------------------------------------------------------------------------
+0.7.4  (2016-03-11)
+- Feature: HCOM sepl command to set plot label
+- Feature: HCOM revert command to revert model changes
+
+- Enhancement: HCOM can now evaluate multiple HCOM function calls on the same line. Example: ones(10)+ones(10)*2
+- Enhancement: HCOM print command is now able to print variables or expression results directly without embedding in string
+- Enhancement: New quantities Momentum, Power, Energy
+- Enhancement: Remote simulation server will now accept a user name so that files on the server will not collide when multiple people are using the service.
+               The user name can be set in HopsanGUI or supplied to the RemoteClient command line tool.
+- Enhancement: Disabled editing, solver selection and recompile button in the code viewer (in Component Properties) for C++ components since it is not possible to  
+               actually change / recompile individual components from within HopsanGUI. This was causing confusion.
+- Enhancement: Disabled the "Dual View" in the library widget since it will fail to show all components in some cases. Fixing the problem will require to much work,
+               the code is still there if someone want to give it a try. This change also removes the "HelpButton" but the UsersGuide is still available through the help menu.
+
+- New component: Hydraulic Piston Accumulator has been added  
+
+- Bug fixed: When loading a model from a 0.6 version of Hopsan using custom parameter scales, the scale factors are inverted in the properties dialog.
+             (Simulation is not affected!)
+             When a scale mismatch is detected on loading a model, it will now be updated to the latest version.
+             Note! Since old versions of Hopsan does not have this fix, the unit scales saved in a model from Hopsan 0.7 are not backwards compatible with Hopsan 0.6.
+- Bug fixed: It is not possible to use HCOM function calls as arguments to HCOM commands if spaces exist in the argument list to the function call
+- Bug fixed: HCOM crash if taking square of temporary vector expression
+- Bug fixed: Rare crash due to "double free" in SymHop Expression destructor 
+- Bug fixed: HCOM scalar/vector division falls back to startvalue for vector name instead of using the vector
+             It will now be interpreted as (scalar * 1 ./ vector) (scalar * Element-wise inverted vector)
+- Bug fixed: In xy-plots the unit label for custom x-axis was incorrect, it got the y-axis unit
+
+------------------------------------------------------------------------------------------------------------------------
+0.7.3  (2016-02-23)
+- Feature: Running optimizations from HopsanCLI
+
+- Enhancement: If you select multiple system parameters then all components with selected parameters will be highlight
+- Enhancement: No longer listing system port variables twice in the plot widget
+- Enhancement: PortType is now saved in port tag in model xml (for external tools)
+
+- New component: Mechanic worm drive
+
+- Bug fixed: If you close a model the numhop script dialog is not closed with it
+- Bug fixed: Sometimes no data is saved in the log variables collected from the core (if you start a second Hopsan instance the cache files were deleted)
+- Bug fixed: It is no longer possible to add or change system parameters in "limitedlocked" systems
+- Bug fixed: When editing a system parameter of other type then double, the type selector still defaults to double
+- Bug fixed: Crash on Windows 8 and 10 after renaming a system port and later saving (or in some other way triggering refresh port appearance)
+- Bug fixed: Parameter sweep optimization is not working, sometime dialog is crashed as well
+
+------------------------------------------------------------------------------------------------------------------------
+0.7.2  (2016-02-06)
+- Feature: Additional versions of the Windows installer and zip release are now available with the compiler included.
+           This version will default to the internal compiler (see options to set other compiler paths).
+           Note! For compression reasons (to keep the file small) the portable "zip" release including compiler uses the "7z" format
+                 and requires the free "7-Zip" program from http://www.7-zip.org/ to unpack.
+- Feature: Hopsan can now utilize remote simulation services for parallel simulation during sensitivity analysis.
+           Note! This is only beneficial for large models that take a long time to simulate. Overhead from remote loading of models and especially transferring data back
+           to the HopsanGUI will add to the total simulation time for each model.
+
+- Enhancement: Imported FMUs will now inherit ComponentSignal by default, (instead of Q-type). When a HopsanTLM port specification is present in the FMU the C or Q
+               type can be decided in that file (using the "tlmcqtype" tag). If not specified, Q-type will be assumed.
+- Enhancement: FMU import HopsanTLM specification now works with all built in node types in Hopsan. (Before, only Hydraulic and Mechanic ports were supported)
+               The Hopsan node type name must be used in the "type" attribute of the "tlmport" tag. Example: "NodeElectric" not "electriccq".
+
+- Bug fixed: Exported FMU wont compile due to failed namespace replacement in new code
+- Bug fixed: The simulate multiple models or all open models code in the ModelHandler sometimes causes crash after simulation
+- Bug fixed: When importing FMU the FMILibrary path does not work if Hopsan is installed in for example "Program Files" (space in path)
+- Bug fixed: Highlighting components using system parameters does not work if system parameter is used in expression
+- Bug fixed: Importing FMU with _ in name causes problems (due to to strict toValidVariableName function)
+- Bug fixed: Crash if trying to use remote parallel optimization using an algorithm or method that has not been implemented in the scheduler
+             It will now fall back to parallel queuer without load balancing
+- Bug fixed: Fixed incorrect rad/s -> rpm unit scale
+- Bug fixed: Fixed rare crash bug in SymHop library 
+- Bug fixed: Fixed crash bugs related to optimization "hidden models"
+
+------------------------------------------------------------------------------------------------------------------------
+0.7.1  (2016-01-28)
+- Enhancement: It is now possible to trigger the "invert plot" function for a data variable through the plot curve controls.
+- Enhancement: The time offset dialog and hcom commands now use the selected default time unit for input and output
+- Enhancement: NumHop dialog now has an apply button so that you can edit and apply changes without closing the dialog
+
+- Fixed component: CylinderC now have the possibility to disable internal end stop simulation
+- Fixed component: Lookup table components are no longer tagged as Experimental (they seem to be working)
+- Fixed component: Hydraulic32DirectionalOnOffValve does not allow flow from load port to tank after bug fix to 0.7.0.
+                   Also added validation tests to prevent this from happening again
+- Fixed component: Electric motor components had wrong unit for Viscous friction coefficient (only fixed in generated C++ code)
+
+- Bug fixed: When opening component properties dialog for a subsystem the model is locked, the dialog seems to be modal (it now behaves as ordinary components)
+- Bug fixed: Added missing check for feasible region in differential evolution optimization algorithm
+
+------------------------------------------------------------------------------------------------------------------------
+0.7.0  (2016-01-26)
+- Note: This version has been in development for approximately one year.
+        There are many changes that are not mentioned in these release notes.
+- Note: The abs HCOM command has been removed, use the abs() function instead.
+- Note: The HCOM plot scale and plot offset commands have been removed. (The features have been removed as well)
+        Use quantities or generation specific time plot offset
+- Note: The core Component functions setInitialValue() and readNodeSafeSlow() and writeNodeSafeSlow() have been removed. Use writeNodeSafe() or readNodeSafe() instead.
+- Note: Now one logdata handler is shared for the entire model instead of for each individual subsystem, this greatly simplifies working with Generations of data.
+        The full system hierarchy of data is now available in the same tree.
+- Note: We have finally chosen a real license, and made sure that third-party dependencies are compatible.
+        This version of Hopsan is released under the GNU GPL version 3 license.
+        If you would like to use a different license, please contact Fluid and Mechatronic Systems, Linköping University,
+        and consider sponsoring the development of Hopsan.
+- Note: This release has updated to MinGW-W64 4.9.3 and a custom compiled version of the Qt Libraries 5.4.2 (for this 64-bit compiler)
+        See the documentation for details.
+
+- Feature: A remote Hopsan simulation framework has been developed and is included in this release.
+           Unfortunately there is no documentation about how to use it but if you are clever, you can probably figure it out.
+           Run the following programs with the "--help" flag for more information:
+           hopsanaddressserver.exe, hopsanserver.exe, hopsanserverclient.exe, hopsanservermonitor.exe
+           HopsanGUI can connect to the server(s) and run remote simulation, and some optimization algorithms can run in parallel if many server computers are set up.
+           Note! This is VERY experimental.
+- Feature: It is now possible to set plot label in the component properties dialogue, this label will be used in plot legend (overwriting full name and alias)
+- Feature: Components (including subsystems) in a model can now be locked, which prevents editing
+- Feature: Ii is now possible to revert model to the last saved state without loosing plot windows and log data generations (Tools menu)
+- Feature: It is now possible to invert specific plot variables from HCOM "ivpv" and component properties
+           Inverting may be useful for analysis purposes, but only the plot curves will be affected. The data will keep the correct value.
+- Feature: HopsanGUI can now automatically compile (and recompile) External component libraries when they are loaded.
+           This means that you no longer need an external build environment for component library development. 
+           (You can still use that for advanced development)
+- Feature: It is now possible to recompile or reload external component libraries from the library widget right-click menu.
+           Provided, that the correct compiler version is installed and selected in Options. (See documentation for details)
+- Feature: It is now possible to start HopsanGUI from the command line, and pass a HCOM script as the first argument. The script will be executed on start-up.
+           Note! the script file name used as the argument must end in .hcom, otherwise it will be treated as an hmf file to load.
+- Feature: Quantities definitions have been moved to the simulation core, so you can now assign quantities directly in the component code
+- Feature: It is now possible to set Quantity on signals (that have no quantity set in code) so that the desired description and units are used in plots.
+           Instead of showing "Value". Note! No check will be done that units match, you have to take care of that yourself.
+- Feature: HopsanGUI now supports data export in the standardized HDF5 http://en.wikipedia.org/wiki/Hierarchical_Data_Format format. 
+           This format has import support in many popular softwares. The format stores data without truncation and includes variable meta data.
+           A helper scripts for convenient import in Matlab is included in the Hopsan release (Check the Scripts directory)
+- Feature: Help description for components can now be written in Markdown (a simple text format) that is automatically converted to HTML in HopsanGUI.
+           Additionally LaTeX equations are supported and will automatically be rendered into the HTML document.
+- Feature: A model embedded script language NumHop is now part of each system component. Using NumHop you can write an initialization script
+           that will be run for each system to set defaultStartValue parameter. This is useful if you need to calculate start values based on other parameters
+           in your model. See the NumHop script section in the documentation.
+- Feature: Symbolic expressions can now be used as parameter values, this make it possible to base one parameter on another in the same component or 
+           use a system parameter directly or included in a mathematical expression. See the NumHop script section in the documentation.
+- Feature: It is now possible to set star values in system ports.
+- Feature: It is now possible to save the state of a simulation and to later load that state to continue the simulation from a certain point.
+           Note! Internal states of the components are not saved, only the interface (node) values. You make the save/restore at steady-state.
+           This functionality is available in the HopsanCLI (see CLI documentation)
+           And in the HopsanGUI see the Export menu, and the -loadstate and -loadsv argument to the HCOM "sim" command.
+- Feature: It is now possible to get node data pointer structures from ports, this makes it easier to write cleaner component code.
+           Especially if you have many ports or even multi ports. Currently this is experimental and only available for Hydraulic and Mechanic nodes.
+- Feature: The HoLC (HopsanLibraryCreator) program is included in this release, you can us it to generate the component library files and component code skeletons.
+           It also offers limited code editor functionality.
+- Feature: External subsystems (.hmf) can now be used as components in the component library
+
+- Enhancement: HCOM set command can now take variables as arguments
+- Enhancement: HCOM get command, which displays current settings
+- Enhancement: HCOM help command will auto try functions if no matching command was found
+
+- Enhancement: It is now possible to have multiple help links in the component help
+- Enhancement: Help links can point to either local files, relative to the xml description, or to on-line web pages.
+- Enhancement: Unit scaling with offset as well as scale are now supported (such as temperature)
+               The scale and offset values follows the same convention as in the FMI standard
+- Enhancement: Built in unit scales will no longer be saved in user configuration file, the default built-in values will always be used.
+               This reduces the risk of using incorrect values.
+- Enhancement: System parameters now support quantities/units and description
+- Enhancement: It is now possible to edit system parameters after they have been added
+- Enhancement: It is now possible to plot and check parameters (but not edit) inside fully locket external systems and locked local systems
+- Enhancement: When the component properties dialogue is opened the model is locked to prevent editing, however, now it is possible to open additional properties dialogues
+               or start a simulation. The dialogues have been given an apply button. You can now iterate the following: open a dialogue, change a parameter, simulate, look
+               at the results. All without ever closing any windows or dialogues.
+- Enhancement: The component properties dialogue for subsystems now look and behave the same as for ordinary components.
+               But it still contain additional system specific settings.
+- Enhancement: The expended items in the plot widget will now be remembered when you switch between two different models
+- Enhancement: When exporting a model as .png, it is possible to choose if the background should be transparent or white. The original resolution is also shown.
+- Enhancement: When a data variable is removed it will signal any plot using it to remove the curve or a curve custom x-data as appropriate.
+               This reduces confusion when analysing the results.
+- Enhancement: When a generation is missing from a data variable, that data curve will be hidden if the curve is set to that generation.
+               (Rather then showing the wrong generation).
+- Enhancement: When offsetting time for a specific generation, now all "Time" vectors in that generation will be affected at the same time.
+               Time offset can be applied and checked from time offset dialogue, right-click menu in plot widget or HCOM commands "chto" and "dito".
+- Enhancement: Systems and components now save their CQS-type as an attribute in the HMF file
+
+- Documentation: The documentation has been reorganized and updated with new information about, how to setup the build environment to build Hopsan as a developer.
+                 how to install the compiler for automatic compilation of External component libraries. Some new features are also covered, but sadly the documentation
+                 is still lagging behind in some areas.
+- Documentation: Added HCOM documentation on how to change curve styles from plot commands
+
+- New components: Round, Ceil and Floor signal components
+- New components: NumHop SingleInput SingleOutput interpreting component, write NumHop script that is evaluated without compilation. 
+                  Code can be extended to support more inputs and outputs.
+- New components: Hydraulic and Mechanic NodeSensor as well as Mechanic C and Q TLM input components make it possible to "graphically" program
+                  the Transmission Line equations in a subsystem block. Note! this is still an experimental feature and performance will be lower
+                  then if you write the code manually. 
+
+- Fixed component: Some directional valve components had different speeds in positive and negative direction
+- Fixed component: HydraulicCylinderC now has built in end-stops, so you should no longer rely on the connected Q-component (usually mass) to limit the stroke.
+
+- Bug fixed: Messages from optimizations no longer appears in main window terminal
+- Bug fixed: Memory leak when re-using models for subsequent optimizations
+- Bug fixed: It is possible to copy/paste in locked external systems, it should not be possible
+- Bug fixed: When a model is locked (external system) it is still possible to change or remove system parameters through the system parameter widget
+- Bug fixed: When sorting the system parameters in the system parameter widget, the row indexes are messed up, making operations affect the wrong parameter
+- Bug fixed: If you remove a system parameter from a system used as an external system, then the old parameter will be re-added once the master model is loaded
+- Bug fixed: Hopsan crash after simulation due to progress bar deletion if something got in the way between finalizeDone signal and finish slot.
+             (actually this was a problem with non blocking signals and slots)
+- Bug fixed: Pressing Ctr+C (copy) without something selected will clear the current copy/cut stack.
+             Not fun if you made something fancy, cut and then accidentally press copy instead of paste.
+- Bug fixed: It is not possible to plot from a scope connected directly to a container port
+- Bug fixed: Variables in subsystems do not know from which model they come
+- Bug fixed: When setting a non string parameter to empty no error is shown and resulting evaluation will be zero
+- Bug fixed: Can not reset string constants to default value if default value is empty string
+- Bug fixed: External subsystem connectors are lost on copy paste
+- Bug fixed: If you load a model containing a subsystem saved as a component and that component is not available in the library,
+             nothing is created and no messages are shown. (There was a debug message but it has now been changed into an error message)
+- Bug fixed: The default unit scale value for converting between Hz and rad/sec is inverted. (This was previously fixed in 0.6.12) but now 
+             with quantity support in the code and a new unit scale system in the GUI, this is no longer an issue.
+             Either you have frequency in rad/s (then use the Frequency quantity) or write unit Hz directly (then unit scaling will not work). 
+- Bug fixed: Deactivated ports are not saved, so they reappear once a model is reloaded.
+
+------------------------------------------------------------------------------------------------------------------------
+0.6.12  (2015-09-03)
+- Note! We strongly suggest that you reset your configuration file ("Reset defaults" button in options dialog) after updating to this version, due to the erroneous handling of frequency unit scaling
+
+- Bug fixed: The definition of Frequency scaling requires the base unit to be the SI-UNIT Hz, but in Hopsan we actually use rad/s.
+             The default configuration setting for Frequency was inverted so that it scales relative to rad/s instead of Hz
+             You need to reset your configuration file after updating to this version.
+             If you have used Frequency scaling previously, you should really reload that model and reset the scaled parameter.
+             Then make sure that you enter the correct frequency value.
+             If you do not, an incorrect scale will be used.
+
+- Bug fixed: Subsystem sometimes move from where you left them the second time you open them
+- Bug fixed: Lookup Tables fail to read CSV files with Windows line endings
+- Bug fixed: Calling initialize on SecondOrderFilter will not reset the output value variable, its value remains unchanged
+- Bug fixed: HopsanCore simulation freeze sometimes when calling stopSimulation() during multi-core simulation
+- Bug fixed: Fixed crash in optimization finalize function
+- Bug fixed: Made sure disabled ports in original model are respected by optimization handler
+- Bug fixed: When creating a new subsystem the default viewport is set to the top-left corner
+
+- Fixed component: Fixed division by zero in hydraulic pressure controlled pump component
+- Fixed component: Enabled stroke limitation of HydraulicCylinderC. Hopefully it works as intended
+- Fixed component: Rewrote cavitation handling in CylinderQ
+- Fixed component: Allow negative c in volumes in CylinderC (to avoid creating oil out if nothing when we get cavitation)
+
+- Enhancement: When renaming a system parameter in the systems parameter widget, the values in components using the parameter should be updated to the new name
+- Enhancement: Added backup and restore functions to first and second order transfer functions
+
+------------------------------------------------------------------------------------------------------------------------
+0.6.11  (2015-04-08)
+- Feature: Support for FMI 2.0 import and export
+           Note! Only Signal, Hydraulic and Mechanic nodes can be exported / imported
+           Note! FMU import in Hopsan require additional TLM description XML file if FMU scalars should be interpreted as PowerPort variables
+           Note! FMU parameters are not yet supported
+- Feature: Compiler path settings in Hopsan for FMU export/import, compiler no longer need to be in system PATH
+
+- Fixed component: Hydraulic PistonQ prevent negative wave variable (cavitation) from "sucking" the piston
+- Fixed component: SignalSRLatch Fixed initial behaviour
+- Fixed component: Mass component position end stops are now +- 1e300 instead of 0 and 1
+- Fixed component: An assortment of fixes and changes in some (Mathematica generated) special components
+                   Pay attention to any warning messages if you use such components
+- Fixed component: Moved default port location on Hydraulic42DirectionalValve and Hydraulic32DirectionalValve
+                   Also fixed incorrect animation data (removed for Hydraulic32DirectionalValve)
+
+- New components: Some new (Mathematica generated) (mostly Mechanic) components added (and some removed)
+- New component:  SignalNot (logic inverter) component
+- New component:  SignalJKLatch component
+- New component:  Signal log and log10 components
+
+- Enhancement: The number of log generations is automatically limited during optimization
+- Enhancement: Log data is no longer cached to User/Documents (very slow if you have a network drive personal storage), instead Temp location is used
+- Enhancement: When setting a system parameter whose name is already taken by a component the error message is slightly more clear
+
+- Bug fixed: Time scale dialog shows wrong unit for imported PLO data
+- Bug fixed: Imported PLO data will now get the correct custom time unit scale based on the plot scale in the PLO file
+             (if it matches one of the time units registered in Hopsan)
+- Bug fixed: The minimize and maximize buttons are no longer present on plot windows
+- Bug fixed: Subsystems exported as components will not be able to retain their icon if you move the model they are included in (only fixed for new exports)
+- Bug fixed: Animation crash if you have an algebraic loop when entering entering animation loop
+- Bug fixed: Animation crash if you have a connector in progress when entering animation mode
+- Bug fixed: When a parameter was entered incorrectly the dialog box that pops up will (sometimes) crash Hopsan when you press the close button
+- Bug fixed: If you are creating a connector from a subsystem port and enter that subsystem then exit it again, Hopsan will crash
+- Bug fixed: Hopsan crash if a connector is being removed (not canceled) while it is being created
+- Bug fixed: When registering alias in logdatahandler Hopsan will crash if fullname is not available in the current generation
+- Bug fixed: Simulink export does not work on Linux, it would generate the same compile script as in Windows
+- Bug fixed: When clicking OK in component properties on a component with multiports lots of empty alias related errors are shown (alias can not be set in multiports)
+- Bug fixed: Viewport keeps jumping around when loading and switching between subsystems, also views are not saved correctly with model
+- Bug fixed: Timestep in FMU export is hard coded (model setting should be used instead)
+- Bug fixed: HCOM cannot read script files that contains tabs (as indentation character)
+- Bug fixed: If you enter properties for a subsystem, and then exit, once you click and drag the system, it is in copy mode
+- Bug fixed: Conditional subsystems are sometimes sorted in the wrong order before initialize
+- Bug fixed: HopsanCore HMF loader does not differ between SubSystem and ConditionaSubsystems, ordinary Subsystems are always created
+- Bug fixed: When re-importing an FMU that is already imported the automatic unloading of the old one does not work
+
+------------------------------------------------------------------------------------------------------------------------
+0.6.10  (2015-02-16)
+- Feature: Added flag to HCOM echo command for ignoring error messages
+- Feature: Added support for componentLibraries/autoLibs/ folder, from where component libraries are automatically loaded at startup
+
+- New component: SignalCounter
+- New component: Sample and hold
+
+- Fixed component: Area ratio parameter in over-center valve is now defined correctly
+- Fixed component: Displacement setting for pressure-controlled pump can no longer exceed 1
+
+- Enhancement: Parameter for custom message in stop simulation component
+- Enhancement: The stop simulation function will always print the current simulation time and the name of the component it was called from, parent systems will also print this information 
+- Enhancement: Optimization now prints error messages
+- Enhancement: Sensitivity analysis can now use system parameters
+- Enhancement: Sensitivity analysis plot windows now show variable names in legend
+
+- Bug fix: When changing scaling of parameter, sometimes the value will not change, happened if the new value was the same as the default value (even if unit was different)
+- Bug fix: When writing an invalid parameter value the value is reset but any applied custom scale is not reset resulting in incorrect actual value
+- Bug fix: Recent models list is not updated when you have opened a new model, only after restarting Hopsan
+- Bug fix: It is not possible to load start values in c subsystems from hmf due to # being considered an illegal character
+- Bug fix: It is not possible to import top-level system parameters in HopsanCLI
+- Bug fix: Applying values after optimization now works again
+- Bug fix: Optimization output displays are now updated correctly after finished optimization
+- Bug fix: SymHop sign() function now returns correct value for negative input
+- Bug fix: Sensitivity analysis can now be aborted
+- Bug fix: Icons for animation and loss calculation are now always disabled when welcome screen is open
+- Bug fix: Check valve components no longer crash when used in animation
+- Bug fix: It is now possible to load connectors without the <coordinates> xml tag
+
+------------------------------------------------------------------------------------------------------------------------
+0.6.9   (2014-11-25)
+- Feature: New LookupTable1D component for PLO v1 and v2 format files
+- Feature: HCOM command for writing (or appending) text strings to files
+- Feature: HCOM command for converting variables to time or frequency domain
+- Feature: HCOM command for saving models
+- Feature: HCOM command for showing and changing offset for variables
+- Feature: HCOM command for extracting X-vector from a variable
+- Feature: Option to reset all animation data in model to default
+- Feature: It is now possible to edit parameter values in subsystems hierarchically using HCOM
+- Feature: It is now possible to modify default parameter values for subtype components in CAF files
+- Feature: Measured simulation times can now be exported to CSV
+- Feature: Multi-marker tool in plot windows, which shows values for several curves at the same time
+- Feature: Option to open containing folder of libraries in library widget (by right-clicking)
+- Feature: Option to automatically set HCOM working directory to model directory
+- Feature: Setting for showing plot windows on top or main window or not
+- Feature: Option to plot entropy during optimization
+- Feature: Setting for not running the extra evaluations after an optimization
+- Feature: Sub-systems can now be saved to components by right-clicking on them
+
+- New component: Symmetric C-type piston
+
+- Fixed component: Start values now work properly for all linear mass components
+- Fixed component: Multiply component now works correctly even if neither of the ports are connected
+- Fixed component: Incorrect modelling of overlap in open centre valve
+- Fixed component: Increased default value of restrictor coefficient in check valve component
+
+- Enhancement: When stepping through HCOM history using arrow keys, history are now filtered by what is already written
+- Enhancement: HCOM rmvar command are now be able to exclude specified variables and/or aliases
+- Enhancement: HCOM print command will now print text even if echo is off
+- Enhancement: Animation color tags can now have divisors/multipliers
+- Enhancement: Each movement and resize animation tag can now have individual divisors/multipliers
+- Enhancement: Animation movables can now have multiple resize and movement tags using different data variables
+- Enhancement: Minimum animation speed was greatly reduced
+- Enhancement: Tab key now works correctly in component properties dialog
+- Enhancement: Save as function now use current model directory as default directory, if model is saved
+- Enhancement: Broken connectors are now always shown on top of other objects
+- Enhancement: Generation number of imported data is now shown in plot widget
+- Enhancement: Right-click copy is less sensitive, to avoid doing it by mistake
+- Enhancement: Power component now use absolute values, to avoid creating imaginary numbers
+- Enhancement: Sub-folders are now always sorted on top of components in library widget
+- Enhancement: Optimization dialog now shows name of model and script file
+- Enhancement: Model is no longer auto-backuped at every iteration during optimization
+- Enhancement: Final evaluations are no longer run if animation was aborted
+- Enhancement: Optimization parameters can now have custom names
+- Enhancement: Warning about aborting the optimization when closing optimization dialog
+
+- Fixed: HCOM  Disp command no longer crashes when used without arguments
+- Fixed: Animation data for adjustable components are now saved correctly
+- Fixed: Crash if closing program while running a real-time animation
+- Fixed: Problems compiling exported FMUs with certain versions of GCC
+- Fixed: Optimization should no longer steal focus from other applications
+- Fixed: Simulink export can now load model even if original model was not saved
+- Fixed: Corrected number of state variables in FMI export for model exchange
+
+------------------------------------------------------------------------------------------------------------------------
+0.6.8   (2014-07-11)
+- Feature: Made it possible to use expressions when specifying plot generations from HCOM
+- Feature: Writing multiple HCOM commands on the same line separated by semicolons
+- Feature: Controlling curve color, type and thickness from HCOM
+- Feature: Numerical input component for animation
+- Feature: Lookup table components for 1D, 2D and 3D
+- Feature: HCOM command for displaying information about a variable
+- Feature: HCOM command for making axes logarithmic in plot windows
+- Feature: HCOM command for locking or unlocking axes in plot windows
+- Feature: HCOM command for changing diagram limits
+- Feature: HCOM command for exporting plot window to graphics
+- Feature: HCOM function for absolute value (intended to replace command with same function)
+- Feature: It is not possible to disable logging in all nodes except alias variables
+
+- New component: Translational mass with coulomb friction and multi-ports
+
+- Fixed components: Mismatch between position and velocity in translational mass components
+- Fixed components: Pressure controlled pump can now be used without reference pressure port connected
+
+- Enhancement: It is not possible to right-click and plot multi-ports if they have only one connection
+- Enhancement: No specified generation in HCOM now assume globally highest generation
+- Enhancement: Generations now become locked when plotting specified generations for a variable from HCOM
+- Enhancement: Change plot window command in HCOM now makes new plot window appear on top of other ones
+- Enhancement: New plot windows no longer steal focus from HCOM widget
+- Enhancement: The maxof() and minof() functions in HCOM can now compare vectors with scalars
+- Enhancement: Optimization dialog now plots newest objective value as well as best and worst
+- Enhancement: Most functions and commands in HCOM now evaluates their arguments properly
+- Enhancement: Animation now stops correctly when stop time is reached
+- Enhancement: Settings for plot graphics export are now saved between sessions
+- Enhancement: Generation number of imported variables are now shown in plot widget
+- Enhancement: Lossless connector icons have been changed so that they are not confused with pipes
+- Enhancement: Exported Simulink S-functions now print messages from HopsanCore
+
+- Fixed: Made it possible to use lookup tables with relative paths in sensitivity analysis widget
+- Fixed: Disabling logging in a node now works also after it has been previously simulated
+- Fixed: Wrong relative paths for components in embedded subsystems
+- Fixed: Mixup of time vectors in interface ports on subsystems
+- Fixed: The ddt command in HCOM returns a vector of wrong size
+- Fixed: Highlighting function in system parameters widget now also highlights negative instances of the parameter
+- Fixed: Highlighting function in system parameters widget now only highlights by name, not by value
+- Fixed: Added missing number of parentheses check in HCOM expressions
+- Fixed: HCOM operators for greater than and smaller than now work for vectors
+- Fixed: Animation data for pressure, levels and flow speed are now remembered when leaving animation mode
+- Fixed: Zoom and center view actions now work in animation mode
+- Fixed: Crash when removing variables with rmvar from HCOM
+- Fixed: Multiplying a vector with zero in HCOM now returns a vector of zeros and not a scalar
+- Fixed: Removed errors and warnings in optimization dialog that made no sense
+- Fixed: Animation display component no longer shows numbers outside its icon
+- Fixed: Aliases no longer lose their connection to plot curves when clicking "ok" in component properties dialog
+
+------------------------------------------------------------------------------------------------------------------------
+0.6.7    (2014-05-14)
+- Feature: It is now possible to change the unit for constants and start values in the component properties dialog.
+           Only registered unit scales will be available
+           Note! The unit ONLY applies to the actual constant value or start value, it will not affect the signals in the connectors
+- Feature: Clickable switches in animation
+- Feature: Mathematica .nb files added for the automatically generated components. (you will need a .nb reader (free version exist) to view them.
+- Feature: It is now possible to distribute components with equal distance vertically or horizontally
+- Feature: New chpvx command in HCOM to set common xdata for the current plot window (see hcom help for more details)
+
+- New component: MechanicGearClutch
+- New component: HydraulicPressureControlValve33
+- New component: Hydraulic 4/2 on-off valve
+
+- Fixed components: Many valves did not initialize the spool position transfer function correctly, making it impossible to start in non-zero positions.
+- Fixed components: MechanicJLink2 corrected. Position at 0 was not set
+- Fixed components: MechanicRotationalInertiaWithGearRatio (in/out power was not same with no viscous friction and steady state)
+- Fixed components: MechanicRotationalInertiaWithSingleGear (in/out power was not same with no viscous friction and steady state)
+- Fixed components: HydraulicTurbulentOrifice now simulates once in initialize to correctly calculate initial values
+- Fixed components: Disabled some start values that would have no effect in Hydraulic Sources&Sinks
+- Fixed components: The White_Noise_Generator utility was generating half of the desired noise std. deviation
+- Fixed components: 3_3_Directional_Valve underlap calculation
+
+- Enhancement: Setting plot scale to "-1" will no longer result in loosing unit (-1 and -1.0 is a special case)
+- Enhancement: Plot markers are now easier to see, they are black by default and you can now change the symbol (or color) from the right-click menu.
+- Enhancement: Adding xdata curves for the entire plot will try to use the same generation as each y-axis curve (instead of latest available generation)
+- Enhancement: When you assign variables in HCOM, the current generation will be used if one is not specified (on the left side)
+- Enhancement: (For very advanced users) It is now possible to add any type of port to programmed subsystems. They will be treated as "interface ports". This make it possible to avoid using "blank system ports" and should make it possible to set startvalues and aliases on the system interface ports.
+- Enhancement: More string (name) based (safe) help functions for setting and getting defaultStartValues and initial values in components.
+- Enhancement: It is now possible to read from writeports
+- Enhancement: Cleanup (removed) many old deprecated functions for component creation (you should have updated your code by now)
+- Enhancement: Connectors to sensor components becomes dashed by default
+- Enhancement: Optimization scripts is backed up before executed
+
+- Fixed: Interface port (in programmed subsystems) node data being logged to late (incorrect initial value being logged). (The node belonged to the wrong system)
+- Fixed: It is possible to open text box widget properties dialog twice for same widget, but it crashes after closing the second dialog
+- Fixed: Optimization seem to crash if objective function from all points are exactly the same
+- Fixed: Optimization: Don't change start values options does not seem to be initialized causing crash sometimes
+- Fixed: Optimization: Apply buttons are not sorted in same order as parameter line edits
+- Fixed: Optimization default functions cannot be found in paths containing spaces
+- Fixed: String constants with default value "empty string" will be shown as disabled
+- Fixed: setInitialValue (writeNodeSafeSlow) does not work on readPorts
+- Fixed: setConstantValue(name, "value") results in call to setConstantValue(name, bool) causing wrong value to be set
+- Fixed: Assigning parameters with system parameters from HCOM does not work
+- Fixed: Animation crash in Ubuntu release, something with indexing outside of a QList (was a problem with trying to read from multiports)
+- Fixed: Animation feature does not evaluate system parameters
+- Fixed: Crash when generating plot axis ticks for data containing 'inf'
+- Fixed: Ports that have an entry in CAF (but disabled), are still shown if "show ports" is active when creating a component
+- Fixed: Crash in Infinite recursion when snap moving objects (snap functions were ping-ponging with each other snapping back and forth)
+- Fixed: Error in double integrator with damping and coulomb friction class. Resolves problem with wrong force/torque generated by friction components.
+- Fixed: Custom x-data in scope components does not update when new generation becomes available
+- Fixed: Matlab m-script export of plotwindow get the subplot index wrong
+- Fixed: Exported S-functions can now run with the time sample from the Simulink model (rather then using model file timestep at export time)
+- Fixed: Save to script file button in optimization dialog should be disabled before script is created
+- Fixed: Removing parameters in sensitivity dialog does not remove min and max boxes
+- Fixed: Assigning parameters with system parameters from HCOM does not work
+
+------------------------------------------------------------------------------------------------------------------------
+0.6.6    (2014-04-07)
+
+- Feature: Find widget capable of finding by component name, system variables, aliases, highlighting the found component(s)
+           Ctrl+Shift+F (or find it in the tools menu)
+           You can also right click an alias in the plot list to find it in the model
+- Feature: HCOM minof(var) and maxof(var) functions
+- Feature: HCOM ones(size) and zeros(size) commands to create a new vector with ones or zeroes
+- Feature: HCOM linspace(min, max, numSamples) and logspace(min, max, numSamples) commands to create a new vector variable
+- Feature: Parameter sweep algorithm for optimization
+- Feature: Parallel Complex-RF algorithm for optimization
+- Feature: Complex-RFM algorithm for optimization
+- Feature: The message widget is back! It will receive all model messages and you are able to see old messages of any type even if they were disabled in the terminal.
+
+- New component: Rate limiter
+- New component: ElectricMotorGearScrewLink
+
+- Fixed components: HydraulicCylinderQ (Q-type Piston) velocity keep growing even if end stop reached
+- Fixed components: 2/2 On-off and Poppet valves can now start with non-zero spool position (that is you can start with an open valve)
+- Fixed components: Many hydraulic valves will now initialize the spool position correctly according to the spool position start values, incorrect parameter descriptions have also been corrected.
+- Fixed components: HydraulicGasAccumulator have new description and correct parameter units
+- Fixed components: Route components now propagates start values
+- Fixed components: You can now set a start value in the UnitDelay component. This lets you avoids problems with initial values in signal loops containing a unit delay.
+- Fixed components: Electrical components regenerated with an assortment of minor fixes.
+
+- Enhancement: Rewrote python interface code, and added help functions to get data variables into python
+               Note! Python is NOT included in Windows64 bit releases due to compatibility issues
+               Note2! Using HCOM instead of Python is currently recommended
+- Enhancement: Made it possible to see generation of custom xdata in the plot curve control box
+- Enhancement: It is now possible to select "show samples" in the axis context menu.
+               It possible to show time-domain variables vs. samples instead of time.
+- Enhancement: Replaced the generation specifier in HCOM, it is now the '@' sign
+               Example "disp apa*@5" would display all variables with a name starting with 'apa' at generation 5
+- Enhancement: Text can now "Reflow" textbox widgets
+- Enhancement: It is now possible to use different color for for text and border in text box widgets
+- Enhancement: It is now possible to run "chpw" in HCOM without a name argument, to auto create a new empty plot window
+- Enhancement: There is now a clear button next to the sort field in the library widget, to quickly allow you to show everything
+- Enhancement: When changing size of a plot window, the zoom is no longer reset (even if axes are not locked)
+- Enhancement: Temp variables are now only used as shared pointer that are auto deleted, before they would get stuck in memory and were never deleted in some cases.
+- Enhancement: Changing timescale on a frequency domain plot does not make sense, Frequency scaling is supported instead
+
+- Fixed: Unit meta data is forgotten when startvalues are saved to xml (replaced by -)
+- Fixed: Sometimes "save undo stack" is activated by default in subsystems, it should be disabled by default.
+- Fixed: Depending on the order of variables, sometimes x-data in curves will not be reloaded when a new generation becomes available
+- Fixed: Copying a component with a broken connector will crash Hopsan
+- Fixed: Crash if simulating multiple systems multi-threaded with more threads than systems
+- Fixed: Description does not show when hovering input signal ports
+- Fixed: When a plot-axis is locked and you remove the last curve and then add a new one the scale is not kept
+- Fixed: If you right click a component the name will be shown again even if it is hidden
+- Fixed: Crash if adding container ports to top level system
+- Fixed: HCOM "exec" command cannot handle paths with spaces
+- Fixed: Global reset-time-vector button only resets time vector for first curve in plot windows
+- Fixed: Unit scaling in component properties dialog is not registered if scaling is selected from drop down menu
+- Fixed: Output start values can not be selected in optimization wizard (they may still be grayed out, but you can select them)
+- Fixed: When importing a data file with variables that has the same name as existing model variable, they are only shown among the imported variables in the plot widget until you simulate again
+- Fixed: Assigning scalar with vector is accepted but both scalar and vector remains
+- Fixed: Plotting something that is only negative keeps lots of white space up to zero in plot windows
+- Fixed: PLO export assumes that first vector is time vector
+- Fixed: Component generator generates strange file (name.hppname.xml) and forgets svg path
+- Fixed: SymHop does not evaluate negative power functions correctly
+- Fixed: Align tool does not work when trying to align textboxwidget to component
+- Fixed: Users guide remaining open when Hopsan is closed
+- Fixed: If you have a parameter alias 'ko' and the parameter value is 'v' (a system parameter) then ko = 0 according to HCOM
+- Fixed: On Kubuntu and maybe others curve marker text is ugly
+         Note! Build in fonts (calibri) were removed as they did not work on Linux systems. If you are moving your models between platforms the font will be replaced and may change size slightly. hopsan will try to choose a font that is as similar to the current one as possible.
+
+- Documentation: Python function documentation is not up to date after python functions have changed names and some new functions have been added.
+
+------------------------------------------------------------------------------------------------------------------------
+0.6.5    (2014-02-14)
+
+- Feature: SAPA and REPA commands in HCOM (Save and read parameter files from scripts)
+- Feature: Integrate function in HCOM
+- Feature: SymHop: Logical OR and AND operators
+- Feature: SymHop: Inequality operator and function
+- Feature: The actual optimization will be run as a separate object instead of working directly with the open model.
+- Feature: HCOM: "optexec" command (run your optimization script from the main hcom terminal). The dialog (controlling the separate optimization object) will be opened.
+- Feature: Highlight C, Q and S components (for educational purposes) (Alt+Shift+s,c,q)
+- Feature: FMU for co-simulation
+- Feature: Library widget has a filter option
+- Feature: User will get a warning about unused system parameters
+- Feature: Uniform distribution option in sensitivity analysis dialog
+- Feature: Compiler and other build information has been added (see about dialog)
+- Feature: When hovering a system parameter, the components that use it will be highlighted
+
+- New component: Ball screw component
+
+- Documentation: The detailed hcom command documentation has been updated
+- Documentation: There is now hcom help for special commands such as ddt lp1 gt lt and other similar
+
+- Enhancement: Lots of improvements to the code behind plots and alias / variable name handling. (Should result in fewer strange problems)
+- Enhancement: Simulink export is using the source code for HopsanCore instead of pre-compiled DLL libraries. (You must build the entire HopsanCore as an s-function)
+               This solves "DLL-hell" issues. (The pre-compiled DLLs are still included in the release though)
+- Enhancement: Optimization dialog shows objective values next to parameter values
+- Enhancement: The HCOM handler in the optimization dialogs will get a copy of all local variables from the global HCOM handler
+- Enhancement: It is now possible to go directly to code tab in the optimization dialog
+- Enhancement: Plot curve markers can use vertical and/or horizontal lines
+- Enhancement: Alias / Variable name pairs will be shown when hovering a port
+- Enhancement: It is now possible to import variables with the same name as aliases and they will end up as a new generation for that alias
+- Enhancement: Individual variables (imported), can now be removed from the plotwidget
+- Enhancement: Generation numbers are now shown in the legend in the plots. Variable source can also be shown. (See legend options)
+- Enhancement: It is now possible to delete imported data files by right-click menu in the plotwidget
+- Enhancement: The lookupTable2d component has an option whether or not to reload csv file on each initialization. (Good for large files that never changes)
+- Enhancement: Lots of improvements in the optimization dialog
+- Enhancement: Some hcom commands such as "chdfsc" will work even if no log data is available (since they work towards the model)
+- Enhancement: Route components have changeable parameters for their limit values
+- Enhancement: HopsanCore HMF loader will indicate the number of warnings and errors that occurred while loading a model (better test capability)
+- Enhancement: The hcom SAPL command now takes wild-card expressions such as *.L *.H *.n, making it possible to export entire generations from scripts.
+- Enhancement: The generation shift arrows in a plotwindow will no longer trigger a generation shift in imported variables. (That rarely make sense, based on user feedback)
+- Enhancement: If your configuration file is read-only (it should not be) you will get an error message. (You need to fix the problem yourself)
+
+- Fixed: Default custom (without unit) scale applied to the data generation is undone by the clever plot curve local scaling
+- Fixed: Sometimes echo is turned off in main terminal after optimization
+- Fixed: Optimization crashes second time if using PS algorithm and plotting objective functions
+- Fixed: HCOM: It is not possible to divide with several vectors at the same time
+- Fixed: Optimization models cannot handle relative search paths in lookup table components
+- Fixed: HCOM Crash if using negative power functions
+- Fixed: Undo and redo removal of a component with an alias will make the component loose alias and crash the program at next simulation
+         (The alias will still be lost, but the program will at least not crash anymore)
+- Fixed: Alias will not work if you rename a component (the old alias will get stuck)
+- Fixed: Alias is not removed when a component is deleted
+- Fixed: HCOM: int, ddt and lp1 functions does not evaluate arguments properly
+- Fixed: Sometimes the component library gets "locked" right-clicking in the library space "unlocks" it again
+- Fixed: Sensitivity analysis and likely others get the simulation time from the global sim time edits instead of model local values
+- Fixed: If always show name is selected, then the name is shown even if the component is hidden
+- Fixed: It should be possible to import a file with the same name multiple times without confusing generations
+- Fixed: Crash if trying to hide/show a disabled outputvariable port
+- Fixed: Double clicking a variable in the plotwidget in a plotwindow opens the curve in a new window
+- Fixed: Adding a signal plot curve after an other curve with unit has been added, the new curve gets the previous unit
+- Fixed: Hopsan crash if you show losses after simulating an empty model
+- Fixed: If you open a properties dialogue from two different models and then move values over to the new one and click OK the name of the first model tab will change
+- Fixed: Hide button for messages/terminal does not react immediately when pressed, and steels vertical space. (It was removed, there is now a hide/show docks button in the left menu)
+- Fixed: Abort script function often fails
+- Fixed: Crash if closing model during optimization
+- Fixed: Sometime the model name shown in the plotwindow title is not correct, it could be a model that is not even open
+- Fixed: Clicking debug multiple time opens multiple dialogues even if one is already open
+- Fixed: Load-order in the HopsanCore hmdf loader. To avoid warnings while loading components using nested subsystem parameters
+
+------------------------------------------------------------------------------------------------------------------------
+0.6.4    (2013-12-02)
+
+- Feature: True 64-bit GUI and CLI application version (for Ms Windows) to make use of more then 4GB ram. (*Ubuntu releases were already 64-bit)
+
+- Documentation: The Hopsan help guide has been updated and reorganized, specifically the section about how to get starter writing your own component libraries in C++. 
+                 The users guide now contain step-by-step instructions on how to install a C++ development environment.
+                 A help section explaining the use of the Hopsan command line interface (CLI) has also been added.
+                 Manny documentation bugs and issues have also been fixed.
+
+- Enhancement: Right-click a component and checking the "Always show name" box will make sure that the component name is always shown even if you toggle the hide names switch.
+- Enhancement: Now component authors can add a link to external documentation in the component description file.
+               See built-in users guide (help) and the page that explain how to create or modify component appearance. 
+- Enhancement: Many under-the-hood changes in HCOM relating to "wildcard" (Gain*.out.*) name patterns.
+               Some commands may have changed behavior (hopefully for the better)
+- Enhancement: Port labels file in Simulink export now have a model specific name
+- Enhancement: The component library widget has been completely rewritten to solve a number of problems.
+
+
+- Fixed: Hopsan should no longer crash if the plot legend area gets larger then the actual plot axis.
+         It will still look pretty strange though. (You should turn of legend if you have that many curves on a axis)
+- Fixed: Simulink export (s-function) would ignore the time step set in the model and always use 0.001
+- Fixed: Coulomb friction utility function does not reset required force when crossing zero velocity
+         This will affect (hopefully for the better) the behavior of the following default components: 
+         MechanicTranslationalMassWithCoulombFriction
+         MechanicRotationalInertiaWithCoulumbFriction
+- Fixed: C++ generator does not create ports for input variables and output variables in CAF file
+- Fixed: Simulink export cannot handle system parameters
+- Fixed: HCOM can not multiply more then 2 variables at the same time
+- Fixed: HCOM chpv does not plot a variable alias if that alias can also be used to access a parameter (startvalue)
+- Fixed: HCOM functions such as ddt( fft( lt( gt( lp1( crash if arguments are not found or if they are otherwise incorrect.
+- Fixed: Optimization becomes slower and slower for each iteration. 
+         Note! this only happened as the number of logged generations increased, the actual simulations took the same amount of time. The auto-clearing of old generations and HCOM name lookup was changed to remove these growing slowdowns.
+- Fixed: Crash in HCOM if calling two-argument functions with only one argument
+- Fixed: HCOM points to wrong model after aborting optimization
+- Fixed: The show names and show ports setting is not remembered the next time you start Hopsan
+- Fixed: If you open a scope and then open an other scope with the same name in a different system/model, the first plotwindow will be stolen.
+         Note! The plotwindows can now have the same "display name" but "behind the scenes" the plotwindow name will be different.
+         This means that you may not be able to switch the active plotwindow from HCOM.
+- Fixed: When you load an external lib containing the same components as an earlier lib, those components are "removed" from earlier libs
+- Fixed: When importing data containing Time, the Time variable will be moved to the __Imported__ category even though it should be shown in both categories.
+- Fixed: When hovering the library widget the size of the widget windows changes making components reorder them selves. (Kubuntu and Windows XP)
+- Fixed: Sometimes messages would not not be printed to the bottom of the terminal widget. (Cursor position would be used)
+
+- Fixed: Cavitation behaviour corrected in HydraulicPistonAckumulator, also changed icon to "gas charged accumulator"
+- Fixed: Drag direction when reversing in MechanicalVehicle1D
+- Fixed: Translational multi-port mass overrides start values with 0
+
+------------------------------------------------------------------------------------------------------------------------
+0.6.3a    (2013-10-28)
+- Fixed: Update notification and auto updater was not working (since 0.6.0)
+- Enhancement: If you import variables and then run a simulation resulting in variables with same name, the model variables will be shown in the PlotWidget.
+               Imported variables are still shown under the __Imported__ category.
+
+------------------------------------------------------------------------------------------------------------------------
+0.6.3
+- Feature: HCOM: Command for removing components
+- Feature: HCOM: min and max functions for scalars
+- Feature: HCOM: Less than and greater than functions for vectors
+- Feature: Numerical integration solver utility for Modelica component
+- Feature: Conditional parameters
+- Feature: Save plot data generation to file (plo v1, plo v2, and csv)
+- Feature: Initial work at data explorer widget where generations can be imported/exported or removed
+
+- Enhancement: When changing plot unit for a curve the curve settings label is updated
+- Enhancement: It is not necessary to re-simulate after changing alias names to make them appear in the plot variable list
+- Enhancement: Imported files are listed by filename category (under __Imported__)
+- Enhancement: Added possibility to have local plot offset for curves
+- Enhancement: Allow all sensor components to be unconnected in model
+- Enhancement: Simulink export use model name, instead of "HopsanSimulink"
+- Enhancement: Limit data generation function limits actual number of generations, it does not remove generations "older" than the limit
+- Enhancement: Time scale and offset in time-scale dialogue can now be set for each generation plotted in a plot tab, not just for the first curve generation
+- Enhancement: Asks user what to do when data generation limit is reached (optional)
+- Enhancement: It is now possible to begin logging before time 0
+- Enhancement: Made sure that almost all default component xmls have working sourcecode link
+- Enhancement: Alias name is now shown on the plot axis instead of data name
+- Enhancement: Parameter values in the parameter table in component properties are now shown in the order that they were registered (this makes more sense then ascii ordered)
+- Enhancement: Hidden node data variables are now ignored by the GUI (since they are not used). A configuration option can be set to show them.
+- Enhancement: Improved the look and feel of the component properties dialogue
+               In the "Value" field: Black normal font = Default Value
+                                     Black Bold font = A changed value (no longer default value)
+                                     Gray Italic on light-gray background = Value will have no effect (Input variables that are connected)
+
+- Fixed: Pneumatic QmSensor was measuring pressure.
+- Fixed: Signal SRlatch component is now working
+- Fixed: Accumulator port description was wrong, Oil volume -> Gas volume
+- Fixed: The SignalPID controller was implementing a differential PID (and required non-zero Ki), I has been replaced with an "ordinary" PID controller.
+         A SignalPID2 controller has also been added using a manual "text book" implementation with "standard form" parameters K, Ti, Tt, Td.
+- Fixed: SignalPIlead limitations
+- Fixed: Some components had GUI/CORE port name mismatch. Implemented test case to prevent this from happening again!
+- Fixed: Some special components have been update
+- Fixed: Some HCOM commands stop working after successful optimization
+- Fixed: HCOM: Max command for vectors cannot handle negative numbers
+- Fixed: Showing name for individual components does not work
+- Fixed: PageUp, PageDown and Escape keys does not work properly in terminal
+- Fixed: Alias variables cannot be accessed by HCOM
+- Fixed: If recompilation of c++ component fails, model "dies", then when trying to reopen it hopsan crash
+- Fixed: Units in signal ports are always SI, even if custom default units are chosen in options dialogue
+- Fixed: Change unit does not seem to work in scopes
+
+- Other: Removed option to automatically load last session at startup
+
+------------------------------------------------------------------------------------------------------------------------
+0.6.2
+- Update: Updated to Qt 4.8.5 (Windows)
+
+- Feature: HCOM Add plot variable command (adpv) in addition to chpv
+- Feature: HCOM commands for changing and displaying plot scales for variables
+- Feature: HCOM command for removing variables
+- Feature: Custom plot scales can now be set in the component properties, they are stored in the model.
+- Feature: Default/custom plot Time unit can now be set/added
+- Feature: Plot tab axes can now be locked
+- Feature: HCOM: chdfsc changes default plot scale, A new chsc command has been added for plot window local scaling
+
+- Enhancement: Replaced the speed slider for animation with a spinbox
+- Enhancement: Plot axis and curve scaling limits can now be manually set using text instead of spinbox (Ex: you can write 1e-12 or similar for fine tuning limits)
+- Enhancement: Plot time scaling has been moved to its own dialog as it may affect more then one curve. (For now it only works if all curves in a plot have the same generation)
+- Enhancement: The welcome widget is now resized to use all available space.
+- Enhancement: HCOM: disp will only show specified generation, or last generation if none is specified
+- Enhancement: Hide signals function will now also hide sub systems of signal type
+- Enhancement: It should now be possible to recompile Modelica and C++ components without closing the model
+- Enhancement: Components are be re-compilable from inside the component properties dialog
+
+- Fixed: Imported data is no longer removed automatically when plot data limit is reached
+- Fixed: "Save subsystem as" actually no longer saves the mother system
+- Fixed: Plot axis labels always show 0 if value less then 1.0e-12 (was a Qwt 6.1 "bug")
+- Fixed: Real-time animation now checks model before simulation
+- Fixed: Axis lock and zoom now works "as it should"
+- Fixed: HCOM now understand alias when dealing with parameters (startvalues and constants)
+- Fixed: HCOM rmvar crashes
+- Fixed: Mechanic mass and inertia with multi-port components no longer overwrites start values with 0.0
+- Fixed: LogData should no longer be auto re-enabled in SIT export and maybe other exports as well (would lead to crash after t_end in real-time simulation)
+- Fixed: Code generation wizard no-longer generates non-compilable code
+- Fixed: Components dialog now get the source code tab if component is loaded from hmf
+- Fixed: Zoom rectangle now changed properly when changing time unit 
+- Fixed: Value is no longer reset if user closes component properties dialog while editing a value
+- Fixed: Sfunctions exports now call finalize
+- Fixed: If an external subsystem file is renamed or removed, it is impossible to edit the subsystem
+- Fixed: If you generate a component, change the svg icon and then re-generates it, icon is reset to default
+- Fixed: Crash on startup if configfile contained un-supported unit scales. (Old Hopsan versions would crash if a newer version had been run.)
+- Fixed: Unable to open Release-notes when path contains space or backslash
+
+- Fixed: Other related issues that were never entered into the issue tracker
+
+------------------------------------------------------------------------------------------------------------------------
+0.6.1
+- Feature: Import CSV data directly to plot window
+- Feature: Plot window can be opened without simulating the model first
+- Feature: System parameters can now be added from component properties dialog
+- Feature: System parameters can now be sorted by name, value or type
+- Feature: HCOM command for importing PLO and CSV data
+- Feature: HCOM command for renaming components
+- Feature: HCOM command for adding system parameters
+- Feature: Alias can now be set by right-clicking ports
+- Feature: Quick-lock axis button in plot window
+- Feature: Losses calculator can now show average power loss
+- Feature: Documentation and source code in component properties dialog now appear in their own tabs
+- Feature: Button in model preferences dialog to quickly clear all log data in model
+- Feature: Forward and backward buttons in help dialog
+
+- Fixed: Plot curve markers now update their positions and labels correctly when switching generations
+- Fixed: Plot curve colors are now re-used in proper order
+- Fixed: Zoom scale in plots are now reset when last curve is removed
+- Fixed: If a model fails to load, it does not appear in the recent models list
+- Fixed: Error message if save operation fails
+
+- Enhancement: Added hover tool-tip for all icons and line edits in main window
+- Enhancement: In time measurement tool, only selected components/types are included in bar chart
+
+- Other: Fixed bad parameterization of inline axial piston machine example model
+
+------------------------------------------------------------------------------------------------------------------------
+0.6.0
+- Important: The handling of Parameter Startvalues and "dynamic" parameter/ports have changed significantly in this release.
+             Read the important information above.
+
+- Update: Updated to Qt 4.8.4 (Windows)
+- Update: Updated to Python 2.7.5 (Windows)
+- Update: Updated to PythonQt2.1_Qt4.8
+- Update: Updated to Qwt6.1.0
+
+- Feature: Log data can now be cached on hard disk, making it possible to keep more generations	before memory runs out
+- Feature: Added support for 2D-animations
+- Feature: Exporting models to FMU Model Exchange
+- Feature: Importing models from FMU Model Exchange
+- Feature: Exporting models to LabVIEW/Veristand
+- Feature: Parameters are replaced by constants and input/output variables, variables are changeable during simulation
+- Feature: Broken connectors now appear in pink! when  connector fails to load
+- Feature: Components can now be recompiled automatically (requires external MinGW compiler)
+- Feature: All ports now have a node and can be plotted even when not connected. They will have a default startValue that is used if not connected.
+- Feature: Built-in tool for profiling components
+- Feature: Added save function for parameter set
+- Feature: Made it possible to print models
+- Feature: Made it possible to export models to PNG bitmaps
+- Feature: Added "replace with similar component" function by right-clicking components
+- Feature: If documents path is not writable, user can select a different path
+- Feature: New terminal widget, using the HCOM language similar to the one in classic Hopsan
+- Feature: Optimization dialog now generates HCOM scripts, increasing performance and usability. Note! python scripting is still possible, but currently not recommended.
+- Feature: Abort button for scripts
+- Feature: Script commands for adding/connecting components and entering/exiting subsystems
+- Feature: Each plot curve can now have an individual x-axis
+- Feature: Made it possible to lock axes in plots
+- Feature: Changing plot curve appearance (dots/lines/etc)
+- Feature: Importing/Exporting data variables from/to PLO format
+- Feature: Pointer tool in plot window
+- Feature: Plot windows now shows model name in their window name
+- Feature: Plots can now be exported to PDF, SVG, PS, PNG or JPEG formats at desired size / resolution (only manually for now, script commands will come later)
+- Feature: Simulation settings can now be controlled with arguments to HopsanCLI
+- Feature: Importing and exporting parameters from CLI
+- Feature: Move ports dialog
+- Feature: System parameters can now be changed in exported S-functions
+- Feature: Auto generated components now have comments telling you not to manually change the code
+- Feature: Added fatal message type, this is used instead of ASSERT(false) that would just crash the program
+- Feature: Replaced all assert(false) in HopsanCore with more clever solutions
+- Feature: Made it possible to save subsystems
+- Feature: Component test models can now be accessed from within program
+- Feature: Added release notes under help menu
+- Feature: Sensor components now have custom units on output signal
+- Feature: Lookuptable2D can no use relative paths to data files, a component utility to handle this has been added
+- Feature: Initial work at a Hopsan Validation Tool in GUI. Currently it can be used to visualize the difference between the HVC and current simulation result.
+
+- Enhancement: All required system parameters are copied when copying components between models
+- Enhancement: Plot widget and library widget now remember all expanded items when updating
+- Enhancement: Simulink export no longer uses absolute path to HMF file
+- Enhancement: Plot legends are now on left or right, depending on which Y-axis they belong to
+- Enhancement: Sorting order for signal components are now displayed as debug output in terminal
+- Enhancement: Aliases are now showed in plot legends
+- Enhancement: Most nodes now have reasonable default start values
+
+- Fixed: It is now possible to use negative system parameters
+- Fixed: System parameters can now be edited in the system parameters widget
+- Fixed: Parameters can now be assigned with system parameters with same name
+- Fixed: XY-plots now updates correctly when changing generation
+- Fixed: Drag-n-drop rectangle are now visible on all operating systems
+- Fixed: When aborting simulations, the entire plot data is no longer collected
+- Fixed: Plot data is no longer collected when logging is disabled
+- Fixed: Memory leak in equation solver
+- Fixed: Lots of small bugs, to many to list here. But do not worry, we have also added plenty of new ones
+
+- Documentation: Added guide for sensitivity analysis
+- Documentation: Added descriptions of optimization algorithms
+- Documentation: Added documentation for animation function
+
+- Other: Replaced all std::string with new HString class, to avoid problems when communicating between executable and dll/so libraries
+- Other: Made it illegal to use other characters than letters, numbers and underscore in component names, this makes names more compatible with certain external tools
+- Other: Algebraic loops are no longer allowed, and must be resolved by using a unit delay component
+- Other: Major performance improvements in SymHop library
+- Other: Node types and parameter units are now stored in HMF files
+- Other: Author information is now stored in HMF files
+- Other: Components now use configure/deconfigure functions instead of relying on constructors/destructors
+- Other: Removed singleton classes to avoid problems sending data between DLLs
+- Other: Lots of improvements to plot data and plot window code
+
+------------------------------------------------------------------------------------------------------------------------
+0.5.6
+- Fixed: MechanicJlink component was broken since Delay changes in 0.5.4, it should now work again
+- Fixed: Instability problems in MechinicalGear components
+- Fixed: Truncations in CylinderC equations, component dynamics has changed slightly
+- Fixed: Truncation in MultiportVolume init value and one ElectricCapacitanceMultiport equation
+- Fixed: ProjectTab is now tagged as changed if you edit the simulation time. (Even if you do not actually change them)
+- Fixed: Made losses dialog ignore power read ports when calculating power losses
+- Fixed: Missing semicolon in exported Simulink C++ files
+- Fixed: Some Python functions only worked on top level system
+- Fixed: Made it possible to map parameters and system parameters from Python scripts
+
+------------------------------------------------------------------------------------------------------------------------
+0.5.5
+- Fixed: Lookup-table component is no longer EXTREAMLY slow, due to smarter lookup algorithm in the CSVParser utility.
+- Fixed: Improved error handling and reporting in CSVParser utility, lookup-table component behaves better when incorrect data is used.
+- Fixed: Help text and picture for lookuptable component is now better.
+- Fixed: Export of plot data (csv and other formats) is no longer EXTREAMLY slow.
+- Fixed: Only the last system parameter was shown in Subsystem properties, now all are shown.
+- Fixed: Save plotwindow now remembers save path
+- Fixed: Pressing enter in add systemparameter widget will not default to cancel button
+- Fixed: Crash when using losses calculation on models without power ports
+- Fixed: Zoom magnifier in plot window was activated after using context menu
+- Fixed: Changed default save path for most save functions to documents folder
+- Fixed: Weird axis scaling in plot window when using logarithmic scaling if data contains values equal to or smaller than zero
+- Fixed: Variable aliases are now displayed first in the favorite variable list in plot widget
+- Fixed: Crash when opening optimization dialog if previously chosen parameters no longer exists in model
+
+- Feature: When adding curves to existing plots, they now inherit unit from previous curves (if they are consistent)
+- Feature: It is now possible to select which column to use for output data in the lookup-table component. If the data file contains more then two columns.
+- Feature: The new lookup algorithm in the CSVParser requires the input data to be strictly increasing. If the data is not, it will be automatically sorted on initialization.
+        
+   (The data file contents will not be changed)
+- Feature: Current value of selected parameters are now shown in optimization dialog
+
+- Documentation: Updated help section for Python scripting commands
+
+------------------------------------------------------------------------------------------------------------------------
+0.5.4
+- Important: Some signal components and the Delay utility have changed, read below for details.
+
+- Fixed: Corrections to diffAngle aux function
+- Fixed: Volume components start values in initialize works
+- Fixed: Mechanic position source handle equivalent mass to be used with for example CylinderC
+- Fixed: Mechanic mass with lever start value and graphics fixed
+- Fixed: Added a patch found on CSV parser project homepage to deal with blank rows in file
+- Fixed: CSV parser do not crash if wrong delimiter is used
+- Fixed: CSV parser is now able to handle new lines in file
+- Fixed: Behaviour of Signal Sin and Square wave, also updated help figure and text to match. Make sure you look at help for new behaviour.
+- Fixed: Correct parameter names in help figure for ramp and pulse component
+- Fixed: Delay utility no longer assert(false) if you input a to low delayTime, ( Td < Ts), it will then use one delay step.
+- Fixed: Rewrote the Delay utility to use elements==delaySteps instead of elements==(delaySteps+1). This avoids one extra (unwanted) delay when using update function.
+- Fixed: SecondOrder Transfer Function Utility max min limit function fixed. CylinderQ (and others) now should not get stuck in end position (under special circumstances).
+- Fixed: Help documentation can now be open at the same time as the rest of Hopsan is used.
+- Fixed: Register parameter function for integer parameters was missing in HopsanCore
+- Fixed: Setting parameter value will now not warn when entering 2E10 as value, that is, both e and E will work.
+- Fixed: Made switch generation buttons work regardless of auto update setting
+- Fixed: Made plot window export data to CSV files in row direction instead of column direction
+- Fixed: Made plots auto-scale correctly when changing generations
+- Fixed: On portable release (zip-release) the optimization files will now end up in the correct directory. "Documents/Hopsan/Scripts"
+- Fixed: Added some help text for fictive components such as TLM-element and mechanical lossless connector component
+- Fixed: Message widgets now auto scrolls to bottom when new messages appears, so that they are always visible
+- Fixed: Multi-threaded optimization algorithms now use correct model path
+- Fixed: Fixed position and Free length wall components now have an equivalent mass parameter, so that they can be connected directly to a cylinder
+
+- Feature: Start values can be saved to be used in next simulation
+- Feature: Made it possible to disable port labels in Simulink export function, for compatibility with older Matlab versions
+
+- New component: Signal PulseWave
+- New component: HydraulicTankC with MultiPort
+
+- Other: Renamed Sink to Scope (only display name, old name will still work)
+- Other: Component parameter value strings will automatically be stripped of leading and trailing spaces (when entered in GUI)
+- Other: Example Models and Benchmark Models have been moved to the Hopsan installation directory instead of Documents/Hopsan/Models
+
+------------------------------------------------------------------------------------------------------------------------
+0.5.3
+- Fixed: External library directory is now remembered in the file dialog
+- Fixed: If you open a new tab (or load new model) the timestep from the new tab would also be set in the previous tab
+- Fixed: C-type piston component now uses correct variables for dead volume and number of connections
+- Fixed: C-type piston now users correct start values in multi-ports
+- Fixed: Crash when simulating with JLink component
+- Fixed: Plot window forgets unit scaling on Y-axes when changing X-axis
+- Fixed: Crash when not recognized file loaded in Look Up Table 2D
+- Fixed: Look Up Table 2D Now always reloads the input data before simulation 
+- Fixed: Look Up Table 2D Output vectors no longer have to be strictly increasing or decreasing
+- Fixed: Port placement in Lever Mass component
+- Fixed: Bug that generated successful simulation message even if component terminated simulation in init
+- Fixed: Latex formulas were not generated as pictures in doxygen documentation (for transfer function help)
+- Fixed: Number of log samples are now remembered when saving/loading models
+
+- Feature: Added a "load script file" button in Python widget
+
+- New component: Sign signal component
+- New component: Subtract multi port component
+
+------------------------------------------------------------------------------------------------------------------------
+0.5.2
+- Fixed: Missing NodeMechanicRotational in documentation
+- Fixed: Replaced assert portType==SYSTEMPORT in determineCQSType() with if() check. (For very advanced users) 
+- Fixed: Compilation errors in FMU export/import
+- Fixed: Sensitivity analysis button should be disabled when no model is open
+- Fixed: Hopsan installer should not delete all contents of target dir without asking
+- Fixed: The Scripts folder was not included in the installer
+- Fixed: The zip-release version should now fall back to its own scripts and models folder if no such folders exist in "mydocuments/Hopsan"
+- Fixed: Some Python scripts necessary for optimization were not included (Python would have to be manually installed)
+- Fixed: Optimization does not work with 0 as parameter minimum if log scale used
+- Fixed: The exampleComponentLib have incorrect include and lib path for release, the dev paths were used
+- Fixed: Crash when opening optimization dialog if model contains a subsystem
+- Fixed: The Scripts folder is now automatically added to the Python path in Hopsan
+- Fixed: Many bugs in the component generator utility
+
+- Feature: Added an initial algorithm section in equation based model generation tool
+- Feature: Added possibility to use algorithm sections before and after equations in component generator utility
+- Feature: Made some more file dialogs remember the last used directory
+
+- Documentation: Improved the documentation on how to create custom components
+
+- Other: The Python scripts from the default Python installation are now distributed with Hopsan
+
+------------------------------------------------------------------------------------------------------------------------
+0.5.1
+- Fixed: Issue with Read ports and Writeport types becoming inverted when connecting to a signal systemport. (Only graphics was affected)
+- Fixed: Added missing script files for optimization
+- Fixed: Fixed component compilation problem due to Windows not allowing programs to save files in their own directory
+- Fixed: Wrong default path in some file dialogs
+- Fixed: Pdf export of workspace created a pdf file that was called .svg
+- Fixed: Include files attempted to include a header file that is not part of the release
+- Fixed: Check if Jacobian matrix is singular returned opposite value
+- Fixed: Wrong include and link directories for compilation script when generating components
+- Fixed: Replaced illegal characters in optimization script filename
+- Fixed: Wrong class names in some Python script commands
+
+------------------------------------------------------------------------------------------------------------------------
+0.5.0
+- Fixed: Small memory leaks (related to removal of system parameters and system ports) in HopsanCore
+- Fixed: It is now possible to click the simulate button directly after editing simulation time. You do not need to press enter first.
+- Fixed: Simulation will now not start if initialize fails
+- Fixed: It is now possible to unload a library and all of its components without restarting Hopsan
+- Fixed: SystemVariable values for external models are now saved in the system that imports the external file. (You will not loose changes to theses variables)
+- Fixed: Build-in HopsanCore HMF loader can now handle Subsystems (internal and external) and system parameters correctly.
+- Fixed: Third-party dependency include files should no longer be needed in custom components
+- Fixed: Add message in HopsanCore should now be thread safe (when using multi core simulation)
+
+- Feature: Added an auto-update function
+- Feature: Added a component generator utility (experimental)
+- Feature: Import from FMI (experimental)
+- Feature: Export to FMI (experimental)
+- Feature: Numerical optimization dialog with constrained simplex and particle swarm algorithms
+- Feature: It is now possible to let a SystemVariable take its value from a parent system SystemVariable. This means that you can propagate SystemVariables downwards in the model hierarchy.
+- Feature: KeyWords can be reserved in the HopsanCore component factory.
+- Feature: Auto update function for Component Appearance XML files.
+- Feature: New component appearance XML format version 0.3
+- Feature: Reset config-file button. Especially useful in Windows.
+- Feature: XY-Plots in Scope (Sink) components
+- Feature: Ports can be permanently hidden. Useful for debug-ports in your custom components.
+- Feature: Ports can now be given a description in appearance XML file.
+- Feature: Components that fail to load are replaced with a dummy component to indicate where missing components should have been.
+- Feature: The undo-stack can optionally be saved together with the model in the HMF file.
+- Feature: External component libs must now report some basic info about what version of Hopsan they were compiled against, and a name. (See example lib for details).
+- Feature: Many auxiliary simulation function have been made inline header only. This might improve simulation speed slightly in some cases. (Reduced overhead)
+- Feature: Right click drag copy, instead of holding shift.
+- Feature: Changed hydraulic ports in C-type piston component to multiports
+
+- Documentation: New and improved built-in documentation style.
+- Documentation: More documentation, especially concerning the creation of custom components. (More will come later)
+- Documentation: User documentation now contains Doxygen generated documentation from the HopsanCore. (Useful for custom component creators) 
+
+- Other: Component constructors with name arguments have been removed. They take no arguments now. (For custom component creators)
+- Other: Lots of "under the hood" code improvements.
+- Other: New Electric components
+
+------------------------------------------------------------------------------------------------------------------------
+0.4.5
+- Fixed: Added missing include files for external dependencies
+- Fixed: Simulink export now copies all required include file to export directory
+
+------------------------------------------------------------------------------------------------------------------------
+0.4.4
+- Fixed: Renamed "Diameter" parameter in valves to "Spool Diameter" to make it clearer
+- Fixed: Prevent simulation from running if time step is to low (if it is zero). To avoid getting stuck in simulation loop.
+- Fixed: (Workaround) If running with some non English locale settings, numbers in XML would be saved with decimal point , instead of . (Files could not be loaded) 
+- Fixed: Signal connector arrows getting stuck in the view when entering a subsystem
+- Fixed: Incorrect index increment order in the Delay utility class
+- Fixed: Welcome dialog does not have mouse focus on startup
+
+------------------------------------------------------------------------------------------------------------------------
+0.4.3
+- Fixed: Connector graphics will now be refreshed when subsystem ports have changed type or node, (solves gray connectors between subsystems)
+- Fixed: Ports sometimes hidden when they should be visible
+- Fixed: Made sure hide/show port and nametext buttons work as they should, refresh when moving between subsystems.
+- Fixed: Hide signal components function is now system specific
+- Fixed: Hide signal components function now also hide unconnected ports
+- Fixed: Allowed both comma and point as decimal delimiter for parameters (comma is changed to point automatically)
+- Fixed: List of system parameters in component properties dialog was always based on top level system, even if component was in subsystem
+- Fixed: Crash if double clicking sink component after simulation when creating connector from sink component multiport
+- Fixed: Missing parameter (Xpa) in load sensing 4/3 valve component
+- Fixed: When undoing deleting a component the parameters were reset
+- Fixed: Start value units are not affected by changing units in options dialog (they always use SI units)
+- Fixed: Plots exported to Matlab now keep their logarithmic scales in the script file
+- Fixed: Flipping an object does not add * to tab (to indicate changes that need to be saved)
+- Fixed: Read and write port invert icon in subsystem external ports
+- Fixed: Connectors between container ports and subsystems are gray even when connected
+
+- Feature: C-type and Q-type components are now sorted in the correct order if they are connected with signal ports
+- Feature: It is now possible to use system parameters from parent system as value for system parameters in subsystem
+- Feature: Subsystem ports with signal nodes will change to mirror internal or external port type, (Read or Write icon will make more sense).
+- Feature: Program now remembers the paths for all file access functions
+- Feature: Rearranged the buttons in the add system parameter dialog so that they make sense
+- Feature: Make it possible to copy with ctrl+c in message widget
+- Feature: Added help text in pressure source components
+- Feature: Added shortcut descriptions for actions in component right-click menus
+
+------------------------------------------------------------------------------------------------------------------------
+0.4.2
+- Fixed: Graphics for external component libraries will not be shown if library failed to load
+- Fixed: Crash when double clicking sink that has not been connected
+- Fixed: Flip button now works on containerobjects (subsystems)
+- Fixed: Correct error message when trying to connect readports to multiports
+- Fixed: No longer registers startvalues for subports in multiports
+- Fixed: No longer reregister startvaules while initializing (disabled values would reappear)
+- Fixed: ; At end of vectors in matlab .m script plot data export
+- Fixed: Exporting both amplitude and phase curve to .m file
+- Fixed: Added scrollbar to subsystem properties, (useful if you have many systemparameters)
+- Fixed: Removed initial "../" from #include paths to avoid build issues with external libraries using Component Utilities
+- Fixed: Removed annoying popup window telling the user about .xml files not containing appearance data, (in case user has other .xml files)
+- Fixed: Highlighted drop area in plot window does not correspond exactly with the actual drop areas
+- Fixed: Changing standard units will update plot unit in ports
+
+- Feature: Load and save function remembers last used directory (while the program is running)
+- Feature: Added an initial simple ExternalComponent example library, (with plenty of comments in the code)
+
+- New Components: sin, cos, tan (Trigonometric functions)
+
+------------------------------------------------------------------------------------------------------------------------
+0.4.1
+- Fixed: Options dialog now resets its values next time after pressing cancel
+- Fixed: Made default start values for components work again
+- Fixed: Made some important corrections to equations in Q-type cylinder
+- Fixed: External libraries with no components are no longer loaded (they turned out "invisible" and could not be unloaded)
+- Fixed: Crash when loading two external libraries with same name
+- Fixed: "Similar messages" counter did not reset between different message types
+- Fixed: Undo stack is now enabled by default (may require re-saving old models)
+- Fixed: Backwards compatibility for loading older .hmf files, where parameters could only be real numbers
+- Fixed: Crash when loading connection from model files where components or ports are missing or have had their names manually altered
+- Fixed: Restored possibility to load old style startvalue settings from hmf files (will still be saved in new format)
+- Fixed: Rare occurrence of endless loop when loading and setting rotation angle for model objects from hmf files
+- Fixed: Made sure error message reporting and debug messages for external component lib loading works. Now you will actually get a message if external lib fails to load.
+- Fixed: Wrong parameter units in some components
+
+- Feature: Added initial capability to get compile info from external libs when loading, (optional implementation for now, will be mandatory in the future)
+
+------------------------------------------------------------------------------------------------------------------------
+0.4.0
+- Added tools for transfer function analysis (Bode plots, Nyquist plots and FFT)
+- Added support for exporting models to Simulink
+- A backup of the model file is now always created before saving
+- Made it possible to drag-n-drop copy a component by holding shift key and dragging
+- Made it possible to drag components only vertically or horizontally with ctrl key
+- Made the sink component work like a scope; it plots all connected ports when double-clicking
+- Added an alternative view mode for the library
+- Made it possible to unload external libraries without restarting program
+- Line width in component graphics was reduced slightly
+- Arithmetic components are now shown in blue
+- Improved descriptions and help pictures for filter and transfer function components
+- Independent arithmetic components parallelized in multi-threaded simulation
+- Subsystems can now have individual time steps (always an even multiple of parent systems time step)
+- Decreased saving/loading/closing time significantly for large models
+- Added help popup messages
+- Made it possible to hide all arithmetic components in a model
+- It is now possible to copy/paste system ports
+- Toolbars can now be placed on right or left side of the workspace
+- Empty plot windows are now closed automatically when discarding their last plot curve
+- Combined text and box widget into a text box widget
+- Program settings are now saved to configuration file every time a setting has changed
+- Made it possible to scale SVG object icons
+- External subsystems can no longer be edited directly, they need to be opened in a new tab
+- Configuration file now remembers the "group by tag" setting in message widget
+- Adjusted size of welcome dialog, to see more of the recent news
+- Fixed crash when loading models with non-existing components
+- Fixed crash when simulating from Python console with progress bar activated
+- Fixed numerical issues with initialization of second order transfer function
+- Corrected wrong parameter order in filter components
+- Fixed crash when deleting connected system ports
+- Fixed erroneous width of connector lines
+- Made integrator component use output start value for initialization
+- Made models load at correct viewport position when loading last session models
+- When saving models for the first time, they are now added to recent models list
+- Added a warning message before truncating erroneous parameter values
+- Made subsystem clear the old contents before loading from external file
+- Made subsystems remember their icon when saving/loading
+- Made it impossible to simulate when a component uses a non-existing system parameter
+- Made several fixes to port graphic issues
+- Made start values show correct units in parameter dialog
+- Made welcome dialog remain if user clicks cancel in "open" dialog
+- New components: Input/output interfaces for Simulink connection
+- New component: 2/2 Poppet Valve
+- New component: Gaussian Noise Generator
+- New component: Additive Gaussian Noise
+- New component: General First Order Transfer Function
+- New component: Rotating Inertia With Coulomb Friction
+- New component: Route With Two Inputs
+- New component: Route With Three Inputs
+- New component: Route With Four Inputs
+- Removed component: Route
+
+------------------------------------------------------------------------------------------------------------------------
+0.3.5
+- Fixed crash when copy/paste subsystem connected to internal container port
+- Fixed crash when plotting from inside subsystems
+- Fixed crash when readports on some signal components with multiports were not connected
+- Fixed crash when deleting internal systemport that was externally connected
+- Fixed issue with special X-axes in plots not being updated to new generations
+
+------------------------------------------------------------------------------------------------------------------------
+0.3.4
+- Fixed important error in calculation of position in mass components
+- Fixed order of parameters in filter utilities and components
+- Fixed containerport graphics remaining blank on internal or external connections
+- Added all greek letters as special symbols for parameter names
+- Changed model folder to Documents/Hopsan/Models
+- New component: General first order transfer function
+
+------------------------------------------------------------------------------------------------------------------------
+0.3.3
+- Corrected erroneous filter algorithms for several mechanic components
+- Fixed crash when closing the last project tab when a plot window is open
+- Recent models are now sorted in correct chronological order
+- Fixed issues with warning message for disabling undo appearing in wrong situations
+- Fixed crash when performing copy/paste operations on subsystems that has been opened
+- Renaming component now also updates the component name in the lists in the plot window
+- Fixed issue with wrong plot tab being closed when clicking close button
+- Fixed cosmetic problems due to saving/loading models
+- Fixed crash when simulating if a connector has been removed but a plot window with it is still open
+- Made it possible to undo/redo adding/deleting subsystems
+- Fixed crashes with custom components attempting to access non-connected ports
+- Fixed issue with signal connectors not getting arrows when connected to system ports
+- Fixed correct color on connectors between systems or systems and multiports
+
+------------------------------------------------------------------------------------------------------------------------
+0.3.2
+- Improved welcome screen with latest news and check for new versions
+- Library now gives a debug message when a component is loaded
+- The component properties window for components now shows the component's type name
+- Port label background is now a little wider
+- A warning message is now given when CQS type of a system is invalidated
+- Fixed crash when trying to plot generations of a component from before it was added
+- Corrected wrong error message when looping subsystems
+- Fixed bug that made ports invisible after aborting connection with escape key
+- Fixed crash when trying to plot after loading model by double-clicking on its file
+- Made subsystem ports appear at the same order as their placement position inside the system
+- Fixed crash when attempting to loop two system signal ports that internally are connected to each other
+- Connector graphics is not updated when subsystem ports switch places
+- Made it possible to undo creating/removing container ports
+- Fixed crash when removing the contents of a looped signal subsystem and later trying to remove the remaining external connector
+- Fixed crash when internally removing systemport that is externally connected
+
+------------------------------------------------------------------------------------------------------------------------
+0.3.1
+- Plot window now resizes automatically to 70% of screen size
+- Lists and curve info boxes in plot window are hided by default on small screen resolutions
+- Exported PNGs from plot window now always get the same pixel size as the plot in the program
+- Cosmetic improvements to container port properties dialog
+- Container port properties dialog can now be opened by double-clicking a container port
+- Fixed minor cosmetic bug in plot window (list names were not hidden when the lists were)
+- Corrected the cavitation checks in pumps and motors, so that oil can never flow from a volume with zero pressure
+- Added oil density as a parameter in all components that depends on it (used to be hard coded)
+- Fixed wrong parameter name in 4/3 servo valve
+- New component: Hydraulic Hose
+- New component: Pilot Controlled Check Valve
+- New component: Pilot Closable Check Valve
+- New component: Check Valve With Orifice
+- New component: 4/3 Servo Valve With Neutral Position Open To Tank
+- New component: 4/3 Servo Valve With Supply Open To Tank At Neutral Position
+
+------------------------------------------------------------------------------------------------------------------------
+0.3.0
+- Subsystems are now fully implemented
+- Added "multi ports" so that multiple connections can be connected to the same port
+- Made volume, pressure source and some signal components use multi ports
+- Completely new plot window
+- Plot curves from different generations can be plotted against each other
+- Plot curves can be scaled and moved
+- Plots can be exported to Comma-Separated Values format (.csv)
+- Plots can be exported to Matlab script file format (.m)
+- Plot window configurations can be saved to .xml format
+- Added the possibility to give plot variables an alias, which makes it easier to access from python scripts
+- Several curve markers can now be added to the same curve
+- Added a recent model list on welcome dialog
+- Added option to attach a script file to a model file, that will be executed automatically when loading the model
+- Made it possible to make connector lines dashed, for e.g. pilot lines
+- Revised program style sheet
+- Fixed crash when trying to connect same two ports with two connectors
+- Fixed several bugs in component model code
+- Remade C-type Cylinder component
+- New component: Pressure Compensating Valve
+- New component: Lever With Mass
+- New component: Rotational Gear With Inertia
+- New component: Rotational Single Gear With Inertia
+- New component: Max
+- New component: Min
+- New component: Sum
+- New component: Route
+
+------------------------------------------------------------------------------------------------------------------------
+0.2.2
+- Fixed critical bug that caused a crash when deleting a c-type pressure source
+- Fixed bug that made plot window crash if using auto update with angular velocity
+- Added a "Check For New Versions" option under Help menu, that will open the download page directly
+- Changed windows installer platform from InstallJammer to Inno Setup
+- Modified transmission example model so it is an angular velocity servo instead of an angle servo
+- Changed graphic icons for sensor components
+- New component: Mechanic angular velocity sensor
+- New component: Mechanic torque sensor
+
+------------------------------------------------------------------------------------------------------------------------
+0.2.1
+- Fixed issue with component properties dialog being too large for laptop screens
+- Fixed bug with ports being flagged as not connected after cancelling creation of a second connector
+- Fixed crash when trying to add system parameter without name
+- Fixed missing icon for .hmf files
+- Limited number of simulation threads to the number of system cores to avoid locking up the system
+- The "Edit text box" field is now resizable
+- The "View" menu is now alphabetically sorted
+- Added rotate and flip operations to the right-click menu of the components
+- Included time stamps in message widget, and made it more readable
+- Added a reset default value button in component properties dialog
+- Made default values gray in component properties dialog
+- Corrected some component names
+- New component: Q-type tank
+
+------------------------------------------------------------------------------------------------------------------------
+0.2.0
+- First beta release

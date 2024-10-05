@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hopsanobjectappearance version="0.3">
+    <modelobject typename="Subsystem" displayname="">
+        <icons>
+            <icon path="subsystemDefault.svg" type="defaultmissing"/>
+        </icons>
+        <ports/>
+    </modelobject>
+</hopsanobjectappearance>

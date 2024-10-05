@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<hopsanobjectappearance version="0.3">
+    <modelobject sourcecode="SignalXor.hpp" typename="SignalXor" displayname="Logical Exclusive Or Operator">
+        <icons>
+            <icon scale="1" path="SignalXor.svg" iconrotation="OFF" type="user"/>
+        </icons>
+        <help>
+            <md>SignalXor.md</md>
+        </help>
+        <replacables>
+            <replacable typename="SignalAnd"/>
+            <replacable typename="SignalOr"/>
+        </replacables>
+        <ports>
+            <port x="1" y="0.5" a="0" name="out"/>
+            <port x="0" y="0.25" a="180" name="in1"/>
+            <port x="0" y="0.75" a="180" name="in2"/>
+        </ports>
+    </modelobject>
+</hopsanobjectappearance>

@@ -1,0 +1,24 @@
+/*!
+\page page_setuplibrarydevelopmentenvironment How to setup the component library development environment
+
+To create your own Hopsan components (writing them as C++ code) you need to install the necessary compiler but you can use whatever code (text) editor that you want.
+You can choose to use the built in code editor inside HopsanGUI, it offers basic code editing functionality.
+An alternative is to use a full-fledged external C++ IDE.
+This guide describes the first simpler option. 
+
+You only need to install the compiler if:
+- You want to (re)compile component libraries that are already written.
+- You want to write a small library with only a few simple components.
+- You are not interested in debugging the code during simulation.
+- You only want to use import/export features in Hopsan that require require a compiler (FMI requires this).
+
+If you want to write a lot of new/advanced code yourself and use the debugger, then it is recommended that you install a full development environment.
+
+
+\section sec_installcompileronly_windows Installing the compiler only, on Microsoft Windows
+Download the version of Hopsan that comes with the compiler included to ensure that you get the correct version.
+The compiler will be located in the mingw or mingw64 sub directories of the Hopsan installation.
+
+\section sec_installcompileronly_linux Installing the compiler only, on GNU/Linux (*Ubuntu or Debian based systems)
+Install the compiler (GCC) and other tools from you package repository using: `sudo apt-get install build-essential`
+*/

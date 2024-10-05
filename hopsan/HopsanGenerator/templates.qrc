@@ -1,0 +1,21 @@
+<RCC>
+    <qresource prefix="/">
+        <file>templates/simulinkWrapperTemplate.cpp</file>
+        <file>templates/labviewWrapperTemplate.cpp</file>
+        <file>templates/simulinkCoSimWrapperTemplate.cpp</file>
+        <file>templates/simulinkSocketDeclarationTemplate.cpp</file>
+        <file>templates/labviewWrapperTemplate.h</file>
+        <file>templates/generalComponentTemplate.hpp</file>
+        <file>templates/labviewModelTemplate.h</file>
+        <file>templates/labviewApiTemplate.h</file>
+        <file>templates/labviewCodegenTemplate.c</file>
+        <file>templates/labviewHowToTemplate.txt</file>
+        <file>templates/fmu2_model.c</file>
+        <file>templates/fmu1_model.c</file>
+        <file>templates/library_template.xml</file>
+        <file>templates/exe_main.cpp</file>
+        <file>templates/exe_utilities.cpp</file>
+        <file>templates/exe_utilities.h</file>
+        <file>templates/fmu3_model.c</file>
+    </qresource>
+</RCC>

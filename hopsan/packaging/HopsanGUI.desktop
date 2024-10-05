@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=HopsanGUI
+Comment=The Hopsan simulation program!
+Icon=hopsan128x128
+TryExec=/opt/hopsan/bin/hopsangui
+Exec=/opt/hopsan/bin/hopsangui
+Path=/opt/hopsan/bin
+Categories=Science;Engineering;Education;

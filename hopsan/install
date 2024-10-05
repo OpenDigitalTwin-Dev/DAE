@@ -1,0 +1,11 @@
+# fmi go to fmi-library to install
+# qwt
+# hdf5
+# discount (markdown)
+
+sudo apt -y install libmarkdown2-dev libqwt-qt5-dev libhdf5-dev p7zip-full libmsgpack-dev libzmq3-dev
+
+7za x CompgenModels.7z -o/$PWD/
+7za x Models.7z -o/$PWD/
+7za x HopsanCore/dependencies.7z -o/$PWD/HopsanCore
+7za x bin.7z -o/$PWD/

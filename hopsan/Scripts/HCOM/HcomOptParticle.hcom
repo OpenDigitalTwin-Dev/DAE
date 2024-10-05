@@ -1,0 +1,52 @@
+# Example HCOM script, takes one argument, runs a simulation arg number of times
+# $Id$
+
+#Simulate to get initial objective values
+define evalall
+    i=0
+    while (i<npoints)
+        chpa GainP.k::Value par(i,0)
+        chpa GainI.k::Value par(i,1)
+
+        sim
+    
+        #Objective function
+        time
+        dt = ans
+        error = Mass.P2.x-Step.out.val
+        abs error
+        opt setobj i aver(error)      
+        i=i+1
+    repeat
+enddefine
+
+
+
+npoints=20
+nparams=2
+maxevals=1000
+functol=0.0001
+partol=0.001
+
+omega=0.5
+c1=1
+c2=1
+
+sim
+chpv Step.out.val Mass.P2.x
+
+opt init particleswarm double
+
+#Set min and max values for parameters
+opt setparminmax 0 0.0001 0.1
+opt setparminmax 1 0.00001 0.01
+
+
+
+opt run
+
+
+#ddt - nya variabler 
+#lp1
+
+    

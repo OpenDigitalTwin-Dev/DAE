@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hopsancomponentlibrary version="0.2">
+  <!-- The "id" element gives the library a uniqe identity, a UUID is recommended but any "unique" string is accepted -->
+  <id>781af9cc-6966-4b27-bed5-db99380f3e42</id>
+  <!-- The 'name' element gives the library a human readable name that will be used in the library widget -->
+  <name>HopsanExtensionLibrary</name>
+  <!-- The "lib" element defines the name of the (.dll / .so / .dynlib) file, (without file extension) -->
+  <!-- Use the "debug_ext" attribute to define the optional debug extension, used in debug mode -->
+  <lib debug_ext="_d">extensionlibrary</lib>
+  <!-- Use one or more "source" elements to define the files that should be compiled and linked into the library -->
+  <source>extensionLibrary.cpp</source>
+  <!-- The "buildflags" element can be used to specify optional compiler and linker flags necessary when compiling the library -->
+  <buildflags>
+    <!-- One or multiple "cflags" elements defines the compiler flags -->
+    <!-- One or multiple "lflags" elements defines the linker flags -->
+    <!-- use the "os" attribute to restrict the flag to a certain platform -->
+    <!-- Example:  
+    <cflags>-I./someLib/include</cflags>
+    <lflags>-L./someLib/bin -lsomeLib</lflags>
+    <lflags os="win64">-lWs2_32</lflags> -->
+  </buildflags>
+  <component>Mechanical/MechanicalSeparator.hpp</component>
+  <component>Mechanical/MechanicForceTransformerQ.hpp</component>
+  <component>Mechanical/MechanicFreeFixWall.hpp</component>
+  <component>Mechanical/MechanicSteel.hpp</component>
+  <component>Hydraulic/HydraulicLosslessTLMPipe.hpp</component>
+  <component>Hydraulic/HydraulicVariableVolume.hpp</component>
+  <component>Hydraulic/HydraulicVariableVolumeLength.hpp</component>
+  <component>Hydraulic/HydraulicVariableVolumeLengthMP.hpp</component>
+  <component>Electrical/ElectricInductanceC.hpp</component>
+  <componentxml>Mechanical/MechanicalSeparator.xml</componentxml>
+  <componentxml>Mechanical/MechanicForceTransformerQ.xml</componentxml>
+  <componentxml>Mechanical/MechanicFreeFixWall.xml</componentxml>
+  <componentxml>Mechanical/MechanicLosslessTLM_SubSys.xml</componentxml>
+  <componentxml>Mechanical/MechanicSteel.xml</componentxml>
+  <componentxml>Hydraulic/HydraulicLosslessTLMPipe.xml</componentxml>
+  <componentxml>Hydraulic/HydraulicVariableVolume.xml</componentxml>
+  <componentxml>Hydraulic/HydraulicVariableVolumeLength.xml</componentxml>
+  <componentxml>Hydraulic/HydraulicVariableVolumeLengthMP.xml</componentxml>
+  <componentxml>Hydraulic/VariableMachine.xml</componentxml>
+  <componentxml>Hydraulic/VariableMachineW.xml</componentxml>
+  <componentxml>Grafcet/BackwardStepSkip_begin.xml</componentxml>
+  <componentxml>Grafcet/BackwardStepSkip_end.xml</componentxml>
+  <componentxml>Grafcet/BottomTopArc.xml</componentxml>
+  <componentxml>Grafcet/Initial_Step.xml</componentxml>
+  <componentxml>Grafcet/Regular_Step.xml</componentxml>
+  <componentxml>Grafcet/Selection_begin2Steps.xml</componentxml>
+  <componentxml>Grafcet/Selection_begin3Steps.xml</componentxml>
+  <componentxml>Grafcet/Selection_end2Steps.xml</componentxml>
+  <componentxml>Grafcet/Selection_end3Steps.xml</componentxml>
+  <componentxml>Grafcet/StepSkip_begin.xml</componentxml>
+  <componentxml>Grafcet/StepSkip_end.xml</componentxml>
+  <componentxml>Grafcet/Synchronization_begin2Steps.xml</componentxml>
+  <componentxml>Grafcet/Synchronization_begin3Steps.xml</componentxml>
+  <componentxml>Grafcet/Synchronization_end2Steps.xml</componentxml>
+  <componentxml>Grafcet/Synchronization_end3Steps.xml</componentxml>
+  <componentxml>Grafcet/Transition.xml</componentxml>
+  <componentxml>Electrical/ElectricInductanceC.xml</componentxml>
+</hopsancomponentlibrary>

@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<hopsanobjectappearance version="0.3">
+    <modelobject sourcecode="SignalHP1Filter.hpp" typename="SignalHP1Filter" displayname="First order high pass filter">
+        <icons>
+            <icon scale="1" path="SignalHP1Filter.svg" iconrotation="OFF" type="user"/>
+        </icons>
+        <help>
+            <md>SignalHP1Filter.md</md>
+        </help>
+        <replacables>
+            <replacable typename="SignalFirstOrderFilter"/>
+            <replacable typename="SignalHP2Filter"/>
+            <replacable typename="SignalIntegrator2"/>
+            <replacable typename="SignalLP1Filter"/>
+            <replacable typename="SignalLP2Filter"/>
+            <replacable typename="SignalSecondOrderTransferFunction"/>
+            <replacable typename="SignalSecondOrderFilter"/>
+        </replacables>
+        <ports>
+            <port x="0" y="0.5" a="180" name="in"/>
+            <port x="1" y="0.5" a="0" name="out"/>
+        </ports>
+    </modelobject>
+</hopsanobjectappearance>

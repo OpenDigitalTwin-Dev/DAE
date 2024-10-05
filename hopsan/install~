@@ -1,0 +1,6 @@
+# fmi
+# qwt
+# hdf5
+# discount (markdown)
+
+sudo apt install libmarkdown2-dev libqwt-qt5-dev libhdf5-dev

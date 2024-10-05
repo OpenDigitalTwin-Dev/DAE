@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hopsancomponentlibrary version="0.3" recompilable="true">
+  <id><<<libid>>></id>
+  <name><<<libname>>></name>
+  <lib debug_ext="<<<libdebugext>>>"><<<libname>>></lib>
+  <buildflags>
+    <<<cflags>>>
+    <<<lflags>>>
+  </buildflags>
+  <<<includepaths>>>
+  <<<linkpaths>>>
+  <<<linklibraries>>>
+  <<<sources>>>
+  <<<extrasources>>>
+  <<<components>>>
+  <<<componentxmls>>>
+  <<<auxiliaryfiles>>>
+</hopsancomponentlibrary>

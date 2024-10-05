@@ -1,0 +1,65 @@
+# Enable C++ support
+language: cpp
+
+jobs:
+  include:
+    - os: linux
+      sudo: required
+      dist: xenial
+      addons:
+        apt_packages:
+          - qt5-default
+          - qtbase5-dev
+          - libqt5webkit5-dev
+          - libqt5svg5-dev
+          - libqt5opengl5-dev
+      services:
+        - xvfb
+      compiler: gcc
+      env:
+        - QT_SELECT=qt5
+        - HOPSAN_BUILD_QMAKE_SPEC=linux-g++
+      install:
+        - cd dependencies
+        - ./download-dependencies.py discount fmilibrary qwt zeromq cppzmq msgpack-c katex tclap
+        - cd ..
+    - os: osx
+      compiler: clang
+      env:
+        - HOPSAN_BUILD_QMAKE_SPEC=macx-clang
+        - HOMEBREW_NO_AUTO_UPDATE=1
+      install:
+        - brew install qt
+        - brew link --force qt
+        - which qmake
+        - cd dependencies
+        - ./download-dependencies.py discount fmilibrary qwt zeromq cppzmq msgpack-c katex tclap
+        - cd ..
+
+# Build steps
+script:
+  - bash --version
+  - echo OSType $OSTYPE
+  - cd dependencies
+  - source ./setHopsanBuildPaths.sh
+  - ./setupDiscount.sh
+  - ./setupFMILibrary.sh
+  - ./setupQwt.sh
+  - ./setupZeroMQ.sh
+  - ./setupMsgpack.sh
+  - ./setupKatex.sh
+  - ./setupTclap.sh
+  - cd ..
+  - mkdir -p build
+  - cd build
+  - ${HOPSAN_BUILD_QT_QMAKE} ../HopsanNG.pro -r -spec ${HOPSAN_BUILD_QMAKE_SPEC} -config release
+  - cd ..
+  - make -j6 -C build
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then xvfb-run -a ./runUnitTests.sh ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./runUnitTests.sh ; fi
+  - ./runValidationTests.sh
+  - cd bin
+  - ls -l
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then otool -lv hopsancli ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then otool -lv hopsangui ; fi
+#  - ./hopsangui ../Scripts/HCOM/exit.hcom

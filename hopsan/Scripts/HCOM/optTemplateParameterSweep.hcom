@@ -1,0 +1,29 @@
+# Auto-generated HCOM script for complex algorithm optimization
+
+#Evaluate function
+define setpars
+    <<<setpars>>>
+enddefine
+
+#Objective function
+define obj
+    <<<objfuncs>>>
+    totalObj = <<<totalobj>>>
+    opt set obj optvar(evalid) totalObj
+enddefine
+
+opt set algorithm parametersweep
+opt set datatype double
+opt set nparams <<<nparams>>>
+opt set maxevals <<<evals>>>
+opt set nmodels <<<nmodels>>>
+opt set npoints <<<nmodels>>>
+
+<<<setminmax>>>
+
+set backup off
+
+opt run
+
+set backup on
+

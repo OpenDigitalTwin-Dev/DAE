@@ -1,0 +1,55 @@
+#Determine debug extension, and debug output on/off
+CONFIG(debug, debug|release) {
+    DEBUG_EXT = _d
+    DEFINES *= HOPSAN_BUILD_TYPE_DEBUG
+} else {
+    DEBUG_EXT =
+    DEFINES *= QT_NO_DEBUG_OUTPUT
+    DEFINES *= HOPSAN_BUILD_TYPE_RELEASE
+}
+
+# Set optimization flags
+# Og = optimization that does not interfere with debugging
+# O3 = highest optimization level for speed
+CONFIG(debug, debug|release) {
+  #QMAKE_CXXFLAGS += -Og
+}
+CONFIG(release, debug|release) {
+  QMAKE_CXXFLAGS += -O3
+}
+
+# Enable C++14
+CONFIG += c++14
+
+#Determine if default component lib should be build in
+#DEFINES *= HOPSAN_INTERNALDEFAULTCOMPONENTS
+
+#Help function to select one of multiple choice paths to include
+defineReplace(selectPath){
+    PATH = $$1
+    DEFAULT_PATHS = $$2
+    NAME = $$3
+
+    !exists($${PATH}) {
+        !isEmpty(PATH) {
+            !build_pass:message("The custom $${NAME} path $${PATH} does not exist!")
+        }
+        #Clear the path in case it containes rubish
+        PATH =
+        for(path,DEFAULT_PATHS){
+            isEmpty(PATH):exists($${path}){
+                PATH = $${path}
+                !build_pass:message("Setting $${NAME} path to one of the defaults $${PATH}")
+            }
+        }
+    } else {
+        !build_pass:message("Using custom $${NAME} path $${PATH}")
+    }
+    !exists($${PATH}){
+        !build_pass:message("The $${NAME} path $${PATH} does not exist")
+    }
+    return($${PATH})
+}
+
+#Make compile output clean
+CONFIG += silent warn_on

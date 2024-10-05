@@ -1,0 +1,57 @@
+module hopsan
+  const hopsanlibpath = joinpath(ENV["HOPSANHOME"], "bin/libhopsanc")
+  if Sys.iswindows()
+    const complibpath = joinpath(ENV["HOPSANHOME"], "componentLibraries/defaultLibrary/defaultcomponentlibrary.dll")
+  elseif Sys.islinux()
+    const complibpath = joinpath(ENV["HOPSANHOME"], "componentLibraries/defaultLibrary/libdefaultcomponentlibrary.so")
+  end
+	
+  function getdatavector(variable)
+    size=ccall((:getNumberOfLogSamples,hopsanlibpath),Cint,())
+    data = zeros(size)
+    ccall((:getDataVector,hopsanlibpath),Cint,(Cstring,Ptr{Cdouble},),variable,data)
+    return data
+  end
+
+  function gettimevector()
+    size=ccall((:getNumberOfLogSamples,hopsanlibpath),Cint,())
+    data = zeros(size)
+    ccall((:getTimeVector,hopsanlibpath),Cint,(Ptr{Cdouble},),data)
+    return data
+  end
+
+  function loadlibrary(path)
+    ccall((:loadLibrary,hopsanlibpath),Cint,(Cstring,),path)
+  end
+
+  function loadmodel(path)
+    ccall((:loadModel,hopsanlibpath),Cint,(Cstring,),path)
+  end
+
+  function setparameter(name,value)
+    ccall((:setParameter,hopsanlibpath),Cint,(Cstring,Cstring,),name,value)
+  end
+
+  function setstarttime(value)
+    ccall((:setStartTime,hopsanlibpath),Cint,(Cdouble,),value)
+  end
+
+  function settimestep(value)
+    ccall((:setTimeStep,hopsanlibpath),Cint,(Cdouble,),value)
+  end
+
+  function setstoptime(value)
+    ccall((:setStopTime,hopsanlibpath),Cint,(Cdouble,),value)
+  end
+
+  function setlogsamples(value)
+    ccall((:setNumberOfLogSamples,hopsanlibpath),Cint,(Culong,),value)
+  end
+
+  function simulate()
+    ccall((:simulate,hopsanlibpath),Cint,())
+  end
+
+  loadlibrary(complibpath)
+end
+

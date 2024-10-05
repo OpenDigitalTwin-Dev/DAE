@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<hopsanobjectappearance version="0.3">
+    <modelobject sourcecode="SignalDisplay.hpp" typename="SignalDisplay" displayname="Display">
+        <icons>
+            <icon scale="1.0" path="display.svg" iconrotation="OFF" type="user"/>
+        </icons>
+        <help>
+            <md>SignalDisplay.md</md>
+        </help>
+        <ports>
+            <port x="0.0" y="0.5" a="0" name="in"/>
+        </ports>
+	<animation>
+            <icon userpath="SignalDisplay_base.svg"/>
+	</animation>
+    </modelobject>
+</hopsanobjectappearance>
