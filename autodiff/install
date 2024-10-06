@@ -22,7 +22,7 @@
 #    COMMAND ${Python_EXECUTABLE} setup.py --quiet build --force
 #    in python/package/CMakeLists.txt
 
-sudo apt install g++ gcc make cmake python3 ccache
+sudo apt install g++ gcc make cmake python3 ccache libeigen3-dev python3-dev python3-pybind11
 
 mkdir build
 cd build
