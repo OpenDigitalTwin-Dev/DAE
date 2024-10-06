@@ -1,0 +1,31 @@
+#    i also met this problem , need to change the following
+#    #ifndef AUTODIFF_DEVICE_FUNC
+#    #ifdef AUTODIFF_EIGEN_FOUND
+#    #include <Eigen/src/Core/util/Macros.h>
+#    #define AUTODIFF_DEVICE_FUNC EIGEN_DEVICE_FUNC
+#    #else
+#    #define AUTODIFF_DEVICE_FUNC
+#    #endif
+#    #endif
+#
+#    by 
+#    #ifdef EIGEN_DEVICE_FUNC
+#    #define AUTODIFF_DEVICE_FUNC EIGEN_DEVICE_FUNC
+#    #else
+#    #define AUTODIFF_DEVICE_FUNC
+#    #endif
+#    in meta.hpp
+#
+#    also need to change
+#    COMMAND ${PYTHON_EXECUTABLE} setup.py --quiet build --force
+#    to
+#    COMMAND ${Python_EXECUTABLE} setup.py --quiet build --force
+#    in python/package/CMakeLists.txt
+
+sudo apt install g++ gcc make cmake python3 ccache
+
+mkdir build
+cd build
+cmake .. -DCMAKE_INSTALL_PREFIX=$PWD/../../install/autodiff_install -DCatch2_DIR=$PWD/../../../install/catch2_install/lib/cmake/Catch2
+make -j4
+make install

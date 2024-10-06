@@ -1,0 +1,4 @@
+rm -rf build
+rm -rf ../install/autodiff_install
+cd build
+cmake .. -DCMAKE_INSTALL_PREFIX=$PWD/../../install/autodiff_install -DCatch2_DIR=$PWD/../../../install/catch2_install/lib/cmake/Catch2
