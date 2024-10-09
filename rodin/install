@@ -1,5 +1,7 @@
 sudo apt -y install gcc g++ cmake make libboost-all-dev p7zip-full liblapack-dev
 
+7za x resources.7z -o/$PWD/
+
 mkdir build
 cd build
 cmake .. -DCMAKE_INSTALL_PREFIX=$PWD/../../install/rodin_install
