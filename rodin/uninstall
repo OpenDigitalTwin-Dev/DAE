@@ -1,3 +1,2 @@
 rm -rf build
 rm -rf resources
-rm -rf third-party
