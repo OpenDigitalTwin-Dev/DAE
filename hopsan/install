@@ -2,8 +2,9 @@
 # qwt
 # hdf5
 # discount (markdown)
+# it is better to use ubuntu20.04 qt5.12 if use ubuntu22.04
 
-sudo apt -y install libmarkdown2-dev libqwt-qt5-dev libhdf5-dev p7zip-full libmsgpack-dev libzmq3-dev
+sudo apt -y install libmarkdown2-dev libqwt-qt5-dev libhdf5-dev p7zip-full libmsgpack-dev libzmq3-dev libtclap-dev
 
 7za x CompgenModels.7z -o/$PWD/
 7za x Models.7z -o/$PWD/

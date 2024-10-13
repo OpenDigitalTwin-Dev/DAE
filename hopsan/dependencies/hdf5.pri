@@ -4,7 +4,7 @@ unix:CONFIG(debug, debug|release):dbg_ext =
 
 # Set hompath
 homedir = /usr
-libdir = $${homedir}/lib
+libdir = $${homedir}/lib/x86_64-linux-gnu/hdf5/serial/
 bindir = $${homedir}/bin
 
 defineTest(have_local_hdf5) {
