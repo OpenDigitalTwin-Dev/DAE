@@ -1,8 +1,10 @@
 # fmi go to fmi-library to install
-# qwt
+# qwt 
 # hdf5
 # discount (markdown)
-# it is better to use ubuntu20.04 qt5.12 if use ubuntu22.04
+# It is better to use ubuntu20.04 with qt5.12.
+# For ubuntu22.04, you should use qt5.15.
+# Since the libqwt-qt5-dev in ubuntu 22.04 use qt5.15, there will be a version problem for qt5.12.
 
 sudo apt -y install libmarkdown2-dev libqwt-qt5-dev libhdf5-dev p7zip-full libmsgpack-dev libzmq3-dev libtclap-dev
 
