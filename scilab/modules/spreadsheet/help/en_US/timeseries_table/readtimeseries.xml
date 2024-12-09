@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * This file is released under the 3-clause BSD license. See COPYING-BSD.
+ *
+ -->
+<refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" 
+          xmlns:svg="http://www.w3.org/2000/svg" xmlns:ns3="http://www.w3.org/1999/xhtml" 
+          xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:db="http://docbook.org/ns/docbook" 
+          version="5.0-subset Scilab" xml:id="readtimeseries" xml:lang="en">
+    <refnamediv>
+        <refname>readtimeseries</refname>
+        <refpurpose>create a timeseries from a file</refpurpose>
+    </refnamediv>
+    <refsynopsisdiv>
+        <title>Syntax</title>
+        <synopsis>
+            ts = readtimeseries(filename)
+            ts = readtimeseries(filename, opts)
+            ts = readtimeseries(..., Name, Value)
+        </synopsis>
+    </refsynopsisdiv>
+    <refsection>
+        <title>Arguments</title>
+        <variablelist>
+            <varlistentry>
+                <term>filename</term>
+                <listitem>
+                    <para>name of file to read</para>
+                    <para/>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>opts</term>
+                <listitem>
+                    <para>file import options obtained by <link linkend="detectImportOptions"></link></para>
+                    <para/>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Name, Value</term>
+                <listitem>
+                    <para>
+                        <emphasis role="bold">Name: 'VariableNames', Value: vector of strings</emphasis>: extracts from the file only the data 
+                        corresponding to the entered variable names.
+                    </para>
+                    <para/>
+                </listitem>
+                <listitem>
+                    <para>
+                        <emphasis role="bold">Name: 'RowTimes', Value: <link linkend="duration"></link> or <link linkend="datetime"></link> column vector</emphasis>: 
+                        if the filename has no time, use this property to add a time index in the timeseries.
+                    </para>
+                    <para/>
+                </listitem>
+                <listitem>
+                    <para>
+                        <emphasis role="bold">Name: 'StartTime', duration or datetime value</emphasis>: 
+                        pecifies the start time of the timeseries.
+                    </para>
+                    <para/>
+                </listitem>
+                <listitem>
+                    <para>
+                        <emphasis role="bold">Name: 'TimeStep', Value: duration or calendarDuration value</emphasis>: 
+                        time step.
+                    </para>
+                    <para/>
+                </listitem>
+                <listitem>
+                    <para>
+                        <emphasis role="bold">Name: 'SampleRate', Value: real scalar</emphasis>: 
+                        number of samples per second (Hz).
+                    </para>
+                    <para/>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>ts</term>
+                <listitem>
+                    <para>timeseries object.</para>
+                    <para/>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </refsection>
+    <refsection>
+        <title>Description</title>
+        <para>
+            The <emphasis role="bold">readtimeseries</emphasis> function creates a timeseries from a file. Each column of file is stored in variables. 
+            If however the columns have no name, then the default variable names are used (["Time", "Var1", ..., "VarN"]). 
+            Accepted file formats are .txt, .dat or .csv.
+        </para>
+        <para>
+            readtimeseries detects the format file thanks to <link linkend="detectImportOptions"></link> function. opts contains all information on the file.
+        </para>
+        <para>
+            To extract only the necessary variables (columns), use <emphasis role="bold">ts = readtimeseries(filename, "VariableNames", value)</emphasis>.
+        </para>
+    </refsection>
+    <refsection>
+        <title>Examples</title>
+        <programlisting role="example"><![CDATA[
+            dt = [datetime(2022,1,10):caldays(1):datetime(2022,1,21)]';
+            hc = [13574; 13169; 11999; 12146; 15456; 10545; 11091; 21657; 11393; 10283; 10924; 16208];
+            hp = [13593; 15306; 16766; 15941; 14558; 13722; 18401; 14632; 14571; 14925; 14284; 15028];
+            ts = timeseries(dt, hc, hp, "VariableNames", ["Time", "HC", "HP"]);
+            writetimeseries(ts, fullfile(TMPDIR, "data.txt"));
+
+            r = readtimeseries(fullfile(TMPDIR, "data.txt"));
+        ]]>
+        </programlisting>
+    </refsection>
+    <refsection role="see also">
+        <title>See also</title>
+        <simplelist type="inline">
+            <member>
+                <link linkend="writetimeseries">writetimeseries</link>
+            </member>
+            <member>
+                <link linkend="timeseries">timeseries</link>
+            </member>
+            <member>
+                <link linkend="detectImportOptions">detectImportOptions</link>
+            </member>
+        </simplelist>
+    </refsection>
+    <refsection role="history">
+        <title>History</title>
+        <revhistory>
+            <revision>
+                <revnumber>2024.0.0</revnumber>
+                <revdescription>
+                    Introduction in Scilab.
+                </revdescription>
+            </revision>
+        </revhistory>
+    </refsection>
+</refentry>

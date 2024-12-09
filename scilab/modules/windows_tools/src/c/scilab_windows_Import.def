@@ -1,0 +1,20 @@
+LIBRARY    scilab_windows.dll
+
+
+EXPORTS
+; --------------------------------------- 
+; scilab_windows
+; --------------------------------------- 
+getScilexConsoleName
+RestoreConsoleColors
+RestoreConsoleFont
+closeInnosetupMutex
+RestoreExitButton
+ClosePipeInfo
+pipeSpawnOut
+pipeSpawnErr
+CreateOuput
+spawncommand
+DetectDetachProcessInCommandLine
+DetectStartInCommandLine
+timeout_process_after

@@ -1,0 +1,130 @@
+// =============================================================================
+// Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+// Copyright (C) 2021 - Samuel GOUGEON
+//
+//  This file is distributed under the same license as the Scilab package.
+// =============================================================================
+// <-- NO CHECK ERROR OUTPUT -->
+// <-- ENGLISH IMPOSED -->
+warning('off');
+// Test the compilation of a simple toolbox with tbx_make(module, section)
+// Copying the testing toolbox from the test environment
+function reset_test_module(source, destDir)
+    if isdir(destDir)
+        if getos()=="Windows"
+            dos("rmdir /Q /S """+destDir+"""")
+        else
+            removedir(destDir);
+        end
+    end
+    status = copyfile(source, destDir);
+    assert_checkequal(status, 1);
+endfunction
+source = SCI + "/modules/modules_manager/tests/tbx/testbox/";
+mytb_dir = TMPDIR + "\testbox";
+// Build only macros
+// -----------------
+reset_test_module(source, mytb_dir);
+tbx_make(mytb_dir, "macros");
+Building macros...
+-- Creation of [testboxlib] (Macros) --
+genlib: Processing file: scilab_error.sci
+genlib: Processing file: scilab_sum.sci
+Generating loader.sce...
+Generating unloader.sce...
+Generating cleaner.sce...
+assert_checktrue(isfile(mytb_dir + "/macros/lib"));
+assert_checktrue(isfile(mytb_dir + "/macros/scilab_sum.bin"));
+assert_checkfalse(isdir(mytb_dir + "/jar"));
+subDirs = mytb_dir + "/src/" + ["c" "java" "fortran"];
+assert_checkfalse(or(isfile(subDirs + "/loader.sce")));
+assert_checkfalse(isfile(mytb_dir + "/sci_gateway/loader_gateway.sce"));
+subDirs = mytb_dir + "/locales/" + ["en_US" "fr_FR"] + "/LC_MESSAGES/";
+assert_checkfalse(or(isfile(subDirs + "testbox.mo")));
+assert_checkfalse(or(isfile(subDirs + "testbox.po")));
+// Build only help pages
+// ---------------------
+// All languages
+reset_test_module(source, mytb_dir);
+tbx_make(mytb_dir, "help");
+Building help...
+Building the manual file [javaHelp] in TMPDIR/testbox/help/en_US.
+Generate image ./csub6_1.png from Scilab code from file csub6.xml
+Generate image ./csub6_en_US_2.png from Scilab code from file csub6.xml
+Building the manual file [inline] in TMPDIR/testbox/inline/en_US.
+Building the manual file [javaHelp] in TMPDIR/testbox/help/fr_FR.
+Generate image ./csub6_1.png from Scilab code from file csub6.xml
+Generate image ./csub6_fr_FR_2.png from Scilab code from file csub6.xml
+Building the manual file [inline] in TMPDIR/testbox/inline/fr_FR.
+Generating loader.sce...
+Generating unloader.sce...
+Generating cleaner.sce...
+assert_checktrue(isdir(mytb_dir + "/jar"));
+assert_checktrue(and(isfile(mytb_dir + "/jar/scilab_"+["en_US" "fr_FR"]+"_help.jar")));
+assert_checkfalse(isfile(mytb_dir + "/macros/lib"));
+assert_checkfalse(isfile(mytb_dir + "/macros/scilab_sum.bin"));
+subDirs = mytb_dir + "/src/" + ["c" "java" "fortran"];
+assert_checkfalse(or(isfile(subDirs + "/loader.sce")));
+assert_checkfalse(isfile(mytb_dir + "/sci_gateway/loader_gateway.sce"));
+subDirs = mytb_dir + "/locales/" + ["en_US" "fr_FR"] + "/LC_MESSAGES/";
+assert_checkfalse(or(isfile(subDirs + "testbox.mo")));
+assert_checkfalse(or(isfile(subDirs + "testbox.po")));
+// Only given languages
+reset_test_module(source, mytb_dir);
+assert_checkfalse(isfile(mytb_dir + "/jar/scilab_fr_FR_help.jar"));
+tbx_make(mytb_dir, "help", "en");
+Building help...
+Building the manual file [javaHelp] in TMPDIR/testbox/help/en_US.
+Generate image ./csub6_1.png from Scilab code from file csub6.xml
+Generate image ./csub6_en_US_2.png from Scilab code from file csub6.xml
+Building the manual file [inline] in TMPDIR/testbox/inline/en_US.
+Generating loader.sce...
+Generating unloader.sce...
+Generating cleaner.sce...
+assert_checktrue(isdir(mytb_dir + "/jar"));
+assert_checktrue(isfile(mytb_dir + "/jar/scilab_en_US_help.jar"));
+assert_checkfalse(isfile(mytb_dir + "/jar/scilab_fr_FR_help.jar"));
+reset_test_module(source, mytb_dir);
+tbx_make(mytb_dir, "help", "fr");
+Building help...
+Building the manual file [javaHelp] in TMPDIR/testbox/help/fr_FR.
+Generate image ./csub6_1.png from Scilab code from file csub6.xml
+Generate image ./csub6_fr_FR_2.png from Scilab code from file csub6.xml
+Building the manual file [inline] in TMPDIR/testbox/inline/fr_FR.
+Generating loader.sce...
+Generating unloader.sce...
+Generating cleaner.sce...
+assert_checktrue(isdir(mytb_dir + "/jar"));
+assert_checktrue(isfile(mytb_dir + "/jar/scilab_fr_FR_help.jar"));
+assert_checkfalse(isfile(mytb_dir + "/jar/scilab_en_US_help.jar"));
+// Build only locales
+// ------------------
+reset_test_module(source, mytb_dir);
+tbx_make(mytb_dir, "localization");
+Generating localization
+-- Building for "en_US" --
+-- Building for "fr_FR" --
+Generating loader.sce...
+Generating unloader.sce...
+Generating cleaner.sce...
+subDirs = mytb_dir + "/locales/" + ["en_US" "fr_FR"] + "/LC_MESSAGES/";
+assert_checktrue(and(isfile(subDirs + "testbox.mo")));
+assert_checktrue(and(isfile(subDirs + "testbox.po")));
+assert_checkfalse(isfile(mytb_dir + "/macros/lib"));
+assert_checkfalse(isdir(mytb_dir + "/jar"));
+subDirs = mytb_dir + "/src/" + ["c" "java" "fortran"];
+assert_checkfalse(or(isfile(subDirs + "/loader.sce")));
+assert_checkfalse(isfile(mytb_dir + "/sci_gateway/loader_gateway.sce"));
+// Build only gateways
+// -------------------
+//reset_test_module(source, mytb_dir);
+//tbx_make(mytb_dir, "sci_gateway");
+//assert_checktrue(isfile(mytb_dir + "/sci_gateway/loader_gateway.sce"));
+//
+//assert_checkfalse(isfile(mytb_dir + "/macros/lib"));
+//assert_checkfalse(isdir(mytb_dir + "/jar"));
+//subDirs = mytb_dir + "/src/" + ["c" "java" "fortran"];
+//assert_checkfalse(or(isfile(subDirs + "/loader.sce")));
+//subDirs = mytb_dir + "/locales/" + ["en_US" "fr_FR"] + "/LC_MESSAGES/";
+//assert_checkfalse(or(isfile(subDirs + "testbox.mo")));
+//assert_checkfalse(or(isfile(subDirs + "testbox.po")));

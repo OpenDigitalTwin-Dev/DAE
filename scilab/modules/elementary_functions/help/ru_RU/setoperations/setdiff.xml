@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
+ * Copyright (C) 2008 - INRIA
+ * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ * Copyright (C) 2018 - 2019 - Samuel GOUGEON
+ *
+ * This file is hereby licensed under the terms of the GNU GPL v2.0,
+ * pursuant to article 5.3.4 of the CeCILL v.2.1.
+ * This file was originally licensed under the terms of the CeCILL v2.1,
+ * and continues to be available under such terms.
+ * For more information, see the COPYING file which you should have received
+ * along with this program.
+ *
+ -->
+<refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg" xmlns:ns5="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:db="http://docbook.org/ns/docbook"
+          xmlns:scilab="http://www.scilab.org" xml:id="setdiff" xml:lang="ru">
+    <refnamediv>
+        <refname>setdiff</refname>
+        <refpurpose>
+            возвращает элементы или строк или столбцов массива, которые не принадлежат другому массиву
+        </refpurpose>
+    </refnamediv>
+    <refsynopsisdiv>
+        <title>Синтаксис</title>
+        <synopsis>
+            v = setdiff(a, b)
+            v = setdiff(a, b, orien)
+            [v, ka] = setdiff(..)
+        </synopsis>
+    </refsynopsisdiv>
+    <refsection>
+        <title>Аргументы</title>
+        <variablelist>
+            <varlistentry>
+                <term>a, b</term>
+                <listitem>
+                    <para>
+                        векторы, матрицы или гиперматрицы действительных или комплексных чисел,
+                        закодированные целые числа, логические значения или строки.
+                        Допускаются закодированные разрежённые входные данные.
+                        Как <varname>a</varname> так и <varname>b</varname> должны иметь одинаковые
+                        типы данных (или типы целых чисел), но можно смешивать плотные и разрежённые.
+                    </para>
+                    <para>
+                        Если используется опция <literal>orien="r"</literal>, то
+                        <varname>a</varname> и <varname>b</varname> должны иметь одинаковое
+                        количество столбцов. Если используется <literal>orien="c"</literal>, то
+                        они должны иметь одинаковое количество строк.
+                    </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>orien</term>
+                <listitem>
+                    направленная обработка:
+                    <itemizedlist>
+                        <listitem>
+                            <literal>"r"</literal>: строки из <varname>a</varname> ищутся среди
+                            строк в <varname>b</varname>.
+                        </listitem>
+                        <listitem>
+                            <literal>"c"</literal>: столбцы из <varname>a</varname> ищутся среди
+                            столбцов в <varname>b</varname>.
+                        </listitem>
+                        <listitem>
+                            <varname>orien</varname> не указано: элементы из <varname>a</varname>
+                            ищутся среди элементов <varname>b</varname>.
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>v</term>
+                <listitem>
+                    Массив с типом данных как у <varname>a</varname> и кодированный:
+                    <itemizedlist>
+                        <listitem>
+                            сортированный вектор из компонентов <varname>a</varname>, которые
+                            отсутствуют в <varname>b</varname>.
+                        </listitem>
+                        <listitem>
+                            <literal>orien="r"</literal>: матрица строк из <varname>a</varname>,
+                            которые отсутствуют в <varname>b</varname>, отсортированный в
+                            лексикографическом порядке.
+                        </listitem>
+                        <listitem>
+                            <literal>orien="c"</literal>: матрица столбцов из
+                            <varname>a</varname>, которые отсутствуют в <varname>b</varname>,
+                            отсортированный в лексикографическом порядке.
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>ka</term>
+                <listitem>
+                    <para>
+                        вектор линейный индексов выбранных элементов, строк, столбцов из
+                        <varname>a</varname> таких, что
+                        <itemizedlist>
+                            <listitem>
+                                <literal>v = a(ka)</literal> либо
+                            </listitem>
+                            <listitem>
+                                <literal>v = a(ka,:)</literal> (<literal>orien="r"</literal>) либо
+                            </listitem>
+                            <listitem>
+                                <literal>v = a(:,ka)</literal> (<literal>orien="c"</literal>)
+                            </listitem>
+                        </itemizedlist>
+                    </para>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </refsection>
+    <refsection>
+        <title>Описание</title>
+        <para>
+            <literal>setdiff(a, b,..)</literal> вычисляет и возвращает элементы либо строк либо
+            столбцов из <varname>a</varname>, которые ОТСУТСТВУЮТ в <varname>b</varname>.
+        </para>
+        <para>
+            Все дупликаты (элементы или строк или столбцов) удаляются из <varname>a</varname> и
+            из <varname>b</varname> перед обработкой.
+        </para>
+        <para>
+            Если <varname>a</varname> - гиперматрица и используется опция <literal>"r"</literal>,
+            то перед обработкой <varname>a</varname> заменяется матрицей, состоящией из строк по
+            всем своим более высоким размерностям. То же самое и в случае, если
+            <varname>b</varname> является гиперматрицей. Если исползуется опция
+            <literal>"c"</literal>, то <varname>a</varname> или/и <literal>"b"</literal>
+            заменяются соответствующими матрицами, состоящими из всех своих столбцов.
+        </para>
+        <para>
+            Формат результатов представлен в следующей таблице, в соответствии с формой
+            <varname>a</varname> и опцией <varname>orien</varname>. Во всех случаях, если все
+            элементы <varname>a</varname> находятся в <varname>b</varname>, возвращается
+            <literal>[]</literal> для <varname>v</varname> как для <varname>ka</varname>:
+            <table>
+                <tr>
+                    <th align="right">orien →</th>
+                    <td colspan="2" align="center">
+                        <emphasis role="bold">отсутствует</emphasis>
+                    </td>
+                    <td colspan="2" align="center">
+                        <emphasis role="bold">"r"</emphasis>
+                    </td>
+                    <td colspan="2" align="center">
+                        <emphasis role="bold">"c"</emphasis>
+                    </td>
+                </tr>
+                <tr>
+                    <th>a ↓</th><th>v</th><th>ka</th><th>v</th><th>ka</th><th>v</th><th>ka</th>
+                </tr>
+                <tr>
+                    <td align="right">
+                        <emphasis role="bold">строка</emphasis>
+                    </td>
+                    <td>cтр</td><td>cтр</td>
+                    <td>cтр</td><td>скал</td>
+                    <td>cтр</td><td>cтр</td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        <emphasis role="bold">столбец</emphasis>
+                    </td>
+                    <td>cтлб</td><td>cтлб</td>
+                    <td>cтлб</td><td>cтлб</td>
+                    <td>cтлб</td><td>скал</td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        <emphasis role="bold">матрица</emphasis>
+                    </td>
+                    <td>cтлб</td><td>cтлб</td>
+                    <td>матр</td><td>cтлб</td>
+                    <td>матр</td><td>cтр</td>
+                </tr>
+                <tr>
+                    <td align="right">
+                        <emphasis role="bold">гиперматрица</emphasis>
+                    </td>
+                    <td>cтлб</td><td>cтлб</td>
+                    <td>матр</td><td>cтлб</td>
+                    <td>матр</td><td>cтр</td>
+                </tr>
+                <tr align="center">
+                    <td align="right">
+                        <emphasis role="bold">скаляр</emphasis>
+                    </td>
+                    <td>скал</td><td>скал</td>
+                    <td>скал</td><td>скал</td>
+                    <td>скал</td><td>скал</td>
+                </tr>
+            </table>
+        </para>
+        <para>
+            <varname>v</varname> и <varname>ka</varname> становятся пустыми
+            <literal>[]</literal>, если <varname>a</varname> пуста (либо <varname>b</varname>),
+            или все элементы <varname>a</varname> находятся в <varname>b</varname>.
+        </para>
+        <para>
+            Для логических значений, <literal>setdiff(…)</literal> полезна главным образом с опциями
+            <literal>"r"</literal> или <literal>"c"</literal>.
+        </para>
+    </refsection>
+    <refsection>
+        <title>Примеры</title>
+        <para>
+            <emphasis role="bold">Пример №1:</emphasis>
+        </para>
+        <programlisting role="example"><![CDATA[
+a = grand(1, 10,"uin", 0, 9)
+b = grand(2, 4, "uin", 0, 9)
+[d, k] = setdiff(a, b);
+d, k
+ ]]></programlisting>
+        <screen><![CDATA[
+--> a = grand(1, 10,"uin", 0, 9)
+ a  =
+   2.   2.   4.   5.   4.   1.   9.   5.   8.   3.
+--> b = grand(2, 4, "uin", 0, 9)
+ b  =
+   5.   0.   9.   9.
+   5.   6.   0.   4.
+--> [d, k] = setdiff(a, b);
+--> d, k
+ d  =
+   1.   2.   3.   8.
+ k  =
+   6.   1.   10.   9.
+]]></screen>
+        <para>
+            <emphasis role="bold">Пример №2: постолбцовая обработка</emphasis>
+        </para>
+        <programlisting role="example"><![CDATA[
+a = grand(2, 7,"uin", 0, 3)
+b = grand(2, 10, "uin", 0, 3)
+[d, k] = setdiff(a, b, "c");
+d, k
+ ]]></programlisting>
+        <screen><![CDATA[
+--> a = grand(2, 7,"uin", 0, 3)
+ a  =
+   0.   1.   0.   2.   3.   0.   2.
+   2.   2.   2.   1.   0.   1.   2.
+--> b = grand(2, 10, "uin", 0, 3)
+ b  =
+   1.   1.   3.   1.   1.   1.   3.   0.   2.   0.
+   3.   3.   2.   2.   0.   0.   1.   0.   1.   0.
+--> [d, k] = setdiff(a, b, "c");
+--> d, k
+ d  =
+   0.   0.   2.   3.
+   1.   2.   2.   0.
+ k  =
+   6.   1.   7.   5.
+]]></screen>
+        <para>
+            <emphasis role="bold">Пример №3: с текстом</emphasis>
+        </para>
+        <programlisting role="example"><![CDATA[
+v1 = tokens("ab  ca  ba  bb  ca  cb  ba  aa  cc  bc  ac  aa")'
+v2 = tokens("cc  ac  ca  bb  ac  bc  ab")'
+[r, k] = setdiff(v1, v2);
+r, k
+]]></programlisting>
+        <screen><![CDATA[
+--> v1 = tokens("ab  ca  ba  bb  ca  cb  ba  aa  cc  bc  ac  aa")'
+ v1  =
+!ab  ca  ac  bb  ca  cb  ba  aa  cc  bc  ac  aa  !
+--> v2 = tokens("cc  ac  ca  bb  ac  bc  ab")'
+ v2  =
+!cc  ac  ca  bb  ac  bc  ab  !
+--> [r, k] = setdiff(v1, v2);
+--> r, k
+ r  =
+!aa  ba  cb  !
+ k  =
+   8.   3.   6.
+]]></screen>
+    </refsection>
+    <refsection role="see also">
+        <title>Смотрите также</title>
+        <simplelist type="inline">
+            <member>
+                <link linkend="unique">unique</link>
+            </member>
+            <member>
+                <link linkend="union">union</link>
+            </member>
+            <member>
+                <link linkend="members">members</link>
+            </member>
+            <member>
+                <link linkend="vectorfind">vectorfind</link>
+            </member>
+        </simplelist>
+    </refsection>
+    <refsection role="history">
+        <title>История</title>
+        <revhistory>
+            <revision>
+                <revnumber>&lt; 5.0</revnumber>
+                <revdescription>
+                    Функция введена.
+                </revdescription>
+            </revision>
+            <revision>
+                <revnumber>6.0.2</revnumber>
+                <revdescription>
+                    Добавлены опции "r" | "c", включая гиперматрицы.
+                </revdescription>
+            </revision>
+            <revision>
+                <revnumber>6.1.0</revnumber>
+                <revdescription>
+                    Теперь допускаются комплексные числа.
+                </revdescription>
+            </revision>
+            <revision>
+                <revnumber>6.1.1</revnumber>
+                <revdescription>
+                    Теперь допускаются логические и разрежённые (логические или числовые) входные данные.
+                </revdescription>
+            </revision>
+        </revhistory>
+    </refsection>
+</refentry>

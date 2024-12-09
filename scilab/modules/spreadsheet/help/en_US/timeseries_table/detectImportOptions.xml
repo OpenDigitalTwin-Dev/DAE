@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * This file is released under the 3-clause BSD license. See COPYING-BSD.
+ *
+ -->
+<refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" 
+          xmlns:svg="http://www.w3.org/2000/svg" xmlns:ns3="http://www.w3.org/1999/xhtml" 
+          xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:db="http://docbook.org/ns/docbook" 
+          version="5.0-subset Scilab" xml:id="detectImportOptions" xml:lang="en">
+    <refnamediv>
+        <refname>detectImportOptions</refname>
+        <refpurpose>structure containing all useful information to import the file</refpurpose>
+    </refnamediv>
+    <refsynopsisdiv>
+        <title>Syntax</title>
+        <synopsis>
+            opts = detectImportOptions(filename)
+            opts = detectImportOptions(filename, Name, Value)
+        </synopsis>
+    </refsynopsisdiv>
+    <refsection>
+        <title>Arguments</title>
+        <variablelist>
+            <varlistentry>
+                <term>filename</term>
+                <listitem>
+                    <para>path or name of file to read</para>
+                    <para>format accepted: .txt, .dat and .csv</para>
+                    <para/>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Name, Value</term>
+                <listitem>
+                    <para>
+                        Name: <emphasis role="bold">'Delimiter'</emphasis>, Value: <emphasis role="bold">string</emphasis>: 
+                        the column separator mark.
+                    </para>
+                    <para/>
+                </listitem>
+                <listitem>
+                    <para>
+                        Name: <emphasis role="bold">'Decimal'</emphasis>, Value: <emphasis role="bold">string</emphasis>: 
+                        the decimal mark, '.' or ','.
+                    </para>
+                    <para/>
+                </listitem>
+                <listitem>
+                    <para>
+                        Name: <emphasis role="bold">'NumHeaderLines'</emphasis>, Value: <emphasis role="bold">double</emphasis>: 
+                        the number of header lines.
+                    </para>
+                    <para/>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>opts</term>
+                <listitem>
+                    <para>
+                        structure containing the following information:
+                    </para>
+                    <informaltable>
+                        <tr valign="top">
+                            <td><emphasis role="bold">variableNames</emphasis></td><td>:</td>
+                            <td>column names in the file.
+                            </td>
+                        </tr>
+                        <tr valign="top">
+                            <td><emphasis role="bold">variableTypes</emphasis></td><td>:</td>
+                            <td>data type of each column (double, string, <link linkend="datetime"></link> or <link linkend="duration"></link>).
+                            </td>
+                        </tr>
+                        <tr valign="top">
+                            <td><emphasis role="bold">inputFormat</emphasis></td><td>:</td>
+                            <td>data format. The detectImportOptions function tries to determine the input format for datetime and duration data. 
+                                For others types, no format is to apply.
+                            </td>
+                        </tr>
+                        <tr valign="top">
+                            <td><emphasis role="bold">delimiter</emphasis></td><td>:</td>
+                            <td>the column seperator.
+                            </td>
+                        </tr>
+                        <tr valign="top">
+                            <td><emphasis role="bold">decimal</emphasis></td><td>:</td>
+                            <td>the decimal seperator.
+                            </td>
+                        </tr>
+                        <tr valign="top">
+                            <td><emphasis role="bold">datalines</emphasis></td><td>:</td>
+                            <td>contains the first and last line of file corresponding to data.
+                            </td>
+                        </tr>
+                        <tr valign="top">
+                            <td><emphasis role="bold">header</emphasis></td><td>:</td>
+                            <td>file header.
+                            </td>
+                        </tr>
+                        <tr valign="top">
+                            <td><emphasis role="bold">emptyCol</emphasis></td><td>:</td>
+                            <td>contains the number of empty columns.
+                            </td>
+                        </tr>
+                    </informaltable>
+                    <para/>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </refsection>
+    <refsection>
+        <title>Description</title>
+        <para>
+            The <emphasis role="bold">detectImportOptions</emphasis> function determines several pieces of information from a file
+            that are useful for reading. This function is used in the <link linkend="readtable"></link> and <link linkend="readtimeseries"></link> functions.
+        </para>
+    </refsection>
+    <refsection>
+        <title>Examples</title>
+        <para><emphasis role="bold">opts = detectImportOptions(filename)</emphasis></para>
+        <para>
+        <programlisting role="example"><![CDATA[
+            Code = ["AF"; "NA"; "OC"; "AN"; "AS"; "EU"; "SA"];
+            NameContinent = ["Africa"; "North America"; "Oceania"; "Antarctica"; "Asia"; "Europe"; "South America"];
+            Area = [30065000; 24256000; 7687000; 13209000; 44579000; 9938000; 17819000]; // in km2
+            NumberCountry = [54; 23; 14; %nan; 47; 45; 12]; 
+            LifeExpectancy = [60; 78; 75; %nan; 72; 75; 74]; // in years
+
+            t = table(Code, NameContinent, Area, NumberCountry, LifeExpectancy, ...
+                "VariableNames", ["Code", "NameContinent", "Area", "NumberCountry", "LifeExpectancy"])
+            
+            // Write the table in CSV file
+            writetable(t, fullfile(TMPDIR, "data.csv"))
+
+            // DetectImportOptions
+            opts = detectImportOptions(fullfile(TMPDIR, "data.csv"))
+
+            r = readtable(fullfile(TMPDIR, "data.csv"), opts)
+        ]]>
+        </programlisting>
+        </para>
+    </refsection>
+    <refsection role="see also">
+        <title>See also</title>
+        <simplelist type="inline">
+            <member>
+                <link linkend="readtable">readtable</link>
+            </member>
+            <member>
+                <link linkend="readtimeseries">readtimeseries</link>
+            </member>
+        </simplelist>
+    </refsection>
+    <refsection role="history">
+        <title>History</title>
+        <revhistory>
+            <revision>
+                <revnumber>2024.0.0</revnumber>
+                <revdescription>
+                    Introduction in Scilab.
+                </revdescription>
+            </revision>
+        </revhistory>
+    </refsection>
+</refentry>

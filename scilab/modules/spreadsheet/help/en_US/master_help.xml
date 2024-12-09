@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book [
+<!--Begin Entities-->
+<!ENTITY a882c0d099b156b7444af4e1d0969990b SYSTEM "file:///E:/ws/toolbox/timeseries/help/en_US/caldays.xml">
+<!ENTITY af156df7502439341dbcd557857a294f7 SYSTEM "file:///E:/ws/toolbox/timeseries/help/en_US/calendarDuration.xml">
+<!ENTITY aac63b6a4ecd7d7a1226ffcf6ed2db054 SYSTEM "file:///E:/ws/toolbox/timeseries/help/en_US/cell2table.xml">
+<!ENTITY ae71b492eed7a3d070463b9838881656a SYSTEM "file:///E:/ws/toolbox/timeseries/help/en_US/datetime.xml">
+<!ENTITY a65b19041509d6c8eac73784d39ab8f09 SYSTEM "file:///E:/ws/toolbox/timeseries/help/en_US/duration.xml">
+<!ENTITY a9996971dfec11681448a6ed0fdf792f1 SYSTEM "file:///E:/ws/toolbox/timeseries/help/en_US/groupcounts.xml">
+<!ENTITY a342548ec595f84d1177a3fa92aefd44e SYSTEM "file:///E:/ws/toolbox/timeseries/help/en_US/groupsummary.xml">
+<!ENTITY aa43b4e8dbbe1e1d253dac3dd553eb242 SYSTEM "file:///E:/ws/toolbox/timeseries/help/en_US/hours.xml">
+<!ENTITY a5c3c7c8c2291c3ce9e4fec780497d152 SYSTEM "file:///E:/ws/toolbox/timeseries/help/en_US/isnat.xml">
+<!ENTITY af3028d8731c104535eccd782f63ea947 SYSTEM "file:///E:/ws/toolbox/timeseries/help/en_US/isregular.xml">
+<!ENTITY a2eafbf511bf3f65acd8c950fdeae8710 SYSTEM "file:///E:/ws/toolbox/timeseries/help/en_US/matrix2table.xml">
+<!ENTITY a04502086c0f936fc5f24715533274496 SYSTEM "file:///E:/ws/toolbox/timeseries/help/en_US/nat.xml">
+<!ENTITY a18a21a929d168a3eb611ff938141225b SYSTEM "file:///E:/ws/toolbox/timeseries/help/en_US/pivot.xml">
+<!ENTITY aec50a542c1631b622ca5852446d20035 SYSTEM "file:///E:/ws/toolbox/timeseries/help/en_US/readtable.xml">
+<!ENTITY afb7edfaf277659cc8668e538117054f9 SYSTEM "file:///E:/ws/toolbox/timeseries/help/en_US/retime.xml">
+<!ENTITY acc3dcd584e3ffbb29b3019c0552e72c0 SYSTEM "file:///E:/ws/toolbox/timeseries/help/en_US/rowfun.xml">
+<!ENTITY ad57382399dbb9b009ae533c2b312e683 SYSTEM "file:///E:/ws/toolbox/timeseries/help/en_US/stackedplot.xml">
+<!ENTITY a3e0e68f32c21226336808117bead0c52 SYSTEM "file:///E:/ws/toolbox/timeseries/help/en_US/struct2table.xml">
+<!ENTITY aefc59b4e366541360c58bfbe729b431f SYSTEM "file:///E:/ws/toolbox/timeseries/help/en_US/synchronize.xml">
+<!ENTITY a01bc31faf169680fa999c479552d31c6 SYSTEM "file:///E:/ws/toolbox/timeseries/help/en_US/table.xml">
+<!ENTITY afffc69d7f596c6aed3153db134bcab9a SYSTEM "file:///E:/ws/toolbox/timeseries/help/en_US/table2cell.xml">
+<!ENTITY a13f398c061cd4fe373865edf443ed325 SYSTEM "file:///E:/ws/toolbox/timeseries/help/en_US/table2matrix.xml">
+<!ENTITY a55b5e3e08bc9c072779cd4111ed3afbb SYSTEM "file:///E:/ws/toolbox/timeseries/help/en_US/table2struct.xml">
+<!ENTITY a0ebdedf42edbd457a2b1c3d5c12b695a SYSTEM "file:///E:/ws/toolbox/timeseries/help/en_US/table2timeseries.xml">
+<!ENTITY a13a72b975d91551191fe7e53c115e980 SYSTEM "file:///E:/ws/toolbox/timeseries/help/en_US/timeseries.xml">
+<!ENTITY a7fcccc24f70d00314e420f25e7fb4ebf SYSTEM "file:///E:/ws/toolbox/timeseries/help/en_US/timeseries2table.xml">
+<!ENTITY a2aeb192e75c5804c38d00fc43360b971 SYSTEM "file:///E:/ws/toolbox/timeseries/help/en_US/varfun.xml">
+<!ENTITY a857d5e09e52c18c8ed43394d3094a2bf SYSTEM "file:///E:/ws/toolbox/timeseries/help/en_US/writetable.xml">
+<!--End Entities-->
+]>
+<book version="5.0-subset Scilab" xml:lang="en_US"
+      xmlns="http://docbook.org/ns/docbook"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      xmlns:svg="http://www.w3.org/2000/svg"
+      xmlns:mml="http://www.w3.org/1998/Math/MathML"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xmlns:db="http://docbook.org/ns/docbook">
+  <info xml:id='timeseries_manual'>
+    <title>timeseries</title>
+  </info>
+
+<part xml:id='section_34297925e75d4c91d64c407050680024'>
+<title>timeseries</title>
+&a882c0d099b156b7444af4e1d0969990b;
+&af156df7502439341dbcd557857a294f7;
+&aac63b6a4ecd7d7a1226ffcf6ed2db054;
+&ae71b492eed7a3d070463b9838881656a;
+&a65b19041509d6c8eac73784d39ab8f09;
+&a9996971dfec11681448a6ed0fdf792f1;
+&a342548ec595f84d1177a3fa92aefd44e;
+&aa43b4e8dbbe1e1d253dac3dd553eb242;
+&a5c3c7c8c2291c3ce9e4fec780497d152;
+&af3028d8731c104535eccd782f63ea947;
+&a2eafbf511bf3f65acd8c950fdeae8710;
+&a04502086c0f936fc5f24715533274496;
+&a18a21a929d168a3eb611ff938141225b;
+&aec50a542c1631b622ca5852446d20035;
+&afb7edfaf277659cc8668e538117054f9;
+&acc3dcd584e3ffbb29b3019c0552e72c0;
+&ad57382399dbb9b009ae533c2b312e683;
+&a3e0e68f32c21226336808117bead0c52;
+&aefc59b4e366541360c58bfbe729b431f;
+&a01bc31faf169680fa999c479552d31c6;
+&afffc69d7f596c6aed3153db134bcab9a;
+&a13f398c061cd4fe373865edf443ed325;
+&a55b5e3e08bc9c072779cd4111ed3afbb;
+&a0ebdedf42edbd457a2b1c3d5c12b695a;
+&a13a72b975d91551191fe7e53c115e980;
+&a7fcccc24f70d00314e420f25e7fb4ebf;
+&a2aeb192e75c5804c38d00fc43360b971;
+&a857d5e09e52c18c8ed43394d3094a2bf;
+</part>
+</book>

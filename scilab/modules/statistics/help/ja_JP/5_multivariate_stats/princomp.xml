@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
+ * Copyright (C) 2000 - INRIA - Carlos Klimann
+ *
+ * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ *
+ * This file is hereby licensed under the terms of the GNU GPL v2.0,
+ * pursuant to article 5.3.4 of the CeCILL v.2.1.
+ * This file was originally licensed under the terms of the CeCILL v2.1,
+ * and continues to be available under such terms.
+ * For more information, see the COPYING file which you should have received
+ * along with this program.
+ *
+ -->
+<refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svg="http://www.w3.org/2000/svg" xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:db="http://docbook.org/ns/docbook" xmlns:scilab="http://www.scilab.org" xml:lang="ja" xml:id="princomp">
+    <refnamediv>
+        <refname>princomp</refname>
+        <refpurpose>主成分解析</refpurpose>
+        <refpurpose>This function is obsolete. Please use <link linkend="pca">pca</link> instead.</refpurpose>
+    </refnamediv>
+    <refsynopsisdiv>
+        <title>呼び出し手順</title>
+        <synopsis>[facpr,comprinc,lambda,tsquare, explained, mu] = princomp(x,eco)</synopsis>
+    </refsynopsisdiv>
+    <refsection>
+        <title>パラメータ</title>
+        <variablelist>
+            <varlistentry>
+                <term>x</term>
+                <listitem>
+                    <para>
+                        <literal>n</literal>行<literal>p</literal>列
+                        (<literal>n</literal>個の独立変数, <literal>p</literal>
+                        個の変数)の実数行列です.
+                    </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>eco</term>
+                <listitem>
+                    <para>論理値,
+                        小さな大きさの特異値分解を可能とするために使用されます.
+                    </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>facpr</term>
+                <listitem>
+                    <para>
+                        <literal>p</literal>行<literal>p</literal>列の行列.
+                        主成分を有します: 相関行列<literal>V</literal>の固有ベクトル.
+                    </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>comprinc</term>
+                <listitem>
+                    <para>
+                        <literal>n</literal>行<literal>p</literal>列の行列.
+                        主成分を有します.この行列の各列は,M個の主軸への個々の直交投影です.
+                        この列の各々は,
+                        条件<literal>u'_i M^(-1) u_i=1</literal>の下で分散を最大化する
+                        変数x1, ...,xpの線形結合です.
+                    </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>lambda</term>
+                <listitem>
+                    <para>
+                        <literal>p</literal>列ベクトルです.
+                        <literal>V</literal>の固有値を有します.
+                        ただし,<literal>V</literal>は相関行列です.
+                    </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>tsquare</term>
+                <listitem>
+                    <para>
+                        <literal>n</literal>列ベクトル.
+                        各データ点に関するHotellingのT^2統計量を有します.
+                    </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>explained</term>
+                <listitem>
+                    <para>
+                        a column vector of length "number of components". The percentage of variance explained by 
+                        each principal component.
+                    </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>mu</term>
+                <listitem>
+                    <para>
+                        a row vector of length <literal>p</literal>. The estimated mean of each variable of 
+                        <literal>x</literal>.
+                    </para>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </refsection>
+    <refsection>
+        <title>説明</title>
+        <para>
+            この関数は,<literal>n</literal>行<literal>p</literal>列の
+            データ行列<literal>x</literal>で
+            "主成分解析"を行ないます.
+        </para>
+        <para>
+            この手法の背後のアイデアは,
+            n個独立変量からなるクラスタを
+            より小さな次元の部分空間に
+            近似的な手法で表すことです.
+            これを行うために,
+            この手法はクラスタを部分空間に投影します.
+            k次元投影部分区間の選択は,
+            投影の距離が最小のゆがみを有するように行われます:
+            投影の距離の平方が最大化されるような
+            k次元部分空間を探します(実際には投影では距離は伸ばすことのみできます).
+            言い換えると,
+            投影のk次元部分空間への投影の慣性は最大化される必要があります.
+        </para>
+        <para>
+            標準化された変数について主成分解析を計算する際に,
+            <literal>princomp(wcenter(x,1))</literal>または<link linkend="pca">pca</link>関数を使用することができます.
+        </para>
+    </refsection>
+    <refsection>
+        <title>例</title>
+        <programlisting role="example"><![CDATA[
+a=rand(100,10,'n');
+[facpr,comprinc,lambda,tsquare] = princomp(a);
+ ]]></programlisting>
+ <programlisting role="example"><![CDATA[
+    x = [1 2 1;2 1 3; 3 2 3]
+    [facpr, comprinc, lambda, tsquare, explained, mu] = princomp(x, %t);
+    comprinc * facpr' + ones(3, 1) * mu // == x
+     ]]></programlisting>
+    </refsection>
+    <refsection role="see also">
+        <title>参照</title>
+        <simplelist type="inline">
+            <member>
+                <link linkend="wcenter">wcenter</link>
+            </member>
+            <member>
+                <link linkend="pca">pca</link>
+            </member>
+        </simplelist>
+    </refsection>
+    <refsection>
+        <title>参考文献</title>
+        <para>Saporta, Gilbert, Probabilités, Analyse des
+            Données et Statistique, Editions Technip, Paris, 1990.
+        </para>
+    </refsection>
+    <refsection>
+        <title>History</title>
+        <revhistory>
+            <revision>
+                <revnumber>2024.1.0</revnumber>
+                <revdescription><literal>princomp</literal> now returns the percentage of the variance explained by each principal component and
+                    the estimated mean of each variable of x.
+                </revdescription>
+            </revision>
+            <revision>
+                <revnumber>2025.0.0</revnumber>
+                <revremark>
+                    Tagged obsolete and will be removed in Scilab 2026.0.0.
+                </revremark>
+            </revision>
+        </revhistory>
+    </refsection>
+</refentry>

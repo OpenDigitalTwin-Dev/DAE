@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Scilab ( https://www.scilab.org/ ) - This file is part of Scilab
+ * Copyright (C) XXXX-2008 - INRIA
+ * Copyright (C) 2018 - Samuel GOUGEON
+ *
+ * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ *
+ * This file is hereby licensed under the terms of the GNU GPL v2.0,
+ * pursuant to article 5.3.4 of the CeCILL v.2.1.
+ * This file was originally licensed under the terms of the CeCILL v2.1,
+ * and continues to be available under such terms.
+ * For more information, see the COPYING file which you should have received
+ * along with this program.
+ *
+ -->
+<refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg" xmlns:mml="http://www.w3.org/1998/Math/MathML"
+          xmlns:db="http://docbook.org/ns/docbook" xmlns:scilab="http://www.scilab.org"
+          xml:lang="en" xml:id="unix_s">
+    <refnamediv>
+        <refname>unix_s</refname>
+        <refpurpose>executes some Windows, Linux or MacOS instructions: output canceled (Silent mode)</refpurpose>
+    </refnamediv>
+    <refsynopsisdiv>
+        <title>Syntax</title>
+        <synopsis>unix_s(commands)</synopsis>
+    </refsynopsisdiv>
+    <refsection>
+        <title>Arguments</title>
+        <variablelist>
+            <varlistentry>
+                <term>commands</term>
+                <listitem>
+                    <para>Single text containing some Windows, Linux, or MacOS instructions.</para>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </refsection>
+    <refsection>
+        <title>Description</title>
+        <para>
+            <literal>unix_s(…)</literal> opens a new session of the Operating System (OS) command
+            interpreter (<emphasis>sh</emphasis> with Linux, <emphasis>cmd.exe</emphasis> with
+            Windows, etc..), sends <varname>commands</varname> to it,
+            lets it processing <varname>commands</varname> instructions, receives the possible
+            error message yielded by the processing, and closes the interpreter session.
+        </para>
+        <para>
+            The starting working directory and environment variables of the opened interpreter
+            are set <link linkend="host_description">as described for host()</link>.
+        </para>
+        <para>
+            The standard output of processed instructions is ignored: Nothing is displayed neither
+            in the Scilab console nor in the OS terminal (Windows consolebox).
+        </para>
+        <para>
+            If an instruction in <varname>commands</varname> generates an error,
+            <itemizedlist>
+                <listitem>
+                    the error message from the OS is displayed in the Scilab console,
+                </listitem>
+                <listitem>
+                    <literal>unix_s</literal> stops and displays its own error message.
+                </listitem>
+                <listitem>
+                    In <varname>commands</varname>, the remaining unprocessed instructions are ignored.
+                </listitem>
+            </itemizedlist>
+            <warning>
+                The effects of valid instructions processed before the erroneous one remain actual
+                (for instance, deleted files).
+                <varname>commands</varname> with multiple instructions are not recommended.
+                They are more difficult to debug.
+            </warning>
+        </para>
+    </refsection>
+    <refsection>
+        <title>Examples</title>
+        <programlisting role="example"><![CDATA[
+if getos() == 'Windows' then
+  unix_s("del foo");
+else
+  unix_s("rm -f foo");
+end
+ ]]></programlisting>
+    </refsection>
+    <refsection role="see also">
+        <title>See also</title>
+        <simplelist type="inline">
+            <member>
+                <link linkend="unix_g">unix_g</link>
+            </member>
+            <member>
+                <link linkend="unix_w">unix_w</link>
+            </member>
+            <member>
+                <link linkend="unix_x">unix_x</link>
+            </member>
+            <member>
+                <link linkend="host">host</link>
+            </member>
+            <member>
+                <link linkend="powershell">powershell</link>
+            </member>
+            <member>
+                <link linkend="setenv">setenv</link>
+            </member>
+            <member>
+                <link linkend="getos">getos</link>
+            </member>
+        </simplelist>
+    </refsection>
+</refentry>

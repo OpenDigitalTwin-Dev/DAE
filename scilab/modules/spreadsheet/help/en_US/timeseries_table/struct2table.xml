@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * This file is released under the 3-clause BSD license. See COPYING-BSD.
+ *
+ -->
+<refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" 
+          xmlns:svg="http://www.w3.org/2000/svg" xmlns:ns3="http://www.w3.org/1999/xhtml" 
+          xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:db="http://docbook.org/ns/docbook" 
+          version="5.0-subset Scilab" xml:id="struct2table" xml:lang="en">
+    <refnamediv>
+        <refname>struct2table</refname>
+        <refpurpose>convert a struct into a table</refpurpose>
+    </refnamediv>
+    <refsynopsisdiv>
+        <title>Syntax</title>
+        <synopsis>
+            t = struct2table(st)
+            t = struct2table(st, Name, Value)
+        </synopsis>
+    </refsynopsisdiv>
+    <refsection>
+        <title>Arguments</title>
+        <variablelist>
+            <varlistentry>
+                <term>st</term>
+                <listitem>
+                    <para>scalar structure or array of structures</para>
+                    <para/>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>Name, Value</term>
+                <listitem>
+                    <para><emphasis role="bold">Name: 'VariableNames', Value: vector of strings</emphasis>: 
+                        the variable name of each column of t. The variable names must be unique and their 
+                        number must be equal to size(m, 2). 
+                        Default value: ["Var1", ..., "VarN"].
+                    </para>
+                    <para/>
+                </listitem>
+                <listitem>
+                    <para><emphasis role="bold">Name: 'RowNames', Value: vector of string</emphasis>: 
+                        the row names for t. The names must be unique and their number must be equal to size(m, 1). 
+                        Default value: [].
+                    </para>
+                    <para/>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>t</term>
+                <listitem>
+                    <para>table object</para>
+                    <para/>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </refsection>
+    <refsection>
+        <title>Description</title>
+        <para>
+            <emphasis role="bold">struct2table</emphasis> converts a struct into a table. 
+            Each fieldnames of st becomes a variable name of t.
+        </para>
+        <para>
+            Like table function, you can specify the variable and row names thanks to optional parameters.
+        </para>
+        <para>
+            You can use directly <emphasis role="bold">t = table(st)</emphasis>.
+        </para>
+    </refsection>
+    <refsection>
+        <title>Examples</title>
+        <para><emphasis role="bold">t = struct2table(st)</emphasis></para>
+        <para>
+        <programlisting role="example"><![CDATA[
+            st.Code = ["AF"; "NA"; "OC"; "AN"; "AS"; "EU"; "SA"];
+            st.NameContinent = ["Africa"; "North America"; "Oceania"; "Antarctica"; "Asia"; "Europe"; "South America"];
+            st.Area = [30065000; 24256000; 7687000; 13209000; 44579000; 9938000; 17819000];
+            st.NumberCountry = [54; 23; 14; %nan; 47; 45; 12]; 
+            st.LifeExpectancy = [60; 78; 75; %nan; 72; 75; 74];
+            t = struct2table(st)
+            // or table(st)
+
+            a = struct("a", 1, "b", 2);
+            a = [a struct("a", 3, "b", 4)];
+            t = struct2table(a)
+            // or table(a)
+        ]]>
+        </programlisting>
+        </para>
+        <para><emphasis role="bold">t = struct2table(m, "RowNames", val)</emphasis></para>
+        <para>
+        <programlisting role="example"><![CDATA[
+            st.Code = ["AF"; "NA"; "OC"; "AN"; "AS"; "EU"; "SA"];
+            st.NameContinent = ["Africa"; "North America"; "Oceania"; "Antarctica"; "Asia"; "Europe"; "South America"];
+            st.Area = [30065000; 24256000; 7687000; 13209000; 44579000; 9938000; 17819000];
+            st.NumberCountry = [54; 23; 14; %nan; 47; 45; 12]; 
+            st.LifeExpectancy = [60; 78; 75; %nan; 72; 75; 74];
+            t = struct2table(st)
+            t.Properties.RowNames = t.Code;
+            t.Code = [];
+
+            Code = ["AF"; "NA"; "OC"; "AN"; "AS"; "EU"; "SA"];
+            st.NameContinent = ["Africa"; "North America"; "Oceania"; "Antarctica"; "Asia"; "Europe"; "South America"];
+            st.Area = [30065000; 24256000; 7687000; 13209000; 44579000; 9938000; 17819000];
+            st.NumberCountry = [54; 23; 14; %nan; 47; 45; 12]; 
+            st.LifeExpectancy = [60; 78; 75; %nan; 72; 75; 74];
+            t = struct2table(st, "RowNames", Code)
+            // or table(st, "RowNames", Code)
+        ]]>
+        </programlisting>
+        </para>
+    </refsection>
+    <refsection role="see also">
+        <title>See also</title>
+        <simplelist type="inline">
+            <member>
+                <link linkend="table">table</link>
+            </member>
+            <member>
+                <link linkend="table2struct">table2struct</link>
+            </member>
+        </simplelist>
+    </refsection>
+    <refsection role="history">
+        <title>History</title>
+        <revhistory>
+            <revision>
+                <revnumber>2024.0.0</revnumber>
+                <revdescription>
+                    Introduction in Scilab.
+                </revdescription>
+            </revision>
+        </revhistory>
+    </refsection>
+</refentry>
