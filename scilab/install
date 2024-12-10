@@ -6,9 +6,21 @@
 # >> #include <libxml/xmlreader.h>
 # >> //}
 
-sudo apt -y install cmake make gcc g++ gfortran libhdf5-dev openjdk-21-jdk ant libgl-dev libncurses-dev libfftw3-dev libeigen3-dev libxml2-dev gettext libblas-dev liblapack-dev libarpack2-dev libsuitesparse-dev libpcre3-dev libmatio-dev libarchive-dev 
+sudo apt -y install cmake make gcc g++ gfortran libhdf5-dev openjdk-21-jdk ant libgl-dev libncurses-dev libfftw3-dev libeigen3-dev libxml2-dev gettext libblas-dev liblapack-dev libarpack2-dev libsuitesparse-dev libpcre3-dev libmatio-dev libarchive-dev
 
 # also need the old version 8.5.19 of tck and tk
+
+cd tcl8.5.19/unix
+./configure
+make -j4
+sudo make install
+cd ../../
+
+cd tk8.5.19/unix
+./configure
+make -j4
+sudo make install
+cd ../../
 
 ./configure --with-hdf5-include=$PWD/../../install/hdf5_install/include --with-hdf5-library=$PWD/../../install/hdf5_install/lib --without-modelica --prefix=$PWD/../install/scilab_install
 
@@ -16,7 +28,7 @@ make -j4
 make install
 
 # >> you need to copy jogamp-all-platforms/lib/linux-amd64 from jogamp-all-platforms to DAE/install/scilab_install/lib/thirdparty
-mv lib/thirdparty ../install/scilab_install/lib
+cp -r lib/thirdparty ../install/scilab_install/lib
 
 # >> you also need to copy .jar from scilab-2025.0.0.bin.x86_64-linux-gnu/scilab-2025.0.0/thirdparty to DAE/install/scilab_install
 cp -r thirdparty ../install/scilab_install
