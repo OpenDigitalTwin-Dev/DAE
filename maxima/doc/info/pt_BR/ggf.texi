@@ -1,0 +1,57 @@
+@c Language: Brazilian Portuguese, Encoding: iso-8859-1
+@c /ggf.texi/1.4/Sat Jun  2 00:13:21 2007//
+@menu
+* Funções e Variáveis Definidas para ggf::
+@end menu
+
+@node Funções e Variáveis Definidas para ggf,  , ggf, ggf
+@section Funções e Variáveis Definidas para ggf
+
+@defvr {Variável de Opção} GGFINFINITY
+Valor padrão: 3
+
+Essa é uma variável de opção para a função @code{ggf}.
+
+Quando calculando a fração contínua da
+função geradora, um quociente parcial tendo um grau
+(estritamente) maior que @var{GGFINFINITY} será descartado e
+o convergente atual será considerado como o valor exato
+da função geradora; na grande mioria dos casos o grau de todos
+os quocientes parciais será ou 0 ou 1; se você usar um valor muito grande,
+então você poderá fornecer termos suficientes com o objetivo de fazer o
+cálculo preciso o bastante.
+
+
+Veja também @code{ggf}.
+@end defvr
+
+
+@defvr {Variável de opção} GGFCFMAX
+Valor padrão: 3
+
+Essa é uma variável de opção para a função @code{ggf}.
+
+Quando calculando a fração contínua da
+função geradora, se nenhum bom resultado for encontrado (veja
+o sinalizador @var{GGFINFINITY}) após se ter calculado uma quantidade de @var{GGFCFMAX} quocientes
+parciais, a função geradora será considerada como
+não sendo uma fração de dois polinômios e a função irá
+terminar. Coloque livemente um valor muito grande para funções geradoras
+mais complicadas.
+
+Veja também @code{ggf}.
+@end defvr
+
+@deffn {Função} ggf (@var{l})
+Calcula a função geradora (se for uma fração de dois
+polinômios) de uma seq@"{u}ência, sendo dados seus primeiros termos. @var{l}
+é uma lista de números.
+
+A solução é retornada como uma fração de dois polinômios.
+Se nenhuma solução tiver sido encontrada, é retornado @code{done}.
+
+Essa função é controlada attravés das variáveis globais @var{GGFINFINITY} e @var{GGFCFMAX}. Veja também @var{GGFINFINITY} e @var{GGFCFMAX}.
+
+Para usar essa função primeiro escreva @code{load("ggf")}.
+@end deffn
+

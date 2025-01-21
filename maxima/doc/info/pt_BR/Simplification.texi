@@ -1,0 +1,652 @@
+@c Language: Brazilian Portuguese, Encoding: iso-8859-1
+@c /Simplification.texi/1.18/Sat Jun  2 00:13:08 2007/-ko/
+@c end concepts Simplification
+@iftex
+@hyphenation{di-fe-ren-te-men-te}
+@end iftex
+@menu
+* Funções e Variáveis Definidas para Simplificação::  
+@end menu
+
+@node Funções e Variáveis Definidas para Simplificação,  , Simplificação, Simplificação
+@section Funções e Variáveis Definidas para Simplificação
+
+@c After studying src/compar.lisp, it appears that askexp would
+@c work as advertised, except that it doesn't appear to be possible
+@c to open a break prompt with ^A or any other character.
+@c What should we do about askexp ???
+@defvr {Variável de sistema} askexp
+Quando @code{asksign} é chamada,
+@code{askexp} é a expressão que @code{asksign} está testando.
+
+Antigamente, era possível para um usuário inspecionar @code{askexp}
+entrando em uma parada do Maxima com control-A.
+@end defvr
+
+@c THERE IS PROBABLY MORE TO THE STORY THAN WHAT IS INDICATED HERE ...
+@deffn {Função} askinteger (@var{expr}, integer)
+@deffnx {Função} askinteger (@var{expr})
+@deffnx {Função} askinteger (@var{expr}, even)
+@deffnx {Função} askinteger (@var{expr}, odd)
+
+@code{askinteger (@var{expr}, integer)} tenta determinar a partir da base de dados do @code{assume}
+se @var{expr} é um inteiro.
+@code{askinteger} pergunta ao usuário pela linha de comando se isso não puder ser feito de outra forma,
+@c UMM, askinteger AND asksign DO NOT APPEAR TO HAVE ANY EFFECT ON THE assume DATABASE !!!
+e tenta instalar a informação na base de dados do @code{assume} se for possível.
+@code{askinteger (@var{expr})} é equivalente a @code{askinteger (@var{expr}, integer)}.
+
+@code{askinteger (@var{expr}, even)} e @code{askinteger (@var{expr}, odd)}
+da mesma forma tentam determinar se @var{expr} é um inteiro par ou inteiro ímpar, respectivamente.
+
+@end deffn
+
+@c THERE IS PROBABLY MORE TO THE STORY THAN WHAT IS INDICATED HERE ...
+@deffn {Função} asksign (@var{expr})
+Primeiro tenta determinar se a expressão
+especificada é positiva, negativa, ou zero.  Se isso não for possível, @code{asksign} pergunta ao
+usuário pelas questões necessárias para completar a sua dedução.  As respostas
+do usuário são guardadas na base de dados pelo tempo que durar a computação
+corrente. O valor de retorno de @code{asksign} é um entre @code{pos}, @code{neg},
+ou @code{zero}.
+
+@end deffn
+
+@c NEEDS CLARIFICATION, EXAMPLES
+@deffn {Função} demoivre (@var{expr})
+@deffnx {Variável de opção} demoivre
+
+A função @code{demoivre (expr)} converte uma expressão
+sem escolher a variável global @code{demoivre}.
+
+Quando a variável @code{demoivre} for @code{true},
+exponenciais complexas são convertidas em expressões equivalentes em termos de funções circulares:
+@code{exp (a + b*%i)} simplifica para @code{%e^a * (cos(b) + %i*sin(b))}
+se @code{b} for livre de @code{%i}.
+@code{a} e @code{b} não são expandidos.
+
+O valor padrão de @code{demoivre} é @code{false}.
+
+@code{exponentialize} converte funções circulares e hiperbólicas para a forma exponencial.
+@code{demoivre} e @code{exponentialize} não podem
+ambas serem @code{true} ao mesmo tempo.
+
+@end deffn
+
+
+@defvr {Variável de opção} domain
+Valor padrão: @code{real}
+
+Quando @code{domain} for escolhida para @code{complex}, @code{sqrt (x^2)} permanecerá
+@code{sqrt (x^2)} em lugar de retornar @code{abs(x)}.
+
+@c PRESERVE EDITORIAL COMMENT -- MAY HAVE SOME SIGNIFICANCE NOT YET UNDERSTOOD !!!
+@c The notion of a "domain" of simplification is still in its infancy,
+@c and controls little more than this at the moment.
+
+@end defvr
+
+@c NEEDS WORK
+@deffn {Função} expand (@var{expr})
+@deffnx {Função} expand (@var{expr}, @var{p}, @var{n})
+Expande a expressão @var{expr}.
+Produtos de somas e somas exponenciadas são
+multiplicadas para fora, numeradores de expressões racionais que são adições são
+quebradas em suas respectivas parcelas, e multiplicação (comutativa
+e não comutativa) é distribuída sobre a adição em todos os níveis de
+@var{expr}.
+
+Para polinômios se pode usar freq@"{u}êntemente @code{ratexpand} que possui um
+algorítmo mais eficiente.
+
+@code{maxnegex} e @code{maxposex} controlam o máximo expoente negativo e
+o máximo expoente positivo, respectivamente, que irão expandir.
+
+@code{expand (@var{expr}, @var{p}, @var{n})} expande @var{expr}, 
+usando @var{p} para @code{maxposex} e @var{n} para @code{maxnegex}.
+Isso é útil com o objetivo de expandir partes mas não tudo em uma expressão.
+
+@code{expon} - o expoente da maior potência negativa que é
+automaticamente expandida (independente de chamadas a @code{expand}).  Por Exemplo
+se @code{expon} for 4 então @code{(x+1)^(-5)} não será automaticamente expandido.
+
+@code{expop} - o maior expoente positivo que é automaticamente
+expandido.  Dessa forma @code{(x+1)^3}, quando digitado, será automaticamente expandido
+somente se @code{expop} for maior que ou igual a 3.  Se for desejado ter
+@code{(x+1)^n} expandido onde @code{n} é maior que @code{expop} então executando
+@code{expand ((x+1)^n)} trabalhará somente se @code{maxposex} não for menor que @code{n}.
+
+O sinalizador @code{expand} usado com @code{ev} causa expansão.
+
+O arquivo @file{simplification/facexp.mac}
+@c I should really use a macro which expands to something like
+@c @uref{file://...,,simplification/facexp.mac}.  But texi2html
+@c currently supports @uref only with one argument.
+@c Worse, the `file:' scheme is OS and browser dependent.
+contém muitas funções relacionadas (em particular @code{facsum}, @code{factorfacsum}
+e @code{collectterms}, que são chamadas automaticamente) e variáveis (@code{nextlayerfactor}
+e @code{facsum_combine}) que fornecem ao usuário com a habilidade para estruturar
+expressões por expansão controlada.
+@c MERGE share/simplification/facexp.usg INTO THIS FILE OR CREATE NEW FILE facexp.texi
+Descrições breves de função estão disponível em @file{simplification/facexp.usg}.
+Um arquivo demonstrativo está disponível fazendo @code{demo("facexp")}.
+
+@end deffn
+
+@c NEEDS EXAMPLES
+@deffn {Função} expandwrt (@var{expr}, @var{x_1}, ..., @var{x_n})
+Expande a expressão @code{expr} com relação às 
+variáveis @var{x_1}, ..., @var{x_n}.
+Todos os produtos envolvendo as variáveis aparecem explicitamente.  A forma retornada
+será livre de produtos de somas de expressões que não estão livres das
+variáveis.   @var{x_1}, ..., @var{x_n}
+podem ser variáveis, operadores, ou expressões.
+
+Por padrão, denominadores não são expandidos, mas isso pode ser controlado
+através do comutador @code{expandwrt_denom}.
+
+Essa função, @code{expandwrt}, não é automaticamente chamada a partir de
+@file{simplification/stopex.mac}.
+
+@end deffn
+
+
+@defvr {Variável de opção} expandwrt_denom
+Valor padrão: @code{false}
+
+@code{expandwrt_denom} controla o tratamento de expressões
+racionais por @code{expandwrt}.  Se @code{true}, então ambos o numerador e
+o denominador da expressão serão expandidos conforme os
+argumentos de @code{expandwrt}, mas se @code{expandwrt_denom} for @code{false}, então somente
+o numerador será expandido por aquele caminho.
+
+@end defvr
+
+@c NEEDS A STAND-ALONE DESCRIPTION (NOT "IS SIMILAR TO")
+@c NEEDS EXAMPLES
+@deffn {Função} expandwrt_factored (@var{expr}, @var{x_1}, ..., @var{x_n})
+é similar a @code{expandwrt}, mas trata expressões que são produtos um tanto quanto diferentemente.
+@code{expandwrt_factored} expande somente sobre esses fatores de @code{expr}
+que contiverem as variáveis @var{x_1}, ..., @var{x_n}.
+
+@c NOT SURE WHY WE SHOULD MENTION THIS HERE
+Essa função é automaticamente chamada a aprtir de @file{simplification/stopex.mac}.
+
+@end deffn
+
+
+@defvr {Variável de opção} expon
+Valor padrão: 0
+
+@code{expon} é o expoente da maior potência negativa que
+é automaticamente expandido (independente de chamadas a @code{expand}).  Por
+exemplo, se @code{expon} for 4 então @code{(x+1)^(-5)} não será automaticamente
+expandido.
+
+@end defvr
+
+
+@deffn {Função} exponentialize (@var{expr})
+@deffnx {Variável de opção} exponentialize
+
+A função @code{exponentialize (expr)} converte 
+funções circulares e hiperbólicas em @var{expr} para exponenciais,
+sem escolher a variável global @code{exponentialize}.
+
+Quando a variável @code{exponentialize} for @code{true},
+todas as funções circulares e hiperbólicas  são convertidas para a forma exponencial.
+O valor padrão é @code{false}.
+
+@code{demoivre} converte exponenciais complexas em funções circulares.
+@code{exponentialize} e @code{demoivre} não podem
+ambas serem @code{true} ao mesmo tempo.
+
+@end deffn
+
+@c NEEDS CLARIFICATION
+@c NEEDS EXAMPLES
+@defvr {Variável de opção} expop
+Valor padrão: 0
+
+@code{expop} - o maior expoente positivo que é 
+automaticamente expandido.  Dessa forma @code{(x+1)^3}, quando digitado, será
+automaticamente expandido somente se @code{expop} for maior que ou igual a 3.  
+Se for desejado ter @code{(x+1)^n} expandido onde @code{n} é maior que 
+@code{expop} então executando @code{expand ((x+1)^n)} trabalhará somente se @code{maxposex} não for 
+menor que @code{n}.
+
+@end defvr
+
+@c NEEDS EXAMPLES
+@defvr {Variável de opção} factlim
+Valor padrão: -1
+
+@code{factlim} especifica o maior fatorial que é
+automaticamente expandido.  Se for -1 então todos os inteiros são expandidos.
+
+@end defvr
+
+@c NEEDS CLARIFICATION, EXAMPLES
+@deffn {Função} intosum (@var{expr})
+Move fatores multiplicativos fora de um somatório para dentro.
+Se o índice for usado na
+expressão de fora, então a função tentará achar um índice
+razoável, o mesmo que é feito para @code{sumcontract}.  Isso é essencialmente a
+idéia inversa da propriedade @code{outative} de somatórios, mas note que isso
+não remove essa propriedade, somente pula sua verificação.
+
+@c WHAT ARE THESE CASES ??
+Em alguns casos,
+um @code{scanmap (multthru, @var{expr})} pode ser necessário antes de @code{intosum}.
+
+@end deffn
+
+@c NEEDS CLARIFICATION, EXAMPLES
+@defvr {Declaração} lassociative
+@code{declare (g, lassociative)} diz ao
+simplificador do Maxima que @code{g} é associativa à esquerda.  E.g., @code{g (g (a, b), g (c, d))} irá
+simplificar para @code{g (g (g (a, b), c), d)}.
+
+@end defvr
+
+@c NEEDS CLARIFICATION, EXAMPLES
+@c WHAT'S UP WITH THE QUOTE MARKS ??
+@defvr {Declaração} linear
+Uma das propriedades operativas do Maxima.  Para funções de uma única variável @code{f} então
+declarada, a "expansão" @code{f(x + y)} retorna @code{f(x) + f(y)},
+@code{f(a*x)} retorna @code{a*f(x)} tomando
+lugar onde @code{a} for uma "constante".  para funções de dois ou mais argumentos,
+"linearidade" é definida para ser como no caso de @code{sum} ou @code{integrate},
+i.e., @code{f (a*x + b, x)} retorna @code{a*f(x,x) + b*f(1,x)}
+para @code{a} e @code{b} livres de @code{x}.
+
+@code{linear} é equivalente a @code{additive} e @code{outative}.
+Veja também @code{opproperties}.
+
+@end defvr
+
+@c NEEDS CLARIFICATION, EXAMPLES
+@defvr {Declaração} mainvar
+Você pode declarar variáveis para serem @code{mainvar} (variável principal).  A escala de
+ordenação para átomos é essencialmente: números < constantes (e.g., @code{%e}, @code{%pi}) <
+escalares < outras variáveis < mainvars.  E.g., compare @code{expand ((X+Y)^4)}
+com @code{(declare (x, mainvar), expand ((x+y)^4))}.  (Nota: Cuidado deve ser
+tomado se você eleger o uso desse recurso acima.  E.g., se você subtrair uma
+expressão na qual @code{x} for uma @code{mainvar} de uma na qual @code{x} não seja uma
+@code{mainvar}, resimplificação e.g. com @code{ev (expr, simp)} pode ser
+necessária se for para ocorrer um cancelamento.  Também, se você grava uma
+expressão na qual @code{x} é uma @code{mainvar}, você provavelmente pode também gravar @code{x}.)
+
+@end defvr
+
+@c NEEDS EXAMPLES
+@defvr {Variável de opção} maxapplydepth
+Valor padrão: 10000
+
+@code{maxapplydepth} é a máxima definição para a qual @code{apply1}
+e @code{apply2} irão pesquisar.
+
+@end defvr
+
+@c NEEDS EXAMPLES
+@defvr {Variável de opção} maxapplyheight
+Valor padrão: 10000
+
+@code{maxapplyheight} é a elevação máxima a qual @code{applyb1}
+irá alcançar antes de abandonar.
+
+@end defvr
+
+@c NEEDS EXAMPLES
+@defvr {Variável de opção} maxnegex
+Valor padrão: 1000
+
+@code{maxnegex} é o maior expoente negativo que será
+expandido pelo comando @code{expand} (veja também @code{maxposex}).
+
+@end defvr
+
+@c NEEDS EXAMPLES
+@defvr {Variável de opção} maxposex
+Valor padrão: 1000
+
+@code{maxposex} é o maior expoente que será
+expandido com o comando @code{expand} (veja também @code{maxnegex}).
+
+@end defvr
+
+@c NEEDS EXAMPLES
+@defvr {Declaração} multiplicative
+@code{declare (f, multiplicative)} diz ao simplificador do Maxima que @code{f} é multiplicativa.
+
+@enumerate
+@item
+Se @code{f} for uma função de uma única variável, sempre que o simplificador encontrar @code{f} aplicada
+a um produto, @code{f} distribue sobre aquele produto.  E.g., @code{f(x*y)}
+simplifica para @code{f(x)*f(y)}.
+@item
+Se @code{f} é uma função de 2 ou mais argumentos, multiplicatividade é
+definida como multiplicatividade no primeiro argumento para @code{f}, e.g.,
+@code{f (g(x) * h(x), x)} simplifica para @code{f (g(x) ,x) * f (h(x), x)}.
+@end enumerate
+
+Essa simplificação não ocorre quando @code{f} é aplicada a expressões da
+forma @code{product (x[i], i, m, n)}.
+
+@end defvr
+
+@c NEEDS CLARIFICATION, EXAMPLES
+@defvr {Variável de opção} negdistrib
+Valor padrão: @code{true}
+
+Quando @code{negdistrib} for @code{true}, -1 distribue
+sobre uma expressão.  E.g., @code{-(x + y)} transforma-se em @code{- y - x}.  Mudando o valor de @code{negdistrib} para @code{false}
+permitirá que @code{- (x + y)} seja mostrado como foi escrito.  Isso algumas vezes é útil
+mas seja muito cuidadoso: como o sinalizador @code{simp}, isso é um sinalizador que você pode não
+querer escolher para @code{false} como algo natural ou necessário com excessão
+de usar localmente no seu Maxima.
+
+@end defvr
+
+@c NEEDS CLARIFICATION, EXAMPLES
+@defvr {Variável de opção} negsumdispflag
+Valor padrão: @code{true}
+
+Quando @code{negsumdispflag} for @code{true}, @code{x - y} é mostrado como @code{x - y}
+em lugar de como @code{- y + x}.  Escolhendo isso para @code{false} faz com que a verificação especial em
+visualização para a diferença das duas expressões não seja concluída.  Uma
+aplicação é que dessa forma @code{a + %i*b} e @code{a - %i*b} podem ambos serem mostrados pelo
+mesmo caminho.
+
+@end defvr
+
+@c NEEDS CLARIFICATION, EXAMPLES
+@c NEED TO MENTION THIS IS AN evflag
+@defvr {Símbolo especial} noeval
+@code{noeval} suprime a fase de avaliação de @code{ev}.  Isso é útil em
+conjunção com outros comutadores e para fazer com que expressões      
+sejam resimplificadas sem serem reavaliadas.
+
+@end defvr
+
+@c NEEDS CLARIFICATION, EXAMPLES
+@defvr {Declaração} noun
+@code{noun} é uma das opções do comando @code{declare}.  Essa opção faz com que um
+função seja declarada como "noun" (substantivo), significando que ela não deve ser avaliada
+automaticamente.
+
+@end defvr
+
+@c NEEDS CLARIFICATION, EXAMPLES
+@defvr {Variável de opção} noundisp
+Valor padrão: @code{false}
+
+Quando @code{noundisp} for @code{true}, substantivos (nouns) são mostrados com
+um apóstrofo.  Esse comutador é sempre @code{true} quando mostrando definições de
+função.
+
+@end defvr
+
+@c NEEDS CLARIFICATION, EXAMPLES
+@defvr {Símbolo especial} nouns
+@code{nouns} é um @code{evflag} (sinalizador de avaliação). Quando usado como uma opção para o comando @code{ev},
+@code{nouns} converte todas as
+formas substantivas ("noun") que ocorrem na expressão que está sendo avaliada para verbos ("verbs"), i.e.,
+avalia essas expressões.  Veja também @code{noun}, @code{nounify}, @code{verb}, e @code{verbify}.
+
+@end defvr
+
+@c NEEDS CLARIFICATION, EXAMPLES
+@c WHAT ARE THE FUNCTIONS WHICH ARE EVALUATED IN FLOATING POINT ??
+@c WHAT IS A "NUMERVAL" ?? (SOMETHING DIFFERENT FROM A NUMERIC VALUE ??)
+@c NEED TO MENTION THIS IS AN evflag
+@defvr {Símbolo especial} numer
+@code{numer} faz com que algumas funções matemáticas (incluindo exponenciação)
+com argumentos numéricos sejam avaliados em ponto flutuante. Isso faz com que
+variáveis em @code{expr} às quais tenham sido dados valores numéricos a elas sejam substituídas pelos
+seus valores correspondentes.  @code{numer} também escolhe o sinalizador @code{float} para @code{on}.
+
+@end defvr
+
+
+@c NEEDS CLARIFICATION, EXAMPLES
+@c HOW TO FIND ALL VARIABLES WHICH HAVE NUMERVALS ??
+@deffn {Função} numerval (@var{x_1}, @var{expr_1}, ..., @var{var_n}, @var{expr_n})
+Declara as variáveis @code{x_1}, ..., @var{x_n} para terem
+valores numéricos iguais a @code{expr_1}, ..., @code{expr_n}.
+O valor numérico é avaliado e substituido para a variável
+em quaisquer expressões na qual a variável ocorra se o sinalizador @code{numer} for
+@code{true}. Veja também @code{ev}.
+
+As expressões @code{expr_1}, ..., @code{expr_n} podem ser quaisquer expressões,
+não necessariamente numéricas.
+@end deffn
+
+
+@defvr {Variável de sistema} opproperties
+
+@code{opproperties} é a lista de propriedades de operadores especiais reconhecidas pelo
+simplificador do Maxima:
+@code{linear}, @code{additive}, @code{multiplicative}, @code{outative} (veja logo abaixo), @code{evenfun},
+@code{oddfun}, @code{commutative}, @code{symmetric}, @code{antisymmetric}, @code{nary}, 
+@code{lassociative}, @code{rassociative}.
+
+@end defvr
+
+
+@c NEEDS CLARIFICATION, EXAMPLES
+@defvr {Variável de opção} opsubst
+Valor padrão: @code{true}
+
+Quando @code{opsubst} for @code{false}, @code{subst} não tenta
+substituir dentro de um operador de uma expressão.  E.g., 
+@code{(opsubst: false, subst (x^2, r, r+r[0]))} irá trabalhar.
+
+@end defvr
+
+@c NEEDS EXAMPLES
+@defvr {Declaração} outative
+@code{declare (f, outative)} diz ao simplificador do Maxima que fatores constantes
+no argumento de @code{f} podem ser puxados para fora.
+
+@enumerate
+@item
+Se @code{f} for uma função de uma única variável, sempre que o simplificador encontrar @code{f} aplicada
+a um produto, aquele produto será particionado em fatores que são
+constantes e fatores que não são e os fatores constantes serão
+puxados para fora.  E.g., @code{f(a*x)} simplificará para @code{a*f(x)} onde @code{a} é uma
+constante.  Fatores de constantes não atômicas não serão puxados para fora.
+@item
+Se @code{f} for uma função de 2 ou mais argumentos, a colocação para fora é definida
+como no caso de @code{sum} ou @code{integrate}, i.e., @code{f (a*g(x), x)} irá simplificar
+para @code{a * f(g(x), x)} sendo @code{a} livre de @code{x}.
+@end enumerate
+
+@code{sum}, @code{integrate}, e @code{limit} são todas @code{outative}.
+
+@end defvr
+
+@c NEEDS EXAMPLES
+@defvr {Declaração} posfun
+@code{declare (f, posfun)} declara @code{f} para ser uma função positiva.
+@code{is (f(x) > 0)} retorna @code{true}.
+
+@end defvr
+
+@deffn {Função} radcan (@var{expr})
+Simplifica @var{expr}, que pode conter logarítmos, exponenciais, e
+radicais, convertendo essa expressão em uma forma que é canônica sobre uma ampla
+classe de expressões e uma dada ordenação de variáveis; isto é, todas
+formas funcionalmente equivalentes são mapeadas em uma única forma.  Para uma
+classe um tanto quanto ampla de expressões, @code{radcan} produz uma forma regular.
+Duas expressões equivalentes nessa classe não possuem necessáriamente a
+mesma aparência, mas suas diferenças podem ser simplificadas por @code{radcan} para
+zero.
+
+Para algumas expressões @code{radcan} é que consome inteiramente o tempo.  Esse
+é o custo de explorar certos relacionamentos entre os componentes da
+expressão para simplificações baseadas sobre fatoração e
+expansões de fração-parcial de expoentes.  
+
+@c %e_to_numlog NEEDS ITS OWN @defvar !!!
+@c DOESN'T APPEAR TO AFFECT radcan !!!
+Quando @code{%e_to_numlog} for @code{true}, 
+@code{%e^(r*log(expr))} simplifica para @code{expr^r} se @code{r} for um número racional.
+
+Quando @code{radexpand} for @code{false}, certas transformações são inibidas.
+@code{radcan (sqrt (1-x))} permanece @code{sqrt (1-x)}
+e não é simplificada para @code{%i sqrt (x-1)}. 
+@code{radcan (sqrt (x^2 - 2*x + 11))} permanece @code{sqrt (x^2 - 2*x + 1)}
+e não é simplificada para @code{x - 1}.
+
+@c MERGE EXAMPLES INTO THIS FILE
+@code{example (radcan)} mostra alguns exemplos.
+
+@end deffn
+
+@c NEEDS CLARIFICATION, EXAMPLES
+@defvr {Variável de opção} radexpand
+Valor padrão: @code{true}
+
+@code{radexpand} controla algumas simplificações de radicais.
+
+Quando @code{radexpand} for @code{all}, faz com que n-ésimas raízes de
+fatores de um produto que são potências de n sejam puxados para fora do
+radical.  E.g. Se @code{radexpand} for @code{all}, @code{sqrt (16*x^2)} simplifica para @code{4*x}.
+
+@c EXPRESS SIMPLIFICATON RULES IN GENERAL CASE, NOT SPECIAL CASE
+Mais particularmente, considere @code{sqrt (x^2)}.
+@itemize @bullet
+@item
+Se @code{radexpand} for @code{all} or @code{assume (x > 0)} tiver sido executado, 
+@code{sqrt(x^2)} simplifica para @code{x}.
+@item
+Se @code{radexpand} for @code{true} e @code{domain} for @code{real} (isso é o padrão), 
+@code{sqrt(x^2)} simplifica para @code{abs(x)}.
+@item
+Se @code{radexpand} for @code{false}, ou @code{radexpand} for @code{true} e @code{domain} for @code{complex}, 
+@code{sqrt(x^2)} não é simplificado.
+@end itemize
+
+@c CORRECT STATEMENT HERE ???
+Note que @code{domain} somente interessa quando @code{radexpand} for @code{true}.
+
+@end defvr
+
+
+@defvr {Variável de opção} radsubstflag
+Valor padrão: @code{false}
+
+@code{radsubstflag}, se @code{true}, permite a @code{ratsubst} fazer
+substituições tais como @code{u} por @code{sqrt (x)} em @code{x}.
+
+@end defvr
+
+@c NEEDS CLARIFICATION, EXAMPLES
+@defvr {Declaração} rassociative
+@code{declare (g, rassociative)} diz ao simplificador do
+Maxima que @code{g} é associativa à direita.  E.g.,
+@code{g(g(a, b), g(c, d))} simplifica para @code{g(a, g(b, g(c, d)))}.
+
+@end defvr
+
+@c NEEDS CLARIFICATION, EXAMPLES
+@deffn {Função} scsimp (@var{expr}, @var{rule_1}, ..., @var{rule_n})
+Simplificação Seq@"{u}êncial Comparativa (método devido a Stoute).
+@code{scsimp} tenta simplificar @var{expr}
+conforme as regras @var{rule_1}, ..., @var{rule_n}.
+Se uma expressão pequena for obtida, o processo
+repete-se.  De outra forma após todas as simplificações serem tentadas, @code{scsimp} retorna
+a resposta original.
+
+@c MERGE EXAMPLES INTO THIS FILE
+@code{example (scsimp)} mostra alguns exemplos.
+
+@end deffn
+
+@c NEEDS CLARIFICATION, EXAMPLES
+@defvr {Variável de opção} simpsum
+Valor padrão: @code{false}
+
+Quando @code{simpsum} for @code{true}, o resultado de uma @code{sum} é
+simplificado.  Essa simplificação pode algumas vezes estar apta a produzir uma
+forma fechada.  Se @code{simpsum} for @code{false} ou se a forma com apóstrofo @code{'sum} for usada, o valor é uma
+forma substantiva aditiva que é uma representação da notação sigma usada em
+matemática.
+
+@end defvr
+
+@c NEEDS CLARIFICATION, EXAMPLES
+@deffn {Função} sumcontract (@var{expr})
+Combina todas as parcelas de um somatório que possuem
+limites superiores e inferiores que diferem por constantes. O resultado é uma
+expressão contendo um somatório para cada escolha de cada tais somatórios
+adicionados a todos os termos extras apropriados que tiveram de ser extraídos para a forma
+dessa adição.  @code{sumcontract} combina todas as somas compatíveis e usa os
+indices de uma as somas se puder, e então tenta formar um
+índice razoável se não for usar qualquer dos fornecidos.
+
+@c WHEN IS intosum NECESSARY BEFORE sumcontract ??
+Isso pode ser necessário fazer um @code{intosum (@var{expr})} antes de @code{sumcontract}.
+
+@end deffn
+
+
+@defvr {Variável de opção} sumexpand
+Valor padrão: @code{false}
+
+Quando @code{sumexpand} for @code{true}, produtos de somas e
+somas exponeciadas simplificam para somas aninhadas.
+
+Veja também @code{cauchysum}.
+
+Exemplos:
+
+@example
+(%i1) sumexpand: true$
+(%i2) sum (f (i), i, 0, m) * sum (g (j), j, 0, n);
+                     m      n
+                    ====   ====
+                    \      \
+(%o2)                >      >     f(i1) g(i2)
+                    /      /
+                    ====   ====
+                    i1 = 0 i2 = 0
+(%i3) sum (f (i), i, 0, m)^2;
+                     m      m
+                    ====   ====
+                    \      \
+(%o3)                >      >     f(i3) f(i4)
+                    /      /
+                    ====   ====
+                    i3 = 0 i4 = 0
+@end example
+
+@end defvr
+
+@defvr {Variável de opção} sumsplitfact
+Valor padrão: @code{true}
+
+Quando @code{sumsplitfact} for @code{false},
+@c "IS APPLIED" -- UNDER WHAT CIRCUMSTANCES EXACTLY ??
+@code{minfactorial} é aplicado após um @code{factcomb}.
+
+@end defvr
+
+@c NEEDS CLARIFICATION, EXAMPLES
+@defvr {Declaração} symmetric
+@code{declare (h, symmetric)} diz ao simplificador
+do Maxima que @code{h} é uma função simétrica.  E.g., @code{h (x, z, y)} 
+simplifica para @code{h (x, y, z)}.
+
+@code{commutative} é sinônimo de @code{symmetric}.
+
+@end defvr
+
+
+@deffn {Função} unknown (@var{expr})
+Retorna @code{true} se e somente se @var{expr} contém um operador ou função
+não reconhecida pelo simplificador do Maxima.
+
+@end deffn
+

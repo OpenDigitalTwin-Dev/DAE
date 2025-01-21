@@ -1,0 +1,4 @@
+@set UPDATED 21 January 2025
+@set UPDATED-MONTH January 2025
+@set EDITION branch_5_47_base_1587_g2075fa225
+@set VERSION branch_5_47_base_1587_g2075fa225

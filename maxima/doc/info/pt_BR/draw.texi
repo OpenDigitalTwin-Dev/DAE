@@ -1,0 +1,2141 @@
+@c Language: Brazilian Portuguese, Encoding: iso-8859-1
+@c /draw.texi/1.13/Sat Jun  2 00:13:20 2007//
+@menu
+* Introdução a draw::
+* Funções e Variáveis Definidas para draw::
+@end menu
+
+
+
+
+
+@node Introdução a draw, Funções e Variáveis Definidas para draw, draw, draw
+@section Introdução a draw
+
+
+@code{draw} é uma interface entre o Maxima e o Gnuplot.
+
+Existem três funções a serem usadas n nível do Maxima: 
+@code{draw2d}, @code{draw3d} e @code{draw}.
+
+Siga o link abaixo para exemplos mais elaborados deste pacote:
+ 
+@url{http://es.geocities.com/riotorto/maxima/gpdraw}
+ 
+Voce precisará do Gnuplot 4.2 para executar este programa.
+
+
+
+
+
+
+@node Funções e Variáveis Definidas para draw,  , Introdução a draw, draw
+@section Funções e Variáveis Definidas para draw
+
+
+
+
+@defvr {Opção gráfica} xrange
+Valor padrão: @code{false}
+
+Se @code{xrange} for @code{false}, o intevalo para a coordenada @var{x} é
+calculado automaticamente.
+
+Caso o usuário deseje um intervalo específico para @var{x}, esse intervalo deve ser fornecido como uma 
+lista da forma definida pelo Maxima, como em @code{xrange=[-2, 3]}.
+
+Uma vez que essa é uma opção gráfica global, sua posição na descrição do fundo
+não é importante.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(xrange = [-3,5],
+             explicit(x^2,x,-1,1))$
+@end example
+
+Veja também @code{yrange} e @code{zrange}.
+@end defvr
+
+
+
+@defvr {Opção gráfica} yrange
+Valor padrão: @code{false}
+
+Se @code{yrange} for @code{false}, the range for the @var{y} coordinate is
+computed automatically.
+
+Se o usuário sesejar um intervalo específico para @var{y}, esse intervalo deve ser fornecido como uma 
+lista da forma definida pelo Maxima, como em @code{yrange=[-2, 3]}.
+
+Uma vez que essa é uma opção gráfica global, sua posição na descrição do fundo
+não é importante.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(yrange = [-2,3],
+             explicit(x^2,x,-1,1),
+             xrange = [-3,3])$
+@end example
+
+Veja também @code{xrange} e @code{zrange}.
+@end defvr
+
+
+
+@defvr {Opção gráfica} zrange
+Valor padrão: @code{false}
+
+Se @code{zrange} for @code{false}, o intervalo para a coordenada @var{z} é
+calculado automaticamente.
+
+Se o usuário sesejar um intervalo específico para @var{z}, esse intervalo deve ser fornecido como uma 
+lista da forma definida pelo Maxima, como em @code{zrange=[-2, 3]}.
+
+Uma vez que essa é uma opção gráfica global, sua posição na descrição do fundo
+não é importante.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw3d(yrange = [-3,3],
+             zrange = [-2,5],
+             explicit(x^2+y^2,x,-1,1,y,-1,1),
+             xrange = [-3,3])$
+@end example
+
+Veja também @code{yrange} e @code{zrange}.
+@end defvr
+
+
+
+@defvr {Opção gráfica} logx
+Valor padrão: @code{false}
+
+Se @code{logx} for @code{true}, o eixo @var{x}será desenhado em
+escala logarítmica.
+
+Uma vez que essa é uma opção gráfica global, sua posição na descrição do fundo
+não é importante.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(explicit(log(x),x,0.01,5),
+             logx = true)$
+@end example
+
+Veja também @code{logy} e @code{logz}.
+@end defvr
+
+
+
+@defvr {Opção gráfica} logy
+Valor padrão: @code{false}
+
+Se @code{logy} for @code{true}, o eixo @var{y}será desenhado em
+escala logarítmica.
+
+Uma vez que essa é uma opção gráfica global, sua posição na descrição do fundo
+não é importante.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(logy = true,
+             explicit(exp(x),x,0,5))$
+@end example
+
+Veja também @code{logx} e @code{logz}.
+@end defvr
+
+
+
+@defvr {Opção gráfica} logz
+Valor padrão: @code{false}
+
+Se @code{logz} for @code{true}, o eixo @var{z}será desenhado em
+escala logarítmica.
+
+Uma vez que essa é uma opção gráfica global, sua posição na descrição do fundo
+não é importante.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw3d(logz = true,
+             explicit(exp(u^2+v^2),u,-2,2,v,-2,2))$
+@end example
+
+Veja também @code{logx} e @code{logy}.
+@end defvr
+
+
+
+@defvr {Opção gráfica} terminal
+Valor padrão: @code{screen}
+
+Seleciona o terminal a ser usado pelo Gnuplot; os valores possíveis são:
+@code{screen} (o valor padrão), @code{png}, @code{jpg}, @code{eps}, e @code{eps_color}.
+
+Uma vez que essa é uma opção gráfica global, sua posição na descrição do fundo
+não é importante. Pode também ser usada como um argumento da função @code{draw}
+
+Exemplos:
+
+@example
+(%i1) load("draw")$
+(%i2) /* screen terminal (default) */
+      draw2d(explicit(x^2,x,-1,1))$
+(%i3) /* png file */
+      draw2d(terminal  = 'png,
+             pic_width = 300,
+             explicit(x^2,x,-1,1))$
+(%i4) /* jpg file */
+      draw2d(terminal   = 'jpg,
+             pic_width  = 300,
+             pic_height = 300,
+             explicit(x^2,x,-1,1))$
+(%i5) /* eps file */
+      draw2d(file_name = "myfile",
+             explicit(x^2,x,-1,1),
+             terminal  = 'eps)$
+@end example
+
+Veja também @code{file_name}, @code{pic_width}, e @code{pic_height}.
+@end defvr
+
+
+
+@defvr {Opção gráfica} grid
+Valor padrão: @code{false}
+
+Se @code{grid} for @code{true}, uma malha será desenhada sobre o plano @var{xy}.
+
+Uma vez que essa é uma opção gráfica global, sua posição na descrição do fundo
+não é importante.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(grid = true,
+             explicit(exp(u),u,-2,2))$
+@end example
+@end defvr
+
+
+
+@defvr {Opção gráfica} title
+Valor padrão: @code{""} (a seq@"{u}ência de caracteres vazia)
+
+A opção @code{title} armazena uma seq@"{u}ência de caracteres do Maxima com o título principal de um fundo gráfico.
+Por padrão, nenhum título é escrito.
+
+Uma vez que essa é uma opção gráfica global, sua posição na descrição do fundo
+não é importante.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(explicit(exp(u),u,-2,2),
+             title = "Exponential function")$
+@end example
+@end defvr
+
+
+
+@defvr {Opção gráfica} xlabel
+Valor padrão: @code{""} (a seq@"{u}ência de caracteres vazia)
+
+A opção @code{xlabel} armazena uma seq@"{u}ência de caracteres do Maxima com o rótulo para o eixo @var{x}.
+Por padrão, nenhum rótulo é escrito.
+
+Uma vez que essa é uma opção gráfica global, sua posição na descrição do fundo
+não é importante.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(xlabel = "Time",
+             explicit(exp(u),u,-2,2),
+             ylabel = "Population")$
+@end example
+
+Veja também @code{ylabel}, e @code{zlabel}.
+@end defvr
+
+
+
+@defvr {Opção gráfica} ylabel
+Valor padrão: @code{""} (a seq@"{u}ência de caracteres vazia)
+
+A opção @code{ylabel} armazena uma seq@"{u}ência de caracteres do Maxima com o rótulo para o eixo @var{y}.
+Por padrão, nenhum rótulo é escrito.
+
+Uma vez que essa é uma opção gráfica global, sua posição na descrição do fundo
+não é importante.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(xlabel = "Time",
+             ylabel = "Population",
+             explicit(exp(u),u,-2,2) )$
+@end example
+
+Veja também @code{xlabel}, e @code{zlabel}.
+@end defvr
+
+
+
+@defvr {Opção gráfica} zlabel
+Valor padrão: @code{""} (a seq@"{u}ência de caracteres vazia)
+
+A opção @code{zlabel} armazena uma seq@"{u}ência de caracteres do Maxima com o rótulo para o eixo @var{z}.
+Por padrão, nenhum rótulo é escrito.
+
+Uma vez que essa é uma opção gráfica global, sua posição na descrição do fundo
+não é importante.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw3d(zlabel = "Z variable",
+             ylabel = "Y variable",
+             explicit(sin(x^2+y^2),x,-2,2,y,-2,2),
+             xlabel = "X variable" )$
+@end example
+
+Veja também @code{xlabel}, e @code{ylabel}.
+@end defvr
+
+
+
+@defvr {Opção gráfica} xtics
+Valor padrão: @code{true}
+
+Se @code{xtics} for @code{true}, a marcação numérica será feitas sobre o eixo @var{x}.
+
+Uma vez que essa é uma opção gráfica global, sua posição na descrição do fundo
+não é importante.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) /* No tics in the x-axis */
+      draw2d(xtics = false,
+             explicit(exp(u),u,-2,2))$
+@end example
+
+Veja também @code{ytics}, e @code{ztics}.
+@end defvr
+
+
+
+@defvr {Opção gráfica} ytics
+Valor padrão: @code{true}
+
+Se @code{ytics} for @code{true}, a marcação numérica será feitas sobre o eixo @var{y}.
+
+Uma vez que essa é uma opção gráfica global, sua posição na descrição do fundo
+não é importante.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(ytics = false,
+             explicit(exp(u),u,-2,2),
+             xtics = false)$
+@end example
+
+Veja também @code{xtics}, e @code{ztics}.
+@end defvr
+
+
+
+@defvr {Opção gráfica} ztics
+Valor padrão: @code{true}
+
+Se @code{ztics} for @code{true}, a marcação numérica será feitas sobre o eixo @var{z}.
+
+Uma vez que essa é uma opção gráfica global, sua posição na descrição do fundo
+não é importante.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) /* No tics in the z-axis */
+      draw3d(ztics = false,
+             explicit(sin(x^2+y^2),x,-2,2,y,-2,2) )$
+@end example
+
+Veja também @code{xtics}, e @code{ytics}.
+@end defvr
+
+
+
+@defvr {Opção gráfica} rot_vertical
+Valor padrão: 60
+
+@code{rot_vertical} é o ângulo (em graus) da rotação vertical (em torno 
+do eixo @var{x}) para escolher o ponto de visualização em fundos gráficos tridimensionais.
+
+O ângulo é associado ao intervalo @math{[0, 180]}.
+
+Uma vez que essa é uma opção gráfica global, sua posição na descrição do fundo
+não é importante.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw3d(rot_vertical = 170,
+             explicit(sin(x^2+y^2),x,-2,2,y,-2,2) )$
+@end example
+
+Veja também @code{rot_horizontal}.
+@end defvr
+
+
+
+@defvr {Opção gráfica} rot_horizontal
+Valor padrão: 30
+
+@code{rot_horizontal} é o ângulo (em graus) da rotação horizontal (em torno 
+do eixo @var{z})  para escolher o ponto de visualização em fundos gráficos tridimensionais.
+
+O ângulo é associado ao intervalo @math{[0, 180]}.
+
+Uma vez que essa é uma opção gráfica global, sua posição na descrição do fundo
+não é importante.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw3d(rot_vertical = 170,
+             rot_horizontal = 360,
+             explicit(sin(x^2+y^2),x,-2,2,y,-2,2) )$
+@end example
+
+Veja também @code{rot_vertical}.
+@end defvr
+
+
+
+@defvr {Opção gráfica} xy_file
+Valor padrão: @code{""} (a seq@"{u}ência de caracteres vazia)
+
+@code{xy_file} é o nome do arquivo onde as coordenada serão armazenadas
+após um clique com o botão do mouse e pressionar a tecla 'x'. Por padrão,
+nenhuma coordenada é armazenada.
+
+Uma vez que essa é uma opção gráfica global, sua posição na descrição do fundo
+não é importante.
+@end defvr
+
+
+
+@defvr {Opção gráfica} user_preamble
+Valor padrão: @code{""} (a seq@"{u}ência de caracteres vazia)
+
+Usuários experientes de Gnuplot podem fazer uso dessa opção para ajuste fino do comportamento
+do Gnuplot escolhendo opções para serem enviadas antes do comando @code{plot} ou do
+comando @code{splot}.
+
+O valor dessa opção deve ser uma seq@"uência de caracteres ou uma lista de seq@"uência de caracteres (um por linha).
+
+Uma vez que essa é uma opção gráfica global, sua posição na descrição do fundo
+não é importante.
+
+Exemplo:
+
+O terminal @i{dumb} não é suportado pelo pacote @code{draw},
+mas é possível escolher o terminal @i{dumb} fazendo uso da opção @code{user_preamble},
+@example
+(%i1) load("draw")$
+(%i2) draw2d(explicit(exp(x)-1,x,-1,1),
+             parametric(cos(u),sin(u),u,0,2*%pi),
+             user_preamble="set terminal dumb")$
+@end example
+@end defvr
+
+
+
+@defvr {Opção gráfica} file_name
+Valor padrão: @code{"maxima_out"}
+
+Esse é o nome do arquivo onde os terminais @code{png}, @code{jpg}, @code{eps}
+e @code{eps_color} guardarão o gráfico.
+
+Uma vez que essa é uma opção gráfica global, sua posição na descrição do fundo
+não é importante. Pode também ser usada como um argumento da função @code{draw}.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(file_name = "myfile",
+             explicit(x^2,x,-1,1),
+             terminal  = 'png)$
+@end example
+
+Veja também @code{terminal}, @code{pic_width}, e @code{pic_height}.
+@end defvr
+
+
+
+@defvr {Opção gráfica} pic_width
+Valor padrão: 640
+
+Essa é a largura do arquivo de bitmap gerado pelos terminais @code{png} e @code{jpg}.
+
+Uma vez que essa é uma opção gráfica global, sua posição na descrição do fundo
+não é importante. Pode também ser usada como um argumento da função @code{draw}.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(terminal   = 'png,
+             pic_width  = 300,
+             pic_height = 300,
+             explicit(x^2,x,-1,1))$
+@end example
+
+Veja também @code{terminal}, @code{file_name}, e @code{pic_height}.
+@end defvr
+
+
+
+@defvr {Opção gráfica} pic_height
+Valor padrão: 640
+
+Essa é a altura do arquivo de bitmap gerado pelos terminais @code{png} e @code{jpg}.
+
+Uma vez que essa é uma opção gráfica global, sua posição na descrição do fundo
+não é importante. Pode também ser usada como um argumento da função @code{draw}.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(terminal   = 'png,
+             pic_width  = 300,
+             pic_height = 300,
+             explicit(x^2,x,-1,1))$
+@end example
+
+Veja também @code{terminal}, @code{file_name}, e @code{pic_width}.
+@end defvr
+
+
+@defvr {Opção gráfica} eps_width
+Valor padrão: 12
+
+Essa é a largura (medida em cm) do arquivo Postscript
+gerado pelos terminais @code{eps} e @code{eps_color}.
+
+Uma vez que essa é uma opção gráfica global, sua posição na descrição do fundo gráfico
+não é importante. Pode também ser usada como um argumento da função @code{draw}.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(terminal   = 'eps,
+             eps_width  = 3,
+             eps_height = 3,
+             explicit(x^2,x,-1,1))$
+@end example
+
+Veja também @code{terminal}, @code{file_name}, e @code{eps_height}.
+@end defvr
+
+
+
+@defvr {Opção gráfica} eps_height
+Valor padrão: 8
+
+Essa é a altura (medida em cm) do arquivo Postscript
+gerado pelos terminais @code{eps} e @code{eps_color}.
+
+Uma vez que essa é uma opção gráfica global, sua posição na descrição do fundo gráfico
+não é importante. Pode também ser usada como um argumento da função @code{draw}.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(terminal   = 'eps,
+             eps_width  = 3,
+             eps_height = 3,
+             explicit(x^2,x,-1,1))$
+@end example
+
+Veja também @code{terminal}, @code{file_name}, e @code{eps_width}.
+@end defvr
+
+
+
+@defvr {Opção gráfica} axis_bottom
+Valor padrão: @code{true}
+
+Se @code{axis_bottom} for @code{true}, o eixo inferior é mostrado em fundos gráficos bidimensionais.
+
+Uma vez que essa é uma opção gráfica global, sua posição na descrição do fundo
+não é importante.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(axis_bottom = false,
+             explicit(x^3,x,-1,1))$
+@end example
+
+Veja também @code{axis_left},  @code{axis_top}, @code{axis_right}, e @code{axis_3d}.
+@end defvr
+
+
+
+@defvr {Opção gráfica} axis_left
+Valor padrão: @code{true}
+
+Se @code{axis_left} for @code{true}, o eixo da esquerda é mostrado em fundos gráficos bidimensionais.
+
+Uma vez que essa é uma opção gráfica global, sua posição na descrição do fundo
+não é importante.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(axis_left = false,
+             explicit(x^3,x,-1,1))$
+@end example
+
+Veja também @code{axis_bottom},  @code{axis_top}, @code{axis_right}, e @code{axis_3d}.
+@end defvr
+
+
+
+@defvr {Opção gráfica} axis_top
+Valor padrão: @code{true}
+
+Se @code{axis_top} for @code{true}, o eixo superior é mostrado em fundos gráficos bidimensionais.
+
+Uma vez que essa é uma opção gráfica global, sua posição na descrição do fundo
+não é importante.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(axis_top = false,
+             explicit(x^3,x,-1,1))$
+@end example
+
+Veja também @code{axis_bottom},  @code{axis_left}, @code{axis_right}, e @code{axis_3d}.
+@end defvr
+
+
+
+@defvr {Opção gráfica} axis_right
+Valor padrão: @code{true}
+
+Se @code{axis_right} for @code{true}, o eixo da direita é mostrado em fundos gráficos bidimensionais.
+
+Uma vez que essa é uma opção gráfica global, sua posição na descrição do fundo
+não é importante.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(axis_right = false,
+             explicit(x^3,x,-1,1))$
+@end example
+
+Veja também @code{axis_bottom},  @code{axis_left}, @code{axis_top}, e @code{axis_3d}.
+@end defvr
+
+
+
+@defvr {Opção gráfica} axis_3d
+Valor padrão: @code{true}
+
+Se @code{axis_3d} for @code{true}, os eixos @var{x}, @var{y} e @var{z} são mostrados em fundos gráficos tridimensionais.
+
+Uma vez que essa é uma opção gráfica global, sua posição na descrição do fundo
+não é importante.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw3d(axis_3d = false,
+             explicit(sin(x^2+y^2),x,-2,2,y,-2,2) )$
+@end example
+
+Veja também @code{axis_bottom},  @code{axis_left}, @code{axis_top}, e @code{axis_right} para eixos em duas dimensões.
+@end defvr
+
+
+
+
+@defvr {Opção gráfica} palette
+Valor padrão: @code{color}
+
+@code{palette} indica como mapear os valores reais de uma matriz
+passada para o objeto @code{image} sobre componentes de cor.
+
+@code{palette} é um vetor comprimento três com componentes 
+variando de -36 a +36; cada valor é um índice para uma fórmula mapeando os níveis
+sobre as cores vermelho, verde e blue, respectivamente:
+@example
+ 0: 0               1: 0.5           2: 1
+ 3: x               4: x^2           5: x^3
+ 6: x^4             7: sqrt(x)       8: sqrt(sqrt(x))
+ 9: sin(90x)       10: cos(90x)     11: |x-0.5|
+12: (2x-1)^2       13: sin(180x)    14: |cos(180x)|
+15: sin(360x)      16: cos(360x)    17: |sin(360x)|
+18: |cos(360x)|    19: |sin(720x)|  20: |cos(720x)|
+21: 3x             22: 3x-1         23: 3x-2
+24: |3x-1|         25: |3x-2|       26: (3x-1)/2
+27: (3x-2)/2       28: |(3x-1)/2|   29: |(3x-2)/2|
+30: x/0.32-0.78125 31: 2*x-0.84     32: 4x;1;-2x+1.84;x/0.08-11.5
+33: |2*x - 0.5|    34: 2*x          35: 2*x - 0.5
+36: 2*x - 1
+@end example
+números negativos significam componentes negativos de cores.
+
+@code{palette = gray} and @code{palette = color} are short cuts for
+@code{palette = [3,3,3]} and @code{palette = [7,5,15]}, respectively.
+
+Uma vez que essa é uma opção gráfica global, sua posição na descrição do fundo do gráfico
+não é importante.
+
+Exemplos:
+
+@example
+(%i1) load("draw")$
+(%i2) im: apply(
+           'matrix,
+            makelist(makelist(random(200),i,1,30),i,1,30))$
+(%i3) /* palette = color, default */
+      draw2d(image(im,0,0,30,30))$
+(%i4) draw2d(palette = gray, image(im,0,0,30,30))$
+(%i5) draw2d(palette = [15,20,-4],
+             colorbox=false,
+             image(im,0,0,30,30))$
+@end example
+
+Veja também @code{colorbox}. 
+@end defvr
+
+
+
+
+@defvr {Opção gráfica} colorbox
+Valor padrão: @code{true}
+
+If @code{colorbox} is @code{true}, a color scale is drawn together with
+@code{image} objects.
+
+Since this is a global graphics option, its position in the scene description
+does not matter.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) im: apply('matrix,
+                 makelist(makelist(random(200),i,1,30),i,1,30))$
+(%i3) draw2d(image(im,0,0,30,30))$
+(%i4) draw2d(colorbox=false, image(im,0,0,30,30))$
+@end example
+
+Veja também @code{palette}.
+@end defvr
+
+
+
+@defvr {Opção gráfica} enhanced3d
+Valor padrão: @code{false}
+
+Se @code{enhanced3d} for @code{true}, superfícies são coloridas em gráficos tridimensionais;
+em outras palavras, pode escolher o modo pm3d do Gnuplot.
+
+Veja a opção @code{palette} para aprender como paletas são especificadas.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw3d(surface_hide = true,
+             enhanced3d   = true,
+             palette      = gray,
+             explicit(20*exp(-x^2-y^2)-10,x,-3,3,y,-3,3))$
+@end example
+@end defvr
+
+
+
+@defvr {Opção gráfica} point_size
+Valor padrão: 1
+
+@code{point_size} escolhe o tamanho para os pontos do gráfico. Esse valor deve ser um
+número não negativo.
+
+Essa opção afeta os seguintes objetos gráficos:
+@itemize @bullet
+@item
+@code{gr2d}: @code{points}.
+
+@item
+@code{gr3d}: @code{points}.
+@end itemize
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(points(makelist([random(20),random(50)],k,1,10)),
+             point_size = 5,
+             points(makelist(k,k,1,20),makelist(random(30),k,1,20)))$
+@end example
+@end defvr
+
+
+
+@defvr {Opção gráfica} point_type
+Valor padrão: 1
+
+@code{point_type} indica como pontos isolados são mostrados; o valor dessa
+opção pode ser qualquer índice inteiro maior que ou igual a -1, ou o nome de
+um estilo de ponto: @code{$none} (-1), @code{dot} (0), @code{plus} (1), @code{multiply} (2),
+@code{asterisk} (3), @code{square} (4), @code{filled_square} (5), @code{circle} (6),
+@code{filled_circle} (7), @code{up_triangle} (8), @code{filled_up_triangle} (9),
+@code{down_triangle} (10), @code{filled_down_triangle} (11), @code{diamant} (12) e
+@code{filled_diamant} (13).
+
+Essa opção afeta os seguintes objetos gráficos:
+@itemize @bullet
+@item
+@code{gr2d}: @code{points}.
+
+@item
+@code{gr3d}: @code{points}.
+@end itemize
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(xrange = [0,10],
+             yrange = [0,10],
+             point_size = 3,
+             point_type = 1,
+             points([[1,1],[5,1],[9,1]]),
+             point_type = 2,
+             points([[1,2],[5,2],[9,2]]),
+             point_type = asterisk,
+             points([[1,3],[5,3],[9,3]]),
+             point_type = 4,
+             points([[1,4],[5,4],[9,4]]),
+             point_type = 5,
+             points([[1,5],[5,5],[9,5]]),
+             point_type = 6,
+             points([[1,6],[5,6],[9,6]]),
+             point_type = filled_circle,
+             points([[1,7],[5,7],[9,7]]),
+             point_type = 8,
+             points([[1,8],[5,8],[9,8]]),
+             point_type = filled_diamant,
+             points([[1,9],[5,9],[9,9]]) )$
+@end example
+@end defvr
+
+
+
+@defvr {Opção gráfica} points_joined
+Valor padrão: @code{false}
+
+Se @code{points_joined} for @code{true}, pontos são unidos por linhas retas.
+
+Essa opção afeta os seguintes objetos gráficos:
+@itemize @bullet
+@item
+@code{gr2d}: @code{points}.
+
+@item
+@code{gr3d}: @code{points}.
+@end itemize
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(xrange        = [0,10],
+             yrange        = [0,4],
+             point_size    = 3,
+             point_type    = 1,
+             line_type     = 3,
+             points([[1,1],[5,1],[9,1]]),
+             points_joined = true,
+             point_type    = 3,
+             line_type     = 5,
+             points([[1,2],[5,2],[9,2]]),
+             point_type    = 5,
+             line_type     = 8,
+             line_width    = 7,
+             points([[1,3],[5,3],[9,3]]) )$
+@end example
+@end defvr
+
+
+
+@defvr {Opção gráfica} filled_func
+Valor padrão: @code{false}
+
+@code{filled_func} indica se uma função é preenchida (@code{true})
+ou não (@code{false}).
+
+Essa opção afeta somente objetos gráfico bidimensional @code{explicit}.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(fill_color  = red,
+             filled_func = true,
+             explicit(sin(x),x,0,10) )$
+@end example
+
+Veja também @code{fill_color}.
+@end defvr
+
+
+
+@defvr {Opção gráfica} transparent
+Valor padrão: @code{false}
+
+Se @code{transparent} for @code{true}, regiões internas de poligonos são
+preenchidas de acordo com @code{fill_color}.
+
+Essa opção afeta os seguintes objetos gráficos:
+@itemize @bullet
+@item
+@code{gr2d}: @code{polygon}, @code{rectangle}, e @code{ellipse}.
+@end itemize
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(polygon([[3,2],[7,2],[5,5]]),
+             transparent = true,
+             color       = blue,
+             polygon([[5,2],[9,2],[7,5]]) )$
+@end example
+@end defvr
+
+
+
+@defvr {Opção gráfica} border
+Valor padrão: @code{true}
+
+Se @code{border} for @code{true}, bordas de polígonos são colorizadas
+de acordo com @code{line_type} e @code{line_width}.
+
+Essa opção afeta os seguintes objetos gráficos:
+@itemize @bullet
+@item
+@code{gr2d}: @code{polygon}, @code{rectangle}, e @code{ellipse}.
+@end itemize
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(color       = brown,
+             line_width  = 8,
+             polygon([[3,2],[7,2],[5,5]]),
+             border      = false,
+             fill_color  = blue,
+             polygon([[5,2],[9,2],[7,5]]) )$
+@end example
+@end defvr
+
+
+
+@defvr {Opção gráfica} head_both
+Valor padrão: @code{false}
+
+Se @code{head_both} for @code{true}, vetores são mostrados com seta dupla na ponta.
+Se @code{false}, somente uma seta é mostrada.
+
+Essa opção somente é relevante para objetos do tipo @code{vector}.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(xrange      = [0,8],
+             yrange      = [0,8],
+             head_length = 0.7,
+             vector([1,1],[6,0]),
+             head_both   = true,
+             vector([1,7],[6,0]) )$
+@end example
+
+Veja também @code{head_length}, @code{head_angle}, e @code{head_type}. 
+@end defvr
+
+
+
+@defvr {Opção gráfica} head_length
+Valor padrão: 2
+
+@code{head_length} indica, em unidades do eixo @var{x}, o comprimento da ponta da seta do vetor.
+
+Essa opção é relevante somente para objetos do tipo @code{vector}.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(xrange      = [0,12],
+             yrange      = [0,8],
+             vector([0,1],[5,5]),
+             head_length = 1,
+             vector([2,1],[5,5]),
+             head_length = 0.5,
+             vector([4,1],[5,5]),
+             head_length = 0.25,
+             vector([6,1],[5,5]))$
+@end example
+
+Veja também @code{head_both}, @code{head_angle}, e @code{head_type}. 
+@end defvr
+
+
+
+@defvr {Opção gráfica} head_angle
+Valor padrão: 45
+
+@code{head_angle} indica o ângulo, em graus, entre a ponta da seta do vetor e
+o segmento que forma o corpo do vetor.
+
+Essa opção é relevante somente para objetos do tipo @code{vector}.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(xrange      = [0,10],
+             yrange      = [0,9],
+             head_length = 0.7,
+             head_angle  = 10,
+             vector([1,1],[0,6]),
+             head_angle  = 20,
+             vector([2,1],[0,6]),
+             head_angle  = 30,
+             vector([3,1],[0,6]),
+             head_angle  = 40,
+             vector([4,1],[0,6]),
+             head_angle  = 60,
+             vector([5,1],[0,6]),
+             head_angle  = 90,
+             vector([6,1],[0,6]),
+             head_angle  = 120,
+             vector([7,1],[0,6]),
+             head_angle  = 160,
+             vector([8,1],[0,6]),
+             head_angle  = 180,
+             vector([9,1],[0,6]) )$
+@end example
+
+Veja também @code{head_both}, @code{head_length}, e @code{head_type}. 
+@end defvr
+
+
+
+@defvr {Opção gráfica} head_type
+Valor padrão: @code{filled}
+
+@code{head_type} é usada para especificar como a ponta é mostrada. Valores
+possíveis são: @code{filled} (ponta fechada e preenchida), @code{empty}
+(ponta fechada mas não preenchida), e @code{nofilled} (ponta aberta).
+
+Essa opção é relevante somente para objetos do tipo @code{vector}.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(xrange      = [0,12],
+             yrange      = [0,10],
+             head_length = 1,
+             vector([0,1],[5,5]), /* default type */
+             head_type = 'empty,
+             vector([3,1],[5,5]),
+             head_type = 'nofilled,
+             vector([6,1],[5,5]))$
+@end example
+
+Veja também @code{head_both}, @code{head_angle}, e @code{head_length}. 
+@end defvr
+
+
+
+@defvr {Opção gráfica} label_alignment
+Valor padrão: @code{center}
+
+@code{label_alignment} é usado para especificar onde escrever rótulos com
+relação às coordenadas fornecidas. Valores possíveis são: @code{center},
+@code{left}, e @code{right}.
+
+Essa opção é relevante somente para objetos do tipo @code{label}.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(xrange          = [0,10],
+             yrange          = [0,10],
+             points_joined   = true,
+             points([[5,0],[5,10]]),
+             color           = blue,
+             label("Centered alignment (default)",5,2),
+             label_alignment = 'left,
+             label("Left alignment",5,5),
+             label_alignment = 'right,
+             label("Right alignment",5,8))$
+@end example
+
+Veja também @code{label_orientation}, e @code{color}. 
+@end defvr
+
+
+
+@defvr {Opção gráfica} label_orientation
+Valor padrão: @code{horizontal}
+
+@code{label_orientation} é usada para especificar a orientação dos rótulos.
+Valores possíveis são: @code{horizontal}, e @code{vertical}.
+
+Essa opção é relevante somente para objetos do tipo @code{label}.
+
+Exemplo:
+
+Nesse exemplo, um ponto fictício é adicionado para firmar uma imagem.
+o pacote @code{draw} precisa sempre de dados para montar um fundo.
+@example
+(%i1) load("draw")$
+(%i2) draw2d(xrange     = [0,10],
+             yrange     = [0,10],
+             point_size = 0,
+             points([[5,5]]),
+             color      = navy,
+             label("Horizontal orientation (default)",5,2),
+             label_orientation = 'vertical,
+             color             = "#654321",
+             label("Vertical orientation",1,5))$
+@end example
+
+Veja também @code{label_alignment}, e @code{color}. 
+@end defvr
+
+
+
+@defvr {Opção gráfica} color
+Valor padrão: @code{"black"}
+
+@code{color} especifica a cor para o desenho de linhas, pontos, bordas de
+polígonos e rótulos.
+
+Cores podem ser fornecidas como nomes ou em código hexadecimal @i{rgb}.
+
+Nomes de cores disponíveis atualmente são: 
+@code{"white"}, @code{"black"}, @code{"gray0"}, @code{"grey0"}, @code{"gray10"},
+@code{"grey10"}, @code{"gray20"}, @code{"grey20"}, @code{"gray30"}, @code{"grey30"},
+@code{"gray40"}, @code{"grey40"}, @code{"gray50"}, @code{"grey50"}, @code{"gray60"},
+@code{"grey60"}, @code{"gray70"}, @code{"grey70"}, @code{"gray80"}, @code{"grey80"},
+@code{"gray90"}, @code{"grey90"}, @code{"gray100"}, @code{"grey100"}, @code{"gray"},
+@code{"grey"}, @code{"light-gray"}, @code{"light-grey"}, @code{"dark-gray"},
+@code{"dark-grey"}, @code{"red"}, @code{"light-red"}, @code{"dark-red"}, @code{"yellow"},
+@code{"light-yellow"}, @code{"dark-yellow"}, @code{"green"}, @code{"light-green"},
+@code{"dark-green"}, @code{"spring-green"}, @code{"forest-green"}, @code{"sea-green"},
+@code{"blue"}, @code{"light-blue"}, @code{"dark-blue"}, @code{"midnight-blue"}, 
+@code{"navy"}, @code{"medium-blue"}, @code{"royalblue"}, @code{"skyblue"}, 
+@code{"cyan"}, @code{"light-cyan"}, @code{"dark-cyan"}, @code{"magenta"}, 
+@code{"light-magenta"}, @code{"dark-magenta"}, @code{"turquoise"}, 
+@code{"light-turquoise"}, @code{"dark-turquoise"}, @code{"pink"}, @code{"light-pink"},
+@code{"dark-pink"}, @code{"coral"}, @code{"light-coral"}, @code{"orange-red"},
+@code{"salmon"}, @code{"light-salmon"}, @code{"dark-salmon"}, @code{"aquamarine"},
+@code{"khaki"}, @code{"dark-khaki"}, @code{"goldenrod"}, @code{"light-goldenrod"},
+@code{"dark-goldenrod"}, @code{"gold"}, @code{"beige"}, @code{"brown"}, @code{"orange"},
+@code{"dark-orange"}, @code{"violet"}, @code{"dark-violet"}, @code{"plum"} and @code{"purple"}.
+
+Componentes cromáticos em código hexadecimal são introduzidos na forma @code{"#rrggbb"}.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(explicit(x^2,x,-1,1), /* default is black */
+             color = "red",
+             explicit(0.5 + x^2,x,-1,1),
+             color = blue,
+             explicit(1 + x^2,x,-1,1),
+             color = "light-blue", /* double quotes if - is used */
+             explicit(1.5 + x^2,x,-1,1),
+             color = "#23ab0f",
+             label("Esse é um rótulo",0,1.2)  )$
+@end example
+
+Veja também @code{fill_color}.
+@end defvr
+
+
+
+@defvr {Opção gráfica} fill_color
+Valor padrão: @code{"red"}
+
+@code{fill_color} especifica a cor para preenchimento de polígonos e
+funções explicitamente bidimensionais.
+
+Veja @code{color} para aprender como cores são especificadas.
+@end defvr
+
+
+
+@defvr {Opção gráfica} line_width
+Valor padrão: 1
+
+@code{line_width} é a lagura das linhas do gráfico.
+Seu valor deve ser um número positivo.
+
+Essa opção afeta os seguintes objetos gráficos:
+@itemize @bullet
+@item
+@code{gr2d}: @code{points}, @code{polygon}, @code{rectangle}, 
+@code{ellipse}, @code{vector}, @code{explicit}, @code{implicit}, 
+@code{parametric} e @code{polar}.
+
+@item
+@code{gr3d}: @code{points} e @code{parametric}.
+@end itemize
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(explicit(x^2,x,-1,1), /* default width */
+             line_width = 5.5,
+             explicit(1 + x^2,x,-1,1),
+             line_width = 10,
+             explicit(2 + x^2,x,-1,1))$
+@end example
+
+Veja também @code{line_type}.
+@end defvr
+
+
+
+@defvr {Opção gráfica} line_type
+Valor padrão: @code{solid}
+
+@code{line_type} indica como linhas são mostradas; valores possíveis são
+@code{solid} e @code{dots}.
+
+Essa opção afeta os seguintes objetos gráficos:
+@itemize @bullet
+@item
+@code{gr2d}: @code{points}, @code{polygon}, @code{rectangle}, 
+@code{ellipse}, @code{vector}, @code{explicit}, @code{implicit}, 
+@code{parametric} e @code{polar}.
+
+@item
+@code{gr3d}: @code{points}, @code{explicit}, @code{parametric} e @code{parametric_surface}.
+@end itemize
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(line_type = dots,
+             explicit(1 + x^2,x,-1,1),
+             line_type = solid, /* default */
+             explicit(2 + x^2,x,-1,1))$
+@end example
+
+Veja também @code{line_width}.
+@end defvr
+
+
+
+@defvr {Opção gráfica} nticks
+Valor padrão: 30
+
+@code{nticks} é o número de amostra de pontos usado pelas rotinas de montagem de gráfico.
+
+Essa opção afeta os seguintes objetos gráficos:
+@itemize @bullet
+@item
+@code{gr2d}: @code{ellipse}, @code{explicit}, @code{parametric} e @code{polar}.
+
+@item
+@code{gr3d}: @code{parametric}.
+@end itemize
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(transparent = true,
+             ellipse(0,0,4,2,0,180),
+             nticks = 5,
+             ellipse(0,0,4,2,180,180) )$
+@end example
+@end defvr
+
+
+
+@defvr {Opção gráfica} adapt_depth
+Valor padrão: 10
+
+@code{adapt_depth} é o número máximo de quebras usado pelas rotinas adaptativos de impressão.
+
+Essa opção é relevante somente para funções 2d @code{explicitas}.
+@end defvr
+
+
+
+@defvr {Opção gráfica} key
+Valor padrão: @code{""} (a seq@"{u}ência de caracteres vazia)
+
+@code{key} é o nome de uma função na legenda. Se @code{key} é uma
+seq@"{u}ência de caracteres vazia, nenhuma chave é atribuída à função.
+
+Essa opção afeta os seguintes objetos gráficos:
+@itemize @bullet
+@item
+@code{gr2d}: @code{points}, @code{polygon}, @code{rectangle},
+@code{ellipse}, @code{vector}, @code{explicit}, @code{implicit},
+@code{parametric}, e @code{polar}.
+
+@item
+@code{gr3d}: @code{points}, @code{explicit}, @code{parametric},
+e @code{parametric_surface}.
+@end itemize
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(key = "Seno",
+             explicit(sin(x),x,0,10),
+             key = "Cosseno",
+             line_type = 3,
+             explicit(cos(x),x,0,10) )$
+@end example
+@end defvr
+
+
+
+@defvr {Opção gráfica} xu_grid
+Valor padrão: 30
+
+@code{xu_grid} é o número de coordenadas da primeira variável
+(@code{x} na forma explícita e o número de coordenadas de @code{u} em superfícies tridimensionais na forma paramétrica) para 
+contruir a grade dos pontos de amostra.
+
+Essa opção afeta os seguintes objetos gráficos:
+@itemize @bullet
+@item
+@code{gr3d}: @code{explicit} e @code{parametric_surface}.
+@end itemize
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw3d(xu_grid = 10,
+             yv_grid = 50,
+             explicit(x^2+y^2,x,-3,3,y,-3,3) )$
+@end example
+
+Veja também @code{yv_grid}.
+@end defvr
+
+
+
+@defvr {Opção gráfica} yv_grid
+Valor padrão: 30
+
+@code{yv_grid} é o número de coordenadas da segunda variável
+(@code{y} na forma explícita e o número de coordenadas de @code{v} em superfícies tridimensionais na forma paramétrica) para 
+construir a grade dos pontos de amostra.
+
+Essa opção afeta os seguintes objetos gráficos:
+@itemize @bullet
+@item
+@code{gr3d}: @code{explicit} e @code{parametric_surface}.
+@end itemize
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw3d(xu_grid = 10,
+             yv_grid = 50,
+             explicit(x^2+y^2,x,-3,3,y,-3,3) )$
+@end example
+
+Veja também @code{xu_grid}.
+@end defvr
+
+
+
+@defvr {Opção gráfica} surface_hide
+Valor padrão: @code{false}
+
+Se @code{surface_hide} for @code{true}, partes escondidas não são mostradas no gráfico em superfícies tridimensioais.
+
+Uma vez que essa é uma opção gráfica global, sua posição na descrição do fundo
+não é importante.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw(columns=2,
+           gr3d(explicit(exp(sin(x)+cos(x^2)),x,-3,3,y,-3,3)),
+           gr3d(surface_hide = true,
+                explicit(exp(sin(x)+cos(x^2)),x,-3,3,y,-3,3)) )$
+@end example
+@end defvr
+
+
+
+@defvr {Opção gráfica} contour
+Valor padrão: @code{none}
+
+Option @code{contour} torna o usuário capaz de selecionar onde imprimir linhas de contorno.
+Valores possíveis são:
+
+@itemize @bullet
+
+@item
+@code{none}:
+nenhuma linha de contorno é mostrada.
+
+@item
+@code{base}:
+linhas de contorno são projetadas no plano xy.
+
+@item
+@code{surface}:
+linhas de contorno são mostradas sobre a superfície.
+
+@item
+@code{both}:
+duas linhas de contorno são mostradas: no plano xy e sobre a superfície.
+
+@item
+@code{map}:
+linhas de contorno são projetadas sobre o plano xy, e o ponto de boservação é
+escolhido na vertical.
+
+@end itemize
+
+Uma vez que essa é uma opção gráfica global, sua posição na descrição do fundo
+não é importante.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw3d(explicit(20*exp(-x^2-y^2)-10,x,0,2,y,-3,3),
+             contour_levels = 15,
+             contour        = both,
+             surface_hide   = true) $
+@end example
+@end defvr
+
+
+
+@defvr {Opção gráfica} contour_levels
+Valor padrão: 5
+
+@code{contour_levels} é o número de níveis em gráficos de contorno.
+
+Uma vez que essa é uma opção gráfica global, sua posição na descrição do fundo
+não é importante.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw3d(explicit(20*exp(-x^2-y^2)-10,x,0,2,y,-3,3),
+             contour_levels = 15,
+             contour        = both,
+             surface_hide   = true) $
+@end example
+@end defvr
+
+
+
+@defvr {Opção gráfica} columns
+Valor padrão: 1
+
+@code{columns} é o número de colunas em gráficos multiplos.
+
+Uma vez que essa é uma opção gráfica global, sua posição na descrição do fundo do gráfico
+não é importante. Pode também ser usado como um argumento da função @code{draw}.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) scene1: gr2d(title="Elipse",
+                   nticks=30,
+                   parametric(2*cos(t),5*sin(t),t,0,2*%pi))$
+(%i3) scene2: gr2d(title="Triângulo",
+                   polygon([4,5,7],[6,4,2]))$
+(%i4) draw(scene1, scene2, columns = 2)$
+@end example
+
+@end defvr
+
+
+
+@defvr {Opção gráfica} ip_grid
+Valor padrão: @code{[50, 50]}
+
+@code{ip_grid} escolhe a grade para a primeira amostragem em gráficos implícitos.
+
+Essa opção é relevante somente para @code{implicit} objects.
+@end defvr
+
+
+
+@defvr {Opção gráfica} ip_grid_in
+Valor padrão: @code{[5, 5]}
+
+@code{ip_grid_in} escolhe a grade para a segunda amostragem em gráficos implícitos.
+
+Essa opção é relevante somente para @code{implicit} objects.
+@end defvr
+
+
+
+
+
+
+
+
+
+@deffn {Construtor de fundo gráfico} gr2d (@var{opção gráfica}, ..., @var{objeto gráfico}, ...)
+
+A função @code{gr2d} constrói um objeto descrevendo um fundo gráfico em duas dimensões. Arguments are
+@i{opções gráficas} e @i{objetos gráficos}. Esse fundo gráfico é interpretado
+seq@"{u}êncialmente: @i{opções gráficas} afetam aqueles @i{objetos gráficos} colocados
+imediatamente à sua direita.
+
+Para fazer uso dessa função escreva primeiramente @code{load("draw")}.
+
+Adiante encontra-se uma lista de @i{objetos gráficos} disponívies para fundos gráficos em duas dimensões:
+
+@itemize @bullet
+@item
+@code{points([[x1,y1], [x2,y2], [x3,y3],...])} ou @code{points([x1,x2,x3,...], [y1,y2,y3,...])}:
+posiciona os pontos @code{[x1,y1]}, @code{[x2,y2]}, @code{[x2,y2]}, ... no gráfico.
+
+Esse objeto é efetado pelas seguintes @i{opções gráficas}: @code{point_size}, 
+@code{point_type}, @code{points_joined}, @code{line_width}, @code{key},
+@code{line_type} e @code{color}.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(key           = "Small points",
+             points(makelist([random(20),random(50)],k,1,10)),
+             point_type    = 6,
+             point_size    = 3,
+             points_joined = true,
+             key           = "Great points",
+             points(makelist(k,k,1,20),makelist(random(30),k,1,20)))$
+@end example
+
+@item
+@code{polygon([[x1,y1], [x2,y2], [x3,y3],...])} ou @code{polygon([x1,x2,x3,...], [y1,y2,y3,...])}:
+desenha um polígono com vértices @code{[x1,y1]}, @code{[x2,y2]}, @code{[x2,y2]}, ... no plano.
+
+Esse objeto é afetado pelas seguintes @i{opçs gráficas}: @code{transparent}, 
+@code{fill_color}, @code{border}, @code{line_width}, @code{key},
+@code{line_type} @code{color}.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(color      = "#e245f0",
+             line_width = 8,
+             polygon([[3,2],[7,2],[5,5]]),
+             border      = false,
+             fill_color  = yellow,
+             polygon([[5,2],[9,2],[7,5]]) )$
+@end example
+
+
+
+@item
+@code{rectangle([x1,y1], [x2,y2])}:
+desenha um retângulo partindo do vértice @code{[x1,y1]} e terminando no vértice @code{[x2,y2]} oposto ao primeiro.
+
+Esse objeto é afetado pelas seguintes @i{opções gráficas}: @code{transparent}, 
+@code{fill_color}, @code{border}, @code{line_width}, @code{key},
+@code{line_type} e @code{color}.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(fill_color  = red,
+             line_width  = 6,
+             line_type   = dots,
+             transparent = false,
+             fill_color   = blue,
+             rectangle([-2,-2],[8,-1]),   /* opposite vertices */
+             transparent = true,
+             line_type   = solid,
+             line_width  = 1,
+             rectangle([9,4],[2,-1.5]),
+             xrange      = [-3,10],
+             yrange      = [-3,4.5] )$
+@end example
+
+
+@item
+@code{ellipse(xc, yc, a, b, ang1, ang2)}:
+desenha uma elipse com centro em @code{[xc, yc]} com semi-eixo maior @code{a} e
+semi-eixo menor @code{b} traçando um arco de elipse que se inicia no ângulo @code{ang1} e que vai
+até o ângulo @code{ang2}.
+semi axis @code{a} e @code{b}, respectively, from angle @code{ang1} to angle
+@code{ang2}.
+
+Esse objeto é afetado pelas seguintes @i{opções gráficas}: @code{nticks}, 
+@code{transparent}, @code{fill_color}, @code{border}, @code{line_width}, 
+@code{line_type}, @code{key} e @code{color}.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(transparent = false,
+             fill_color  = 8,
+             color       = gray30,
+             transparent = false,
+             line_width  = 5,
+             ellipse(0,6,3,2,270,-270),  /* center (x,y), a, b, start & end in degrees */
+             transparent = true,
+             color       = blue,
+             line_width  = 3,
+             ellipse(2.5,6,2,3,30,-90),
+             xrange      = [-3,6],
+             yrange      = [2,9] )$
+@end example
+
+
+@item
+@code{label(rótulo,x,y)}:
+escreve o @code{rótulo} no ponto @code{[x,y]}.
+
+Esse objeto é afetado pelas seguintes @i{opções gráficas}: @code{label_alignment}, 
+@code{label_orientation} e @code{color}.
+
+Exemplo:
+
+Nesse exemplo, um ponto imaginário é adicionado para firmar a imagem.
+O pacote @code{draw} precisa sempre da dados para desenhar um fundo.
+Essas cores podem mudar em diferentes terminais.
+@example
+(%i1) load("draw")$
+(%i2) draw2d(explicit(x^2,x,-1,1),
+             color = "red",
+             label("Label in red",0,0.3),
+             color = "#0000ff",
+             label("Label in blue",0,0.6),
+             color = "light-blue", /* double quotes if - is used */
+             label("Rótulo em light-blue",0,0.9)  )$
+@end example
+
+
+@item
+@code{vector([x,y], [dx,dy])}:
+desenha um vetor de componentes ortogonais @code{[dx,dy]} com orígem eno ponto @code{[x,y]}.
+
+Esse objeto é afetado pelas seguintes @i{opções gráficas}: @code{head_both}, 
+@code{head_length}, @code{head_angle}, @code{head_type}, @code{line_width}, 
+@code{line_type} e @code{key}.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(xrange      = [0,12],
+             yrange      = [0,10],
+             head_length = 1,
+             vector([0,1],[5,5]), /* default type */
+             head_type = 'empty,
+             vector([3,1],[5,5]),
+             head_both = true,
+             head_type = 'nofilled,
+             line_type = dots,
+             vector([6,1],[5,5]))$
+@end example
+
+
+@item
+@code{explicit(fcn,var,minval,maxval)}:
+monta o gráfico da função explícita @code{fcn}, com variável @code{var} assumindo valores
+de @code{minval} a @code{maxval}.
+
+Esse objeto é afetado pelas seguintes @i{opções gráficas}: @code{nticks}, 
+@code{adapt_depth}, @code{line_width}, @code{line_type}, @code{key},
+@code{filled_func}, @code{fill_color} e @code{color}.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(line_width = 3,
+             color      = blue,
+             explicit(x^2,x,-3,3) )$
+(%i3) draw2d(fill_color  = brown,
+             filled_func = true,
+             explicit(x^2,x,-3,3) )$
+@end example
+
+
+@item
+@code{implicit(fcn,x-var,x-minval,x-maxval,y-var,y-minval,y-maxval)}:
+monta o gráfico da função implícita definida por @code{fcn}, com variável @code{x-var} assumindo
+de @code{x-minval} a @code{x-maxval}, e variável @code{y-var} assumindo valores
+de @code{y-minval} a @code{y-maxval}.
+
+Esse objeto é afetado pelas seguintes @i{opções gráficas}: @code{ip_grid}, 
+@code{ip_grid_in}, @code{line_width}, @code{line_type}, @code{key} e @code{color}.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(terminal  = eps,
+             grid      = true,
+             line_type = solid,
+             key       = "y^2=x^3-2*x+1",
+             implicit(y^2=x^3-2*x+1, x, -4,4, y, -4,4),
+             line_type = dots,
+             key       = "x^3+y^3 = 3*x*y^2-x-1",
+             implicit(x^3+y^3 = 3*x*y^2-x-1, x, -4,4, y, -4,4),
+             title     = "Duas funções implícitas" )$
+@end example
+
+@item
+@code{polar(radius,ang,minang,maxang)}:
+plots function @code{radius(ang)} defined in polar coordinates, com a variável @code{ang}
+assumindo valores de @code{minang} a @code{maxang}.
+
+Esse objeto é afetado pelas seguintes @i{opções gráficas}: @code{nticks}, 
+@code{line_width}, @code{line_type}, @code{key} e @code{color}.
+
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(user_preamble = "set grid polar",
+             nticks        = 200,
+             xrange        = [-5,5],
+             yrange        = [-5,5],
+             line_type     = 6,
+             line_width    = 3,
+             title         = "Hyperbolic Spiral",
+             polar(10/theta,theta,1,10*%pi) )$
+@end example
+
+
+@item
+@code{parametric(xfun,yfun,par,parmin,parmax)}:
+monta o gráfico da função paramétrica @code{[xfun,yfun]}, com parâmetro @code{par}
+assumindo valores de @code{parmin} a @code{parmax}.
+
+Esse objeto é afetado pelas seguintes @i{opções gráficas}: @code{nticks}, 
+@code{line_width}, @code{line_type}, @code{key} e @code{color}.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw2d(explicit(exp(x),x,-1,3),
+             color = red,
+             key   = "Esse é a unidade paramétrica!!",
+             parametric(2*cos(rrr),rrr^2,rrr,0,2*%pi))$
+@end example
+
+
+
+
+
+@item
+@code{image(im,x0,y0,width,height)}:
+monta o gráfico da imágem @code{im} em uma região retangular do vértice @code{(x0,y0)} ao vértice
+@code{(x0+width,y0+height)} no plano real. O argumeto @code{im} deve ser uma
+matriz de números reais, ou uma matriz de vetores de comprimento três.
+
+Se @code{im} for uma matriz de números reais, valores de pixel são interpretados conforme
+a opção gráfica @code{palette}, que é um vetor de comprimento três com componentes
+numéricas variando de -36 a +36; cada valor é um índice para uma fórmula mapeando os níveis
+sobre as cores vermelha, verde e azul, respectivamente:
+@example
+ 0: 0               1: 0.5           2: 1
+ 3: x               4: x^2           5: x^3
+ 6: x^4             7: sqrt(x)       8: sqrt(sqrt(x))
+ 9: sin(90x)       10: cos(90x)     11: |x-0.5|
+12: (2x-1)^2       13: sin(180x)    14: |cos(180x)|
+15: sin(360x)      16: cos(360x)    17: |sin(360x)|
+18: |cos(360x)|    19: |sin(720x)|  20: |cos(720x)|
+21: 3x             22: 3x-1         23: 3x-2
+24: |3x-1|         25: |3x-2|       26: (3x-1)/2
+27: (3x-2)/2       28: |(3x-1)/2|   29: |(3x-2)/2|
+30: x/0.32-0.78125 31: 2*x-0.84     32: 4x;1;-2x+1.84;x/0.08-11.5
+33: |2*x - 0.5|    34: 2*x          35: 2*x - 0.5
+36: 2*x - 1
+@end example
+números negativos significam componente de cor negativa.
+
+@code{palette = gray} e @code{palette = color} são atalhos para
+@code{palette = [3,3,3]} e @code{palette = [7,5,15]}, respectivamente.
+
+Se @code{im} for uma matriz de vetores de comprimento três, eles são interpretados
+como componenetes das cores vermelho, verde e azul.
+
+Exemplos:
+
+se @code{im} for uma matriz de números reais, valores de pixel são interpretados conforme
+a opção gráfica @code{palette}.
+@example
+(%i1) load("draw")$
+(%i2) im: apply(
+           'matrix,
+            makelist(makelist(random(200),i,1,30),i,1,30))$
+(%i3) /* palette = color, default */
+      draw2d(image(im,0,0,30,30))$
+(%i4) draw2d(palette = gray, image(im,0,0,30,30))$
+(%i5) draw2d(palette = [15,20,-4],
+             colorbox=false,
+             image(im,0,0,30,30))$
+@end example
+
+Veja também @code{colorbox}.
+
+Se @code{im} for uma matriz de vetores de comprimento três, eles são interpretados
+como componentes da cores vermelho, verde e azul.
+@example
+(%i1) load("draw")$
+(%i2) im: apply(
+            'matrix,
+             makelist(
+               makelist([random(300),
+                         random(300),
+                         random(300)],i,1,30),i,1,30))$
+(%i3) draw2d(image(im,0,0,30,30))$
+@end example
+
+@end itemize
+
+Veja também as seguintes opções gráficas: @code{xrange}, @code{yrange}, 
+@code{logx}, @code{logy}, @code{terminal}, @code{grid}, @code{title}, 
+@code{xlabel}, @code{ylabel}, @code{xtics}, @code{ytics}, @code{xy_file}, 
+@code{file_name}, @code{pic_width}, @code{pic_height}, 
+@code{eps_width}, @code{eps_height},
+@code{user_preamble}, @code{axis_bottom}, @code{axis_left}, @code{axis_top}, 
+e @code{axis_right}.
+
+@end deffn
+
+
+
+
+
+
+
+
+
+@deffn {Scene constructor} gr3d (@var{opção gráfica}, ..., @var{objeto gráfico}, ...)
+
+A função @code{gr3d} constrói um objeto descrevendo um fundo gráfico tridimensional. Argumentos são
+@i{opções gráficas} e @i{objetos gráficos}. Esse fundo gráfico é interpretado
+seq@"{u}êncialmente: @i{opções gráficas} afetam aqueles @i{objetos gráficos} colocados
+imediatamente à sua direita.
+
+Para fazer uso dessa função escreva primeiramente @code{load("draw")}.
+
+Essa é a lista dos @i{objetos gráficos} disponíveis para fundos gráficos tridimensionais:
+
+@itemize @bullet
+@item
+@code{points([[x1,y1,z1], [x2,y2,z2], [x3,y3,z3],...])} ou 
+@code{points([x1,x2,x3,...], [y1,y2,y3,...], [z1,z2,z3,...])}:
+posiciona os pontos @code{[x1,y1,z1]}, @code{[x2,y2,z2]}, @code{[x2,y2,z3]}, ... no gráfico.
+
+Esse objeto é afetado pelas seguintes @i{opções gráficas}: @code{point_size}, 
+@code{point_type}, @code{points_joined}, @code{line_width}, @code{key}, @code{line_type}
+e @code{color}.
+
+Exemplos:
+
+Uma amostra tridimensional,
+@example
+(%i1) load("draw")$
+(%i2) load ("numericalio")$
+(%i3) s2 : read_matrix (file_search ("wind.data"))$
+(%i4) draw3d(title      = "Velocidades diárias de ventos disponíveis",
+             point_size = 2,
+             points(args(submatrix (s2, 4, 5))) )$
+@end example
+
+Duas amostras tridimensionais,
+@example
+(%i1) load("draw")$
+(%i2) load ("numericalio")$
+(%i3) s2 : read_matrix (file_search ("wind.data"))$
+(%i4) draw3d(title      = "Velocidades diárias de ventos disponíveis. Dois conjuntos de dados",
+             point_size = 2,
+             key        = "Amostras das estações 1, 2 e 3",
+             points(args(submatrix (s2, 4, 5))),
+             point_type = 4,
+             key        = "Amostras das estações 1, 4 e 5",
+             points(args(submatrix (s2, 2, 3))) )$
+@end example
+
+
+@item
+@code{label(rótulo,x,y,z)}:
+escreve @code{rótulo} no ponto @code{[x,y,z]}.
+
+Esse objeto é afetado pelas seguintes @i{opções gráficas}: @code{label_alignment}, 
+@code{label_orientation} e @code{color}.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw3d(explicit(exp(sin(x)+cos(x^2)),x,-3,3,y,-3,3),
+             color = red,
+             label("SUBINDO",-2,0,3),
+             color = blue,
+             label("DESCENDO",2,0,-3) )$
+@end example
+
+
+
+
+@item
+@code{vector([x,y,z], [dx,dy,dz])}:
+monta o gráfico do vetor @code{[dx,dy,dz]} com orígem em @code{[x,y,z]}.
+
+Esse objeto é afetado pelas seguintes @i{opções gráficas}: @code{head_both}, 
+@code{head_type}, @code{line_width}, 
+@code{line_type}, @code{key} e @code{color}.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw3d(color = cyan,
+             vector([0,0,0],[1,1,1]/sqrt(3)),
+             vector([0,0,0],[1,-1,0]/sqrt(2)),
+             vector([0,0,0],[1,1,-2]/sqrt(6)) )$
+@end example
+
+
+
+@item
+@code{explicit(fcn,var1,minval1,maxval1,var2,minval2,maxval2)}:
+monta o gráfico da função explícita @code{fcn}, com a variável @code{var1} assumindo valores
+de @code{minval1} a @code{maxval1} e variável @code{var2} assumindo valores
+de @code{minval2} a @code{maxval2}.
+
+Esse objeto é afetado pelas seguintes @i{opções gráficas}: @code{xu_grid}, 
+@code{yv_grid}, @code{line_type}, @code{key} e @code{color}.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw3d(key   = "Gauss",
+             color = "#a02c00",
+             explicit(20*exp(-x^2-y^2)-10,x,-3,3,y,-3,3),
+             color = blue,
+             key   = "Plane",
+             explicit(x+y,x,-5,5,y,-5,5),
+             surface_hide = true)$
+@end example
+
+
+@item
+@code{parametric(xfun,yfun,zfun,par,parmin,parmax)}:
+monta o gráfico da curva paramétrica @code{[xfun,yfun,zfun]}, com parâmetro @code{par}
+assumindo valores de @code{parmin} a @code{parmax}.
+
+Esse objeto é afetado pelas seguintes @i{opções gráficas}: @code{nticks}, 
+@code{line_width}, @code{line_type}, @code{key} e @code{color}.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw3d(explicit(exp(sin(x)+cos(x^2)),x,-3,3,y,-3,3),
+             color = royalblue,
+             parametric(cos(5*u)^2,sin(7*u),u-2,u,0,2),
+             color      = turquoise,
+             line_width = 2,
+             parametric(t^2,sin(t),2+t,t,0,2),
+             surface_hide = true,
+             title = "Surface & curves" )$
+@end example
+
+
+@item
+@code{parametric_surface(xfun,yfun,zfun,par1,par1min,par1max,par2,par2min,par2max)}:
+monta o gráfico da superfície paramétrica @code{[xfun,yfun,zfun]}, com parâmetro @code{par1}
+assumindo valores de @code{par1min} a @code{par1max} e o parâmetro @code{par2}
+assumindo valores de @code{par2min} a @code{par2max}.
+
+Esse objeto é afetado pelas seguintes @i{opções gráficas}: @code{xu_grid}, 
+@code{yv_grid}, @code{line_type}, @code{key} e @code{color}.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) draw3d(title          = "Concha do mar",
+             xu_grid        = 100,
+             yv_grid        = 25,
+             rot_vertical   = 100,
+             rot_horizontal = 20,
+             surface_hide   = true,
+             parametric_surface(0.5*u*cos(u)*(cos(v)+1),
+                                0.5*u*sin(u)*(cos(v)+1),
+                                u*sin(v) - ((u+3)/8*%pi)^2 - 20,
+                                u, 0, 13*%pi, v, -%pi, %pi) )$
+@end example
+
+@end itemize
+
+Veja também as seguintes opções gráficas: @code{xrange}, @code{yrange}, 
+@code{zrange}, @code{logx}, @code{logy}, @code{logz}, @code{terminal}, 
+@code{grid}, @code{title}, @code{xlabel}, @code{ylabel}, @code{zlabel}, 
+@code{xtics}, @code{ytics}, @code{ztics}, @code{xy_file}, 
+@code{user_preamble}, @code{axis_bottom}, @code{axis_left}, 
+@code{axis_top}, @code{file_name}, @code{pic_width}, @code{pic_height}, 
+@code{eps_width}, @code{eps_height},
+@code{axis_right}, @code{rot_vertical}, @code{rot_horizontal}, 
+@code{axis_3d}, @code{xu_grid}, @code{yv_grid}, @code{surface_hide}, 
+@code{contour}, @code{contour_levels}, @code{palette}, @code{colorbox}
+e @code{enhanced3d}.
+
+
+@end deffn
+
+
+
+
+
+
+
+@deffn {Function} draw (@var{gr2d}, ..., @var{gr3d}, ..., @var{opções}, ...)
+
+Monta o fundo de uma série de gráficos; seus argumentos são objetos @code{gr2d} e
+@code{gr3d}, juntamente com algumas opções. Por padrão, o fundos gráficos são colocados juntos
+em uma coluna.
+
+A função @code{draw} aceita duas opções possíveis: @code{terminal} 
+e @code{columns}.
+
+As funções @code{draw2d} e @code{draw3d} são atalhos para serem usados 
+quando somente um fundo gráfico é requerido, em duas ou três dimensões, respectivamente.
+
+Para fazer uso dessa função escreva primeiramente @code{load("draw")}.
+
+Exemplo:
+
+@example
+(%i1) load("draw")$
+(%i2) scene1: gr2d(title="Ellipse",
+                   nticks=30,
+                   parametric(2*cos(t),5*sin(t),t,0,2*%pi))$
+(%i3) scene2: gr2d(title="Triangle",
+                   polygon([4,5,7],[6,4,2]))$
+(%i4) draw(scene1, scene2, columns = 2)$
+@end example
+@end deffn
+
+
+@deffn {Função} draw2d (@var{opção}, @var{objeto gráfico}, ...)
+
+Essa função é um atalho para
+@code{draw2d(gr2d(@var{opções}, ..., @var{objeto gráfico}, ...))}.
+
+Pode ser usada para montar gráfico de um único fundo bidimensional.
+
+Para fazer uso dessa função escreva primeiramente @code{load("draw")}.
+
+@end deffn
+
+
+@deffn {Função} draw3d (@var{opção}, @var{graphic object}, ...)
+
+Essa função é um atalho para
+@code{draw3d(gr3d(@var{opções}, ..., @var{objeto gráfico}, ...))}.
+
+Pode ser usada para montar o fundo gráfico único tridmensional.
+
+Para fazer uso dessa função escreva primeiramente @code{load("draw")}.
+
+@end deffn
+
+
+
+@defvr {Variável} draw_pipes
+Valor padrão: @code{true}
+
+Quando @code{draw_pipes} for @code{true}, Maxima comunica-se com Gnuplot
+diretamente (via pipes). Se @code{draw_pipes} for @code{false}, Maxima comunica-se 
+com Gnuplot via arquivos. Essa opção não está disponível para usuários windows.
+
+@end defvr
+
+

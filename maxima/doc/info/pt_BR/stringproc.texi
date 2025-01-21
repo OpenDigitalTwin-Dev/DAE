@@ -1,0 +1,891 @@
+@c Language: Brazilian Portuguese, Encoding: iso-8859-1
+@c /stringproc.texi/1.8/Sat Jun  2 00:13:34 2007//
+@menu
+* Introdução a manipulação de seq@"{u}ências de caracteres::
+* Funções e Variáveis para entrada e saída::
+* Funções e Variáveis para caracteres::
+* Funções e Variáveis para seq@"{u}ências de caracteres::
+@end menu
+
+@node Introdução a manipulação de seq@"{u}ências de caracteres, Funções e Variáveis para entrada e saída, stringproc, stringproc
+@section Introdução a manipulação de seq@"{u}ências de caracteres
+
+O arquivo @code{stringproc.lisp} amplia a compatibilidade do Maxima de trabalhar com seq@"{u}ências de caracteres 
+e adiciona algumas funções úteis a entrada e saída de dados.
+
+Para esclarecimentos e correções por favor mande um e-mail para van.nek at arcor.de .
+
+No Maxima uma seq@"{u}ência de caracteres é facilmente contruída digitando "texto" (qualquer texto desejado entre aspas duplas).
+Note que seq@"{u}ências de caracteres do Maxima não são seq@"{u}ências de caracteres do Lisp e vice-versa.
+@code{stringp} realiza testes para seq@"{u}ências de caracteres
+do Maxima, e @code{lstringp} realiza testes para seq@"{u}ências de caracteres do Lisp.
+Se por alguma razão voce tiver um valor,
+que é uma seq@"{u}ência de caracteres do Lisp, talvez quando estiver usando a função @code{sconcat} do Maxima, você pode converter via @code{sunlisp}. 
+
+
+@c ===beg===
+@c m: "text";
+@c [stringp(m),lstringp(m)];
+@c l: sconcat("text");
+@c [stringp(l),lstringp(l)];
+@c stringp( sunlisp(l) );
+@c ===end===
+@example
+(%i1) m: "text";
+(%o1)                         text
+(%i2) [stringp(m),lstringp(m)];
+(%o2)                     [true, false]
+(%i3) l: sconcat("text");
+(%o3)                         text
+(%i4) [stringp(l),lstringp(l)];
+(%o4)                     [false, true]
+(%i5) stringp( sunlisp(l) );
+(%o5)                         true
+@end example
+
+Todas as funções em @code{stringproc.lisp}, que retornarem seq@"{u}ências de caracteres, retornam seq@"{u}ências de caracteres do Maxima.
+
+Caracteres são introduzidos como seq@"{u}ências de caracteres do Maxima de comprimento 1.
+Com certeza, esses caracteres não são caracteres do Lisp.
+Testes podem ser realizados com @code{charp} ( @code{lcharp} e conversões do Lisp para o Maxima com @code{cunlisp}).
+
+
+@c ===beg===
+@c c: "e";
+@c [charp(c),lcharp(c)];
+@c supcase(c);
+@c charp(%);
+@c ===end===
+@example
+(%i1) c: "e";
+(%o1)                           e
+(%i2) [charp(c),lcharp(c)];
+(%o2)                     [true, false]
+(%i3) supcase(c);
+(%o3)                           E
+(%i4) charp(%);
+(%o4)                         true
+@end example
+
+Novamente, todas as funções em @code{stringproc.lisp}, que retornam caracteres, retornam caracteres do Maxima.
+devido a esse fato, que os caracteres introduzidos são seq@"{u}ências de caracteres comprimento 1,
+você pode usar muitas das funções de seq@"{u}ência de caracteres também para caracteres.
+Como visto, @code{supcase} é um exemplo.
+
+É importante saber,
+que o primeiro caractere em uma seq@"{u}ência de caracteres do Maxima éstá na posição 1.
+Isso é designado devido ao fato de o primeiro elemento em uma lista do Maxima está na posição 1 também.
+Veja definições de @code{charat} e de @code{charlist} para obter exemplos.
+
+Em aplicações fnções de seq@"{u}ência de caractere são muitas vezes usadas quando estamos trabalhando com arquivos.
+Você encontrará algumas úteis funções de fluxo e funções de impressões em @code{stringproc.lisp}.
+O seguinte exemplo mostra algumas das funções aqui introduzidas no trabalho.
+
+Exemplo: 
+
+@code{openw} retorna um fluxo de saída para um arquivo, @code{printf} então permite escrita formatada 
+para esse arquivo. Veja @code{printf} para detalhes.
+
+@example
++(%i1) s: openw("E:/file.txt");
++(%o1)                    #<output stream E:/file.txt>
++(%i2) for n:0 thru 10 do printf( s, "~d ", fib(n) );
++(%o2)                                done
++(%i3) printf( s, "~%~d ~f ~a ~a ~f ~e ~a~%", 
+               42,1.234,sqrt(2),%pi,1.0e-2,1.0e-2,1.0b-2 );
++(%o3)                                false
++(%i4) close(s);
++(%o4)                                true
+@end example
+
+Após fechar o fluxo você pode abrí-lo novamente, dessa vez com direção de entrada. 
+@code{readline} retorna a linha completa como uma seq@"{u}ência de caracteres. O pacote @code{stringproc} 
+agora oferece muitas funções para manipulação de seq@"{u}ências de caracteres. A troca de indicações/fichas pode ser realizada por 
+@code{split} ou por @code{tokens}.
+
+@example
+(%i5) s: openr("E:/file.txt");
+(%o5)                     #<input stream E:/file.txt>
+(%i6) readline(s);
+(%o6)                     0 1 1 2 3 5 8 13 21 34 55 
+(%i7) line: readline(s);
+(%o7)               42 1.234 sqrt(2) %pi 0.01 1.0E-2 1.0b-2
+(%i8) list: tokens(line);
+(%o8)           [42, 1.234, sqrt(2), %pi, 0.01, 1.0E-2, 1.0b-2]
+(%i9) map( parsetoken, list );
+(%o9)           [42, 1.234, false, false, 0.01, 0.01, false]
+@end example
+
+@code{parsetoken} somente analiza números inteiros e em ponto flutuante. A análise de símbolos ou grandes números em ponto flutuante 
+precisa de @code{parse_string}, que irá ser disponibilizada para uso automaticamente através de @code{eval_string.lisp}.
+
+@example 
+(%i10) map( parse_string, list );
+(%o10)           [42, 1.234, sqrt(2), %pi, 0.01, 0.01, 1.0b-2]
+(%i11) float(%);
+(%o11) [42.0, 1.234, 1.414213562373095, 3.141592653589793, 0.01, 0.01, 0.01]
+(%i12) readline(s);
+(%o12)                               false
+(%i13) close(s)$
+@end example
+
+@code{readline} retorna @code{false} quado o fim de arquivo acontecer.
+
+@node Funções e Variáveis para entrada e saída, Funções e Variáveis para caracteres, Introdução a manipulação de seq@"{u}ências de caracteres, stringproc
+@section Funções e Variáveis para entrada e saída
+
+Exemplo: 
+
+@c ===beg===
+@c s: openw("E:/file.txt");
+@c control: 
+@c  "~2tAn atom: ~20t~a~%~2tand a list: ~20t~@{~r ~@}~%~2tand an integer: ~20t~d~%"$
+@c printf( s,control, 'true,[1,2,3],42 )$
+@c close(s);
+@c s: openr("E:/file.txt");
+@c while stringp( tmp:readline(s) ) do print(tmp)$
+@c close(s)$
+@c ===end===
+@example
+(%i1) s: openw("E:/file.txt");
+(%o1)                     #<output stream E:/file.txt>
+(%i2) control: 
+ "~2tAn atom: ~20t~a~%~2tand a list: ~20t~@{~r ~@}~%~2tand an integer: ~20t~d~%"$
+(%i3) printf( s,control, 'true,[1,2,3],42 )$
+(%o3)                                false
+(%i4) close(s);
+(%o4)                                true
+(%i5) s: openr("E:/file.txt");
+(%o5)                     #<input stream E:/file.txt>
+(%i6) while stringp( tmp:readline(s) ) do print(tmp)$
+  An atom:          true 
+  and a list:       one two three  
+  and an integer:   42 
+(%i7) close(s)$
+@end example
+
+
+@deffn {Função} close (@var{fluxo}) 
+Fecha  @var{fluxo} e retorna @code{true} se @var{fluxo} tiver sido aberto anteriormente. 
+
+@end deffn
+
+@deffn {Função} flength (@var{fluxo})
+Retorna o número de elementos em @var{fluxo}. 
+
+@end deffn
+
+@deffn {Função} fposition (@var{fluxo})
+@deffnx {Função} fposition (@var{fluxo}, @var{pos})
+Retorna a posição corrente em @var{fluxo}, se @var{pos} não está sendo usada.
+Se @var{pos} estiver sendo usada,
+@code{fposition} escolhe a posição em @var{fluxo}.
+@var{pos} tem que ser um número positivo,
+o primeiro elemento em @var{fluxo} está na posição 1.
+
+@end deffn
+
+@deffn {Função} freshline () 
+@deffnx {Função} freshline (@var{fluxo}) 
+escreve uma nova linha (em @var{fluxo}),
+se a posição atual não for um início de linha.
+Veja também @code{newline}.
+@end deffn
+
+@deffn {Função} newline () 
+@deffnx {Função} newline (@var{fluxo}) 
+Escreve uma nova linha (para @var{fluxo}).
+Veja @code{sprint} para um exemplo de uso de @code{newline()}.
+Note que existem alguns casos, onde @code{newline()}não trabalha como esperado. 
+
+@end deffn
+
+@deffn {Função} opena (@var{arquivo}) 
+Retorna um fluxo de saída para @var{arquivo}.
+Se um arquivo já existente tiver sido aberto, @code{opena} anexa os elementos ao final do arquivo.
+
+@end deffn
+
+@deffn {Função} openr (@var{arquivo}) 
+Retorna um fluxo para @var{arquivo}.
+Se @var{arquivo} não existir, ele será criado.
+
+@end deffn
+
+@deffn {Função} openw (@var{arquivo}) 
+Retorna um fluxo de saída para @var{arquivo}.
+Se @var{arquivo} não existir, será criado.
+Se um arquivo já existente for aberto, @code{openw} modifica destrutivametne o @var{arquivo}.
+
+@end deffn
+
+@deffn {Função} printf (@var{dest}, @var{seq_caracte})
+@deffnx {Função} printf (@var{dest}, @var{seq_caracte}, @var{expr_1}, ..., @var{expr_n})
+Torna a função FORMAT do Lisp Comum disponível no Maxima. 
+(Retirado de gcl.info: "format produces formatted output by outputting the caracteres of 
+control-string string and observing that a tilde introduces a directive.
+The caractere after the tilde,
+possibly preceded by prefix parameters and modifiers,
+specifies what kind of formatting is desired.
+Most directives use one or more elements of args to create their output.")
+
+A seguinte descrição e oa exemplos podem fornecer uma idéia de uso de @code{printf}.
+Veja um referência de Lisp para maiores informações.
+
+@example
+   ~%       nova linha
+   ~&       novíssima line
+   ~t       tabulação
+   ~$       monetário
+   ~d       inteiro decimal
+   ~b       inteiro binário
+   ~o       inteiro octal
+   ~x       inteiro hexadecimal
+   ~br      inteiro de base b
+   ~r       soletra um inteiro
+   ~p       plural
+   ~f       ponto flutuante
+   ~e       notação científica
+   ~g       ~f ou ~e, dependendo  da magnitude
+   ~a       como mostrado pela função print do Maxima
+   ~s       seq@"{u}ências de caracteres entre "aspas duplas"
+   ~~       ~
+   ~<       justificação de texto, ~> terminador de justificação de texto
+   ~(       conversão de caixa alta/baixa, ~) terminador de conversão de caixa
+   ~[       seleção, ~] terminador de seleção 
+   ~@{       iteração, ~@} terminador de iteração
+@end example
+
+Por favor note que não existe especificador de formato para grandes números em ponto flutuante. Todavia grandes números em ponto flutuante podem 
+simplesmente serem mostrados por meio da diretiva @code{~a}. 
+@code{~s} mostra a seq@"{u}ências de caracteres entre "aspas duplas", você pode evitar isso usando @code{~a}.
+Note que a diretiva de seleção @code{~[} é indexada em zero.
+Também note que existem algumas diretivas, que não trabalham no Maxima.
+Por exemplo, @code{~:[} falha.
+
+@c ===beg===
+@c printf( false, "~a ~a ~4f ~a ~@@r", 
+@c         "String",sym,bound,sqrt(12),144), bound = 1.234;
+@c printf( false,"~@{~a ~@}",["one",2,"THREE"] );
+@c printf( true,"~@{~@{~9,1f ~@}~%~@}",mat ),
+@c         mat = args( matrix([1.1,2,3.33],[4,5,6],[7,8.88,9]) )$
+@c control: "~:(~r~) bird~p ~[is~;are~] singing."$
+@c printf( false,control, n,n,if n=1 then 0 else 1 ), n=2;
+@c ===end===
+@example
+(%i1) printf( false, "~a ~a ~4f ~a ~@@r", 
+              "String",sym,bound,sqrt(12),144), bound = 1.234;
+(%o1)                 String sym 1.23 2*sqrt(3) CXLIV
+(%i2) printf( false,"~@{~a ~@}",["one",2,"THREE"] );
+(%o2)                          one 2 THREE 
+(%i3) printf( true,"~@{~@{~9,1f ~@}~%~@}",mat ),
+              mat = args( matrix([1.1,2,3.33],[4,5,6],[7,8.88,9]) )$
+      1.1       2.0       3.3 
+      4.0       5.0       6.0 
+      7.0       8.9       9.0 
+(%i4) control: "~:(~r~) bird~p ~[is~;are~] singing."$
+(%i5) printf( false,control, n,n,if n=1 then 0 else 1 ), n=2;
+(%o5)                    Two birds are singing.
+@end example
+
+Se @var{dest} for um fluxo ou @code{true}, então @code{printf} retorna @code{false}.
+De outra forma, @code{printf} retorna uma seq@"{u}ência de caracteres contendo a saída.
+
+@end deffn
+
+@deffn {Função} readline (@var{fluxo}) 
+Retorna uma seq@"{u}ência de caracteres contendo os caracteres a partir da posição corrente em @var{fluxo} até o fim de linha ou @var{false} se o fim de linha do arquivo for encontrado.
+
+@end deffn
+
+@deffn {Função} sprint (@var{expr_1}, ..., @var{expr_n})
+Avalia e mostra seus argumentos um após o outro `sobre uma linha' iniciando na posição mais à esquerda.
+Os números são mostrados com o '-' à direita do número,
+e isso desconsidera o comprimento da linha. @code{newline()}, que irá ser chamada automaticamente a partir de @code{stringproc.lisp} 
+pode ser útil, se você desejar colocar uma parada de linha intermediária.
+
+@c ===beg===
+@c for n:0 thru 22 do sprint( fib(n) )$
+@c for n:0 thru 22 do ( 
+@c    sprint(fib(n)), if mod(n,10)=9 then newline() )$
+@c ===end===
+@example
+(%i1) for n:0 thru 22 do sprint( fib(n) )$
+0 1 1 2 3 5 8 13 21 34 55 89 144 233 377 610 987 1597 2584 4181 6765 10946 17711 
+(%i2) for n:0 thru 22 do ( 
+         sprint(fib(n)), if mod(n,10)=9 then newline() )$
+0 1 1 2 3 5 8 13 21 34 
+55 89 144 233 377 610 987 1597 2584 4181 
+6765 10946 17711 
+@end example
+
+@end deffn
+
+@node Funções e Variáveis para caracteres, Funções e Variáveis para seq@"{u}ências de caracteres, Funções e Variáveis para entrada e saída, stringproc
+@section Funções e Variáveis para caracteres
+
+@deffn {Função} alphacharp (@var{caractere})    
+Retorna @code{true} se @var{caractere} for um caractere alfabético. 
+
+@end deffn
+
+@deffn {Função} alphanumericp (@var{caractere}) 
+Retorna @code{true} se @var{caractere} for um caractere alfabético ou um dígito. 
+
+@end deffn
+
+@deffn {Função} ascii (@var{int}) 
+Retorna o caractere correspondente ao código numérico ASCII @var{int}.
+( -1 < int < 256 )
+
+@c ===beg===
+@c for n from 0 thru 255 do ( 
+@c    tmp: ascii(n), if alphacharp(tmp) then sprint(tmp), if n=96 then newline() )$
+@c ===end===
+@example
+(%i1) for n from 0 thru 255 do ( 
+tmp: ascii(n), if alphacharp(tmp) then sprint(tmp), if n=96 then newline() )$
+A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 
+a b c d e f g h i j k l m n o p q r s t u v w x y z
+@end example
+
+@end deffn
+
+@deffn {Função} cequal (@var{caractere_1}, @var{caractere_2})          
+Retorna @code{true} se @var{caractere_1} e @var{caractere_2} forem os mesmos. 
+
+@end deffn
+
+@deffn {Função} cequalignore (@var{caractere_1}, @var{caractere_2})    
+como @code{cequal} mas ignora a caixa alta/baixa. 
+
+@end deffn
+
+@deffn {Função} cgreaterp (@var{caractere_1}, @var{caractere_2})       
+Retorna @code{true} se o código numérico ASCII do @var{caractere_1} for maior que o código numérico ASCII do @var{caractere_2}. 
+
+@end deffn
+
+@deffn {Função} cgreaterpignore (@var{caractere_1}, @var{caractere_2})
+Como @code{cgreaterp} mas ignora a caixa alta/baixa. 
+
+@end deffn
+
+@deffn {Função} charp (@var{obj}) 
+Retorna @code{true} se @var{obj} for um caractere do Maxima.
+Veja na seção "Introdução a manipulação de seq@"{u}ências de caracteres" para ter um exemplo.
+
+@end deffn
+
+@deffn {Função} cint (@var{caractere}) 
+Retorna o código numéico ASCII de @var{caractere}.
+
+@end deffn
+
+@deffn {Função} clessp (@var{caractere_1}, @var{caractere_2})
+Retorna @code{true} se o código numérico ASCII de @var{caractere_1} for menor que o código numérico ASCII de @var{caractere_2}. 
+
+@end deffn
+
+@deffn {Função} clesspignore (@var{caractere_1}, @var{caractere_2})
+Como em @code{clessp} ignora a caixa alta/baixa. 
+
+@end deffn
+
+@deffn {Função} constituent (@var{caractere})   
+Retorna @code{true} se @var{caractere} for caractere  gráfico e não o caractere de espaço em branco.
+Um caractere gráfico é um caractere que se pode ver, adicionado o caractere de espaço em branco.
+(@code{constituent} foi definida por Paul Graham, em ANSI Common Lisp, 1996, página 67.)
+
+@c ===beg===
+@c for n from 0 thru 255 do ( 
+@c    tmp: ascii(n), if constituent(tmp) then sprint(tmp) )$
+@c ===end===
+@example
+(%i1) for n from 0 thru 255 do ( 
+tmp: ascii(n), if constituent(tmp) then sprint(tmp) )$
+! " #  %  ' ( ) * + , - . / 0 1 2 3 4 5 6 7 8 9 : ; < = > ? @@ A B
+C D E F G H I J K L M N O P Q R S T U V W X Y Z [ \ ] ^ _ ` a b c
+d e f g h i j k l m n o p q r s t u v w x y z @{ | @} ~
+@end example
+
+@end deffn
+
+@deffn {Função} cunlisp (@var{lisp_char}) 
+Converte um caractere do Lisp em um caractere do Maxima.
+(Você pode não precisar dessa função.)
+
+@end deffn
+
+@deffn {Função} digitcharp (@var{caractere})    
+Retorna @code{true} se @var{caractere} for um dígito (algarismo de 0 a 9). 
+
+@end deffn
+
+@deffn {Função} lcharp (@var{obj}) 
+Retorna @code{true} se @var{obj} for um caractere do Lisp.
+(Você pode não precisar dessa função.)
+
+@end deffn
+
+@deffn {Função} lowercasep (@var{caractere})    
+Retorna @code{true} se @var{caractere} for um caractere em caixa baixa. 
+
+@end deffn
+
+@defvr {Variable} newline 
+O caractere de nova linha. 
+
+@end defvr
+
+@defvr {Variável} space   
+O caractere de espaço em branco.
+
+@end defvr
+
+@defvr {Variável} tab     
+O caractere de tabulação.
+
+@end defvr
+
+@deffn {Função} uppercasep (@var{caractere})    
+Retorna @code{true} se @var{caractere} for um caractere em caixa alta. 
+
+@end deffn
+
+@node Funções e Variáveis para seq@"{u}ências de caracteres,  , Funções e Variáveis para caracteres, stringproc
+@section Funções e Variáveis para seq@"{u}ências de caracteres
+
+@deffn {Função} sunlisp (@var{lisp_string}) 
+Converte uma seq@"{u}ência de caracteres do Lisp em uma seq@"{u}ência de caracteres do Maxima.
+(Em geral você pode não precisar dessa função.)
+
+@end deffn
+
+@deffn {Função} lstringp (@var{obj}) 
+Retorna @code{true} se @var{obj} is uma seq@"{u}ência de caracteres do Lisp.
+(Em geral você pode não precisar dessa função.)
+
+@end deffn
+
+@deffn {Função} stringp (@var{obj}) 
+Retorna @code{true} se @var{obj} for uma seq@"{u}ência de caracteres do Maxima.
+Veja a introdução para obter exemplos.
+
+@end deffn
+
+@deffn {Função} charat (@var{seq_caracte}, @var{n}) 
+Retorna o @var{n}-ésimo caractere de @var{seq_caracte}.
+O primeiro caractere em @var{seq_caracte} é retornado com @var{n} = 1.
+
+@c ===beg===
+@c charat("Lisp",1);
+@c ===end===
+@example
+(%i1) charat("Lisp",1);
+(%o1)                           L
+@end example
+
+@end deffn
+
+@deffn {Função} charlist (@var{seq_caracte}) 
+Retorna a lsita de todos os caracteres em @var{seq_caracte}. 
+
+@c ===beg===
+@c charlist("Lisp");
+@c %[1];
+@c ===end===
+@example
+(%i1) charlist("Lisp");
+(%o1)                     [L, i, s, p]
+(%i2) %[1];
+(%o2)                           L
+@end example
+
+@end deffn
+
+@deffn {Função} parsetoken (@var{seq_caracte})  
+@code{parsetoken} converte a primeira ficha em @var{seq_caracte} para o correspondente número ou retorna @code{false} se o número não puder ser determinado.
+O conjunto de delimitadores para a troca de fichas é @code{@{space, comma, semicolon, tab, newline@}}
+
+Nota de tradução:
+espaço, vírgula, ponto e vírgula, tabulação e nova linha.
+
+@c ===beg===
+@c 2*parsetoken("1.234 5.678");
+@c ===end===
+@example
+(%i1) 2*parsetoken("1.234 5.678");
+(%o1)                         2.468
+@end example
+
+Para analizar você pode também usar  a função @code{parse_string}.
+Veja a descrição no arquivo 'share\contrib\eval_string.lisp'. 
+
+@end deffn
+
+@deffn {Função} sconc (@var{expr_1}, ..., @var{expr_n})
+Avalia seus argumentos e concatena-os em uma seq@"{u}ência de caracteres.
+@code{sconc} é como @code{sconcat} mas retorna uma seq@"{u}ência de caracteres do Maxima.
+
+@c ===beg===
+@c sconc("xx[",3,"]:",expand((x+y)^3));
+@c stringp(%);
+@c ===end===
+@example
+(%i1) sconc("xx[",3,"]:",expand((x+y)^3));
+(%o1)             xx[3]:y^3+3*x*y^2+3*x^2*y+x^3
+(%i2) stringp(%);
+(%o2)                         true
+@end example
+
+@end deffn
+
+@deffn {Função} scopy (@var{seq_caracte}) 
+Retorna uma cópia de @var{seq_caracte} como uma nova seq@"{u}ência de caracteres. 
+
+@end deffn
+
+@deffn {Função} sdowncase (@var{seq_caracte}) 
+@deffnx {Função} sdowncase (@var{seq_caracte}, @var{início}) 
+@deffnx {Função} sdowncase (@var{seq_caracte}, @var{início}, @var{fim}) 
+Como em @code{supcase}, mas caracteres em caixa alta são convertidos para caracteres em caixa baixa. 
+
+@end deffn
+
+@deffn {Função} sequal (@var{seq_caracte__1}, @var{seq_caracte__2}) 
+Retorna @code{true} se @var{seq_caracte__1} e @var{seq_caracte__2} tiverem o mesmo comprimento e contiverem os mesmos caracteres. 
+
+@end deffn
+
+@deffn {Função} sequalignore (@var{seq_caracte__1}, @var{seq_caracte__2})
+Como em @code{sequal} mas igonara a caixa alta/baixa. 
+
+@end deffn
+
+@deffn {Função} sexplode (@var{seq_caracte})
+@code{sexplode} é um apelido para a função @code{charlist}.
+
+@end deffn
+
+@deffn {Função} simplode (@var{lista})  
+@deffnx {Função} simplode (@var{lista}, @var{delim})  
+@code{simplode} takes uma @code{lista} ou expressões  e concatena-as em uma seq@"{u}ência de caracteres.
+Se nenhum delimitador @var{delim} for usado, @code{simplode} funciona como @code{sconc} e não utiliza delimitador.
+@var{delim} pode ser qualquer seq@"{u}ência de caracteres.
+
+@c ===beg===
+@c simplode(["xx[",3,"]:",expand((x+y)^3)]);
+@c simplode( sexplode("stars")," * " );
+@c simplode( ["One","more","coffee."]," " );
+@c ===end===
+@example
+(%i1) simplode(["xx[",3,"]:",expand((x+y)^3)]);
+(%o1)             xx[3]:y^3+3*x*y^2+3*x^2*y+x^3
+(%i2) simplode( sexplode("stars")," * " );
+(%o2)                   s * t * a * r * s
+(%i3) simplode( ["One","more","coffee."]," " );
+(%o3)                   One more coffee.
+@end example
+
+@end deffn
+
+@deffn {Função} sinsert (@var{seq}, @var{seq_caracte}, @var{pos})  
+Retorna uma seq@"{u}ência de caracteres que é uma concatenação de @code{substring (@var{seq_caracte}, 1, @var{pos} - 1)},
+a seq@"{u}ência de caracteres @var{seq} e @code{substring (@var{seq_caracte}, @var{pos})}.
+Note que o primeiro caractere está em @var{seq_caracte} e está na posição 1.
+
+@c ===beg===
+@c s: "A submarine."$
+@c sconc( substring(s,1,3),"yellow ",substring(s,3) );
+@c sinsert("hollow ",s,3);
+@c ===end===
+@example
+(%i1) s: "A submarine."$
+(%i2) sconc( substring(s,1,3),"yellow ",substring(s,3) );
+(%o2)                  A yellow submarine.
+(%i3) sinsert("hollow ",s,3);
+(%o3)                  A hollow submarine.
+@end example
+
+@end deffn
+
+@deffn {Função} sinvertcase (@var{seq_caracte})  
+@deffnx {Função} sinvertcase (@var{seq_caracte}, @var{início})  
+@deffnx {Função} sinvertcase (@var{seq_caracte}, @var{início}, @var{fim})  
+Retorna @var{seq_caracte} exceto que cada caractere da posição @var{início} até a posição @var{fim} está invertido.
+Se a posição @var{fim} não for fornecida,
+todos os caracteres do início ao @var{fim} de @var{seq_caracte} são substituídos.
+
+@c ===beg===
+@c sinvertcase("sInvertCase");
+@c ===end===
+@example
+(%i1) sinvertcase("sInvertCase");
+(%o1)                      SiNVERTcASE
+@end example
+
+@end deffn
+
+@deffn {Função} slength (@var{seq_caracte}) 
+Retorna número de caracteres em @var{seq_caracte}. 
+
+@end deffn
+
+@deffn {Função} smake (@var{num}, @var{caractere}) 
+Retorna uma nova seq@"{u}ência de caracteres repetindo @var{num} vezes @var{caractere}. 
+
+@c ===beg===
+@c smake(3,"w");
+@c ===end===
+@example
+(%i1) smake(3,"w");
+(%o1)                          www
+@end example
+
+@end deffn
+
+@deffn {Função} smismatch (@var{seq_caracte__1}, @var{seq_caracte__2}) 
+@deffnx {Função} smismatch (@var{seq_caracte__1}, @var{seq_caracte__2}, @var{test}) 
+Retorna a posição do primeiro caractere de @var{seq_caracte__1} no qual @var{seq_caracte__1} e @var{seq_caracte__2} diferem ou @code{false} em caso contrário.
+A função padrao de teste para coincidência é @code{sequal}.
+Se @code{smismatch} pode ignorar a caixa alta/baixa, use @code{sequalignore} como função de teste.
+
+@c ===beg===
+@c smismatch("seven","seventh");
+@c ===end===
+@example
+(%i1) smismatch("seven","seventh");
+(%o1)                           6
+@end example
+
+@end deffn
+
+@deffn {Função} split (@var{seq_caracte})  
+@deffnx {Função} split (@var{seq_caracte}, @var{delim})  
+@deffnx {Função} split (@var{seq_caracte}, @var{delim}, @var{multiple})  
+Retorna a lista de todas as fichas em @var{seq_caracte}.
+Cada ficha é uma seq@"{u}ência de caracteres não analisada.
+@code{split} usa @var{delim} como delimitador.
+Se @var{delim} não for fornecido, o caractere de espaço é o delimitador padrão.
+@var{multiple} é uma variável booleana com @code{true} como valor padrão.
+Multiplos delimitadores são lidos como um.
+Essa função é útil se tabulações são gravadas com caracteres de espaço multiplos.
+Se @var{multiple} for escolhido para @code{false}, cada delimitador é considerado.
+
+@c ===beg===
+@c split("1.2   2.3   3.4   4.5");
+@c split("first;;third;fourth",";",false);
+@c ===end===
+@example
+(%i1) split("1.2   2.3   3.4   4.5");
+(%o1)                 [1.2, 2.3, 3.4, 4.5]
+(%i2) split("first;;third;fourth",";",false);
+(%o2)               [first, , third, fourth]
+@end example
+
+@end deffn
+
+@deffn {Função} sposition (@var{caractere}, @var{seq_caracte}) 
+Retorna a posição do primeiro caractere em @var{seq_caracte} que coincide com @var{caractere}.
+O primeiro caractere em @var{seq_caracte} está na posição 1.
+Para que os caracteres que coincidirem desconsiderem a caixa alta/baixa veja @code{ssearch}.
+
+@end deffn
+
+@deffn {Função} sremove (@var{seq}, @var{seq_caracte})  
+@deffnx {Função} sremove (@var{seq}, @var{seq_caracte}, @var{test})  
+@deffnx {Função} sremove (@var{seq}, @var{seq_caracte}, @var{test}, @var{início})  
+@deffnx {Função} sremove (@var{seq}, @var{seq_caracte}, @var{test}, @var{início}, @var{fim})  
+Retorna uma seq@"{u}ência de caracteres como @var{seq_caracte} mas com todas as subseq@"{u}ências de caracteres que coincidirem com @var{seq}.
+A função padrão de teste de coincidência é @code{sequal}.
+Se @code{sremove} puder ignorar a caixa alta/baixa enquanto busca por @var{seq}, use @code{sequalignore} como teste.
+Use @var{início} e @var{fim} para limitar a busca.
+Note que o primeiro caractere em @var{seq_caracte} está na posição 1.
+
+@c ===beg===
+@c sremove("n't","I don't like coffee.");
+@c sremove ("DO ",%,'sequalignore);
+@c ===end===
+@example
+(%i1) sremove("n't","I don't like coffee.");
+(%o1)                   I do like coffee.
+(%i2) sremove ("DO ",%,'sequalignore);
+(%o2)                    I like coffee.
+@end example
+
+@end deffn
+
+@deffn {Função} sremovefirst (@var{seq}, @var{seq_caracte})  
+@deffnx {Função} sremovefirst (@var{seq}, @var{seq_caracte}, @var{test})  
+@deffnx {Função} sremovefirst (@var{seq}, @var{seq_caracte}, @var{test}, @var{início})  
+@deffnx {Função} sremovefirst (@var{seq}, @var{seq_caracte}, @var{test}, @var{início}, @var{fim})  
+Como em @code{sremove} exceto qie a primeira subseq@"{u}ência de caracteres que coincide com @code{seq} é removida. 
+
+@end deffn
+
+@deffn {Função} sreverse (@var{seq_caracte}) 
+Retorna uma seq@"{u}ência de caracteres com todos os caracteres de @var{seq_caracte} em ordem reversa. 
+
+@end deffn
+
+@deffn {Função} ssearch (@var{seq}, @var{seq_caracte})  
+@deffnx {Função} ssearch (@var{seq}, @var{seq_caracte}, @var{test})  
+@deffnx {Função} ssearch (@var{seq}, @var{seq_caracte}, @var{test}, @var{início})  
+@deffnx {Função} ssearch (@var{seq}, @var{seq_caracte}, @var{test}, @var{início}, @var{fim})
+Retorna a posição da primeira subseq@"{u}ência de caracteres de @var{seq_caracte} que coincide com a seq@"{u}ência de caracteres @var{seq}.
+A função padrão de teste de coincidência é @code{sequal}.
+Se @code{ssearch} puder igonorar a caixa alta/baixa, use @code{sequalignore} como função de teste.
+Use @var{início} e @var{fim} para limitar a busca.
+Note que o primeiro caractere em @var{seq_caracte} está na posição 1.
+
+@example
+(%i1) ssearch("~s","~@{~S ~@}~%",'sequalignore);
+(%o1)                                  4
+@end example
+
+@end deffn
+
+@deffn {Função} ssort (@var{seq_caracte}) 
+@deffnx {Função} ssort (@var{seq_caracte}, @var{test}) 
+Retorna uma seq@"{u}ência de caracteres que contém todos os caracteres de @var{seq_caracte} em uma ordem tal que não existam dois caracteres @var{c} sucessivos e @var{d} seja tal que @code{test (@var{c}, @var{d})} seja @code{false} e @code{test (@var{d}, @var{c})} seja @code{true}.
+A função padrão de teste para ordenaçào é @var{clessp}.
+O conjunto de funções de teste é @code{@{clessp, clesspignore, cgreaterp, cgreaterpignore, cequal, cequalignore@}}.
+
+@c ===beg===
+@c ssort("I don't like Mondays.");
+@c ssort("I don't like Mondays.",'cgreaterpignore);
+@c ===end===
+@example
+(%i1) ssort("I don't like Mondays.");
+(%o1)                    '.IMaddeiklnnoosty
+(%i2) ssort("I don't like Mondays.",'cgreaterpignore);
+(%o2)                 ytsoonnMlkIiedda.'   
+@end example
+
+@end deffn
+
+@deffn {Função} ssubst (@var{nova}, @var{antiga}, @var{seq_caracte}) 
+@deffnx {Função} ssubst (@var{nova}, @var{antiga}, @var{seq_caracte}, @var{test}) 
+@deffnx {Função} ssubst (@var{nova}, @var{antiga}, @var{seq_caracte}, @var{test}, @var{início}) 
+@deffnx {Função} ssubst (@var{nova}, @var{antiga}, @var{seq_caracte}, @var{test}, @var{início}, @var{fim}) 
+Retorna uma seq@"{u}ência de caracteres como @var{seq_caracte} exceto que todas as subseq@"{u}ências de caracteres que coincidirem com @var{antiga} são substituídas por @var{nova}.
+@var{antiga} e @var{nova} não precisam ser de mesmo comprimento.
+A função padrão de teste para coincidência é para coincidências é @code{sequal}.
+Se @code{ssubst} puder ignorar a cixa alta/baixa enquanto procurando por @var{antiga}, use @code{sequalignore} como função de teste.
+Use @var{início} e @var{fim} para limitar a busca.
+Note que o primeiro caractere em @var{seq_caracte} está na posição 1.
+
+@c ===beg===
+@c ssubst("like","hate","I hate Thai food. I hate green tea.");
+@c ssubst("Indian","thai",%,'sequalignore,8,12);
+@c ===end===
+@example
+(%i1) ssubst("like","hate","I hate Thai food. I hate green tea.");
+(%o1)          I like Thai food. I like green tea.
+(%i2) ssubst("Indian","thai",%,'sequalignore,8,12);
+(%o2)         I like Indian food. I like green tea.
+@end example
+
+@end deffn
+
+@deffn {Função} ssubstfirst (@var{nova}, @var{antiga}, @var{seq_caracte}) 
+@deffnx {Função} ssubstfirst (@var{nova}, @var{antiga}, @var{seq_caracte}, @var{test}) 
+@deffnx {Função} ssubstfirst (@var{nova}, @var{antiga}, @var{seq_caracte}, @var{test}, @var{início}) 
+@deffnx {Função} ssubstfirst (@var{nova}, @var{antiga}, @var{seq_caracte}, @var{test}, @var{início}, @var{fim}) 
+Como em @code{subst} exceto que somente a primeira subseq@"{u}ência de caracteres que coincidir com @var{antiga} é substituída. 
+
+@end deffn
+
+@deffn {Função} strim (@var{seq},@var{seq_caracte}) 
+Retorna uma seq@"{u}ência de caracteres como @var{seq_caracte},
+mas com todos os caracteres que aparecerem em @var{seq} removidos de ambas as extremidades. 
+
+@c ===beg===
+@c "/* comment */"$
+@c strim(" /*",%);
+@c slength(%);
+@c ===end===
+@example
+(%i1) "/* comment */"$
+(%i2) strim(" /*",%);
+(%o2)                        comment
+(%i3) slength(%);
+(%o3)                           7
+@end example
+
+@end deffn
+
+@deffn {Função} striml (@var{seq}, @var{seq_caracte}) 
+Como em @code{strim} exceto que somente a extremidade esquerda de @var{seq_caracte} é recordada. 
+
+@end deffn
+
+@deffn {Função} strimr (@var{seq}, @var{seq_caracte}) 
+Como em @code{strim} exceto que somente a extremidade direita de seq@"{u}ência de caracteres é recortada. 
+
+@end deffn
+
+@deffn {Função} substring (@var{seq_caracte}, @var{início})
+@deffnx {Função} substring (@var{seq_caracte}, @var{início}, @var{fim}) 
+Retorna a subseq@"{u}ência de caracteres de @var{seq_caracte} começando na posição @var{início} e terminando na posição @var{fim}.
+O caractere na posição @var{fim} não é incluído.
+Se @var{fim} não for fornecido, a subseq@"{u}ência de caracteres contém o restante da seq@"{u}ência de caracteres.
+Note que o primeiro caractere em @var{seq_caracte} está na posição 1.
+
+@c ===beg===
+@c substring("substring",4);
+@c substring(%,4,6);
+@c ===end===
+@example
+(%i1) substring("substring",4);
+(%o1)                        string
+(%i2) substring(%,4,6);
+(%o2)                          in
+@end example
+
+@end deffn
+
+@deffn {Função} supcase (@var{seq_caracte}) 
+@deffnx {Função} supcase (@var{seq_caracte}, @var{início}) 
+@deffnx {Função} supcase (@var{seq_caracte}, @var{início}, @var{fim}) 
+Retorna @var{seq_caracte} exceto que caracteres em caixa baixa a partir da posição @var{início} até a posição @var{fim} são substituídos pelo correspondente caracteres em caixa alta.
+Se @var{fim} não for fornecido,
+todos os caracteres em caixa baixa de @var{início} até o fim de @var{seq_caracte} são substituídos.
+
+@c ===beg===
+@c supcase("english",1,2);
+@c ===end===
+@example
+(%i1) load("stringproc")$
+(%i1) supcase("english",1,2);
+(%o1)                        English
+@end example
+
+@end deffn
+
+@deffn {Função} tokens (@var{seq_caracte}) 
+@deffnx {Função} tokens (@var{seq_caracte}, @var{test}) 
+Retorna uma lista de fichas, que tiverem sido extrídos de @var{seq_caracte}.
+As fichas são subseq@"{u}ências de caracteres cujos caracteres satisfazem a uma determinada função de teste.
+Se o teste não for fornecido, @var{constituent} é usada como teste padrão.
+@code{@{constituent, alphacharp, digitcharp, lowercasep, uppercasep, charp, characterp, alphanumericp@}} é o conjunto de fnções de teste. 
+(A verão Lisp de @code{tokens} é escrita por Paul Graham. ANSI Common Lisp, 1996, page 67.)
+
+@c ===beg===
+@c load("stringproc")$
+@c tokens("24 October 2005");
+@c tokens("05-10-24",'digitcharp);
+@c map(parsetoken,%);
+@c ===end===
+@example
+(%i1) tokens("24 October 2005");
+(%o1)                  [24, October, 2005]
+(%i2) tokens("05-10-24",'digitcharp);
+(%o2)                     [05, 10, 24]
+(%i3) map(parsetoken,%);
+(%o3)                      [5, 10, 24]
+@end example
+
+@end deffn
+

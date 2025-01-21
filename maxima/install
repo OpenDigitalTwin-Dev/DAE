@@ -1,0 +1,6 @@
+./bootstrap
+mkdir build
+cd build
+./../configure --prefix=$PWD/../../install/maxima_install
+make -j4
+make install

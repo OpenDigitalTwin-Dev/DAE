@@ -1,0 +1,29 @@
+\input ../texinfo
+@c /maxima.texi/1.49/Sat Jun  2 00:13:25 2007/-ko/
+@c Language: Brazilian Portuguese, Encoding: iso-8859-1
+@c -*-texinfo-*-
+
+@c 2000-04-17 Jim Van Zandt <jrv@vanzandt.mv.com> Added header,
+@c info directory entry, reference to introduction chapter, and menu
+@c descriptions.  Rearranged chapters.
+
+@c to update the menus do: 
+@c (texinfo-multiple-files-update "maxima.texi" t t)
+@c
+@c texinfo-multiple-files-update will delete the detailed node listing!
+@c texinfo Coodinator Robert Dodier
+@c Portuguese Translator Jorge Barros de Abreu <ficmati01@solar.com.br>
+
+@c %**start of header
+@setfilename  maxima.info
+@synindex vr fn
+@documentencoding UTF-8
+@documentlanguage pt_BR
+@set mail <maxima at math dot utexas dot edu>
+@settitle Manual do Maxima
+@include include-maxima.texi
+
+@bye
+
+
+

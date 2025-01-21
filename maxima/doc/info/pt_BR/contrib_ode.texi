@@ -1,0 +1,501 @@
+@c Language: Brazilian Portuguese, Encoding: iso-8859-1
+@c /contrib_ode.texi/1.5/Sat Jun  2 00:13:11 2007//
+@menu
+* Introdução a contrib_ode::
+* Funções e Variáveis Definidas para contrib_ode::
+* Possibilidades de melhorias em contrib_ode::
+* Casos de teste para contrib_ode::
+* Referências bibliográficas para contrib_ode::
+@end menu
+
+@node Introdução a contrib_ode, Funções e Variáveis Definidas para contrib_ode, contrib_ode, contrib_ode
+
+@section Introdução a contrib_ode 
+
+O resolvedor de equações diferenciais ordinárias (EDO) do MAXIMA, o @code{ode2}, resolve
+EDO's elementares de primeira e segunda ordem.  A função
+@code{contrib_ode} extende @code{ode2} com métodos adicionais para EDO's lineares
+e EDO's não lineares de primeira ordem e EDO's lineares homogêneas de segunda ordem.  
+O código está ainda em desenvolvimemto e a seq@"{u}ência de chamada da função pode mudar
+em futuras versões.  Uma vez que o código estiver estabilizado essa função pode ser
+movida do diretório contrib e integrada dentro do MAXIMA.
+
+Esse pacote deve torna-se disponível para uso com o comando @code{load("contrib_ode")}
+em primeiro lugar.
+
+A convenção de chamada para @code{contrib_ode} é idêntica a @code{ode2}.  
+Toma
+três argumentos: uma EDO (somente o lado esquerdo precisa ser fornecido se o
+lado direito for 0), a variável dependente, e a variável
+independente.  Quando @code{contrib_ode} obtiver sucesso, retorna uma lista de soluções.
+
+A forma de retorno da lista de solução difere de @code{ode2}.
+Como equações não lineares podem ter múltiplas soluções, 
+@code{contrib_ode} retorna uma lista de soluções.  Cada solução pode
+ter várias formas:
+@itemize @bullet
+@item
+uma solução explícita para a variável dependente,
+
+@item
+uma solução implícita para a variável dependente,
+
+@item
+uma solução paramétrica em termos de variável %t, ou
+
+@item
+uma transfrmação em outra EDO na variável %u.
+
+@end itemize
+
+@code{%c} é usado para representar a constante de integração para equações de primeira ordem.
+@code{%k1} e @code{%k2} são constantes para equações de segunda ordem.  
+Se @code{contrib_ode}
+não puder obter uma solução por qualquer razão, @code{false} é retornado, após
+talvez mostrar uma mensagem de erro.
+
+Isso é necessário para retornar uma lista de soluções, como mesmo EDO's de primeira
+ordem não lineares podem ter soluções multiplas.  Por exemplo:
+
+@c ===beg===
+@c load("contrib_ode")$
+@c eqn:x*'diff(y,x)^2-(1+x*y)*'diff(y,x)+y=0;
+@c contrib_ode(eqn,y,x);
+@c method;
+@c ===end===
+@example
+(%i1) load("contrib_ode")$
+
+(%i2) eqn:x*'diff(y,x)^2-(1+x*y)*'diff(y,x)+y=0;
+
+                    dy 2             dy
+(%o2)            x (--)  - (x y + 1) -- + y = 0
+                    dx               dx
+(%i3) contrib_ode(eqn,y,x);
+
+                                             x
+(%o3)             [y = log(x) + %c, y = %c %e ]
+(%i4) method;
+
+(%o4)                        factor
+@end example
+
+EDO's não lineares podem ter soluções singulares sem constantes de
+integração, como na segunda solução do seguinte exemplo:
+
+@c ===beg===
+@c load("contrib_ode")$
+@c eqn:'diff(y,x)^2+x*'diff(y,x)-y=0;
+@c contrib_ode(eqn,y,x);
+@c method;
+@c ===end===
+@example
+(%i1) load("contrib_ode")$
+
+(%i2) eqn:'diff(y,x)^2+x*'diff(y,x)-y=0;
+
+                       dy 2     dy
+(%o2)                 (--)  + x -- - y = 0
+                       dx       dx
+(%i3) contrib_ode(eqn,y,x);
+
+                                           2
+                                 2        x
+(%o3)              [y = %c x + %c , y = - --]
+                                          4
+(%i4) method;
+
+(%o4)                       clairault
+@end example
+
+
+A seguinte EDO possui duas soluções paramétricas em termos da variável
+fictícia %t.  Nesse caso as soluções paramétricaspodem ser manipuladas
+para fornecer soluções explícitas.
+
+@c ===beg===
+@c load("contrib_ode")$
+@c eqn:'diff(y,x)=(x+y)^2;
+@c contrib_ode(eqn,y,x);
+@c method;
+@c ===end===
+@example
+(%i1) load("contrib_ode")$
+
+(%i2) eqn:'diff(y,x)=(x+y)^2;
+
+                          dy          2
+(%o2)                     -- = (y + x)
+                          dx
+(%i3) contrib_ode(eqn,y,x);
+
+(%o3) [[x = %c - atan(sqrt(%t)), y = - x - sqrt(%t)], 
+                     [x = atan(sqrt(%t)) + %c, y = sqrt(%t) - x]]
+(%i4) method;
+
+(%o4)                       lagrange
+@end example
+
+O seguinte exemplo (Kamke 1.112) demonstra uma solução implícita.
+
+@c ===beg===
+@c load("contrib_ode")$
+@c assume(x>0,y>0);
+@c eqn:x*'diff(y,x)-x*sqrt(y^2+x^2)-y;
+@c contrib_ode(eqn,y,x);
+@c method;
+@c ===end===
+@example
+(%i1) load("contrib_ode")$
+
+(%i2) assume(x>0,y>0);
+
+(%o2)                    [x > 0, y > 0]
+(%i3) eqn:x*'diff(y,x)-x*sqrt(y^2+x^2)-y;
+
+                     dy           2    2
+(%o3)              x -- - x sqrt(y  + x ) - y
+                     dx
+(%i4) contrib_ode(eqn,y,x);
+
+                                  y
+(%o4)                  [x - asinh(-) = %c]
+                                  x
+(%i5) method;
+
+(%o5)                          lie
+@end example
+
+ 
+
+A seguinte equação de Riccati é transformada em uma EDO linear
+de segunda ordem na variável %u.  MAXIMA não está apto a
+resolver a nova EDO, de forma que essa nova EDO é retornada sem avaliação.
+@c ===beg===
+@c load("contrib_ode")$
+@c eqn:x^2*'diff(y,x)=a+b*x^n+c*x^2*y^2;
+@c contrib_ode(eqn,y,x);
+@c method;
+@c ===end===
+@example
+(%i1) load("contrib_ode")$
+
+(%i2) eqn:x^2*'diff(y,x)=a+b*x^n+c*x^2*y^2;
+
+                    2 dy      2  2      n
+(%o2)              x  -- = c x  y  + b x  + a
+                      dx
+(%i3) contrib_ode(eqn,y,x);
+
+               d%u
+               ---                            2
+               dx        2     n - 2   a     d %u
+(%o3)  [[y = - ----, %u c  (b x      + --) + ---- c = 0]]
+               %u c                     2      2
+                                       x     dx
+(%i4) method;
+
+(%o4)                        riccati
+@end example
+
+
+Para EDO's de primeira ordem @code{contrib_ode} chama @code{ode2}.  @code{ode2} tenta então os
+seguintes métodos: fatoração, Clairault, Lagrange, Riccati,
+Abel e os métodos de simetria de Lie.  O método de Lie não é tentado
+sobre equações de Abel se o método de Abel falhar, mas é tendado
+se o método de Riccati uma EDO de segunda ordem não resolvida.
+
+Para EDO's de segunda ordem @code{contrib_ode} chama @code{ode2} e em seguida @code{odelin}.
+
+Rastros extensivos de depuração mensagens são mostradas se o comando
+@code{put('contrib_ode,true,'verbose)} for executado.
+
+@node Funções e Variáveis Definidas para contrib_ode, Possibilidades de melhorias em contrib_ode, Introdução a contrib_ode, contrib_ode
+@section Funções e Variáveis Definidas para contrib_ode
+
+@deffn {Função} contrib_ode (@var{eqn}, @var{y}, @var{x})
+
+Retorna uma lista de soluções da EDO @var{eqn} com
+variável independente @var{x} e variável dependente @var{y}.
+
+@end deffn
+
+@deffn {Função} odelin (@var{eqn}, @var{y}, @var{x})
+
+@code{odelin} resolve EDO's lineares homogêneas de primeira e 
+segunda ordem com
+variável independente @var{x} e variável dependente @var{y}.  
+@code{odelin} retorna um conjunto solução fundamental da EDO.
+
+para EDO's de segunda ordem, @code{odelin} usa um método, devido a Bronstein
+e Lafaille, que busca por soluções em termos de funções 
+especiais dadas. 
+
+@c ===beg===
+@c load("contrib_ode")$
+@c odelin(x*(x+1)*'diff(y,x,2)+(x+5)*'diff(y,x,1)+(-4)*y,y,x);
+@c ===end===
+@example
+(%i1) load("contrib_ode");
+
+(%i2) odelin(x*(x+1)*'diff(y,x,2)+(x+5)*'diff(y,x,1)+(-4)*y,y,x);
+...trying factor method
+...solving 7 equations in 4 variables
+...trying the Bessel solver
+...solving 1 equations in 2 variables
+...trying the F01 solver
+...solving 1 equations in 3 variables
+...trying the spherodial wave solver
+...solving 1 equations in 4 variables
+...trying the square root Bessel solver
+...solving 1 equations in 2 variables
+...trying the 2F1 solver
+...solving 9 equations in 5 variables
+       gauss_a(- 6, - 2, - 3, - x)  gauss_b(- 6, - 2, - 3, - x)
+(%o2) @{---------------------------, ---------------------------@}
+                    4                            4
+                   x                            x
+
+@end example
+
+@end deffn
+
+@deffn {Função} ode_check (@var{eqn}, @var{sol})
+
+Retorna o valor da EDO @var{eqn} após substituir uma
+possível solução @var{sol}.  O valor é igual a
+zero se @var{sol} for uma solução of @var{eqn}.
+
+@c ===beg===
+@c load("contrib_ode")$
+@c eqn:'diff(y,x,2)+(a*x+b)*y;
+@c ans:[y = bessel_y(1/3,2*(a*x+b)^(3/2)/(3*a))*%k2*sqrt(a*x+b)
+@c          +bessel_j(1/3,2*(a*x+b)^(3/2)/(3*a))*%k1*sqrt(a*x+b)];
+@c ode_check(eqn,ans[1]);
+@c ===end===
+@example
+(%i1) load("contrib_ode")$
+
+(%i2) eqn:'diff(y,x,2)+(a*x+b)*y;
+
+                         2
+                        d y
+(%o2)                   --- + (a x + b) y
+                          2
+                        dx
+(%i3) ans:[y = bessel_y(1/3,2*(a*x+b)^(3/2)/(3*a))*%k2*sqrt(a*x+b)
+         +bessel_j(1/3,2*(a*x+b)^(3/2)/(3*a))*%k1*sqrt(a*x+b)];
+
+                                  3/2
+                    1  2 (a x + b)
+(%o3) [y = bessel_y(-, --------------) %k2 sqrt(a x + b)
+                    3       3 a
+                                          3/2
+                            1  2 (a x + b)
+                 + bessel_j(-, --------------) %k1 sqrt(a x + b)]
+                            3       3 a
+(%i4) ode_check(eqn,ans[1]);
+
+(%o4)                           0
+@end example
+
+@end deffn
+
+@defvr {Variável global} @code{method}
+
+A variável @code{method} é escolhida para o método que resolver com sucesso
+uma dada EDO.
+
+@end defvr
+
+@defvr {Variável} @code{%c}
+
+@code{%c} é a constante de integração para EDO's de primeira ordem.
+
+@end defvr
+
+@defvr {Variável} @code{%k1}
+
+@code{%k1} é a primeira constante de integração para EDO's de segunda ordem.
+
+@end defvr
+
+@defvr {Variável} @code{%k2}
+
+@code{%k2} é a segunda constante de integração para EDO's de segunda ordem.
+
+@end defvr
+
+@deffn {Função} gauss_a (@var{a}, @var{b}, @var{c}, @var{x})
+
+@code{gauss_a(a,b,c,x)} e @code{gauss_b(a,b,c,x)} são funções
+hipergeométricas 2F1.  Elas represetnam quaisquer duas soluções
+independentes da equação diferencial hipergeométrica
+@code{x(1-x) diff(y,x,2) + [c-(a+b+1)x diff(y,x) - aby = 0} (A&S 15.5.1).  
+
+O único uso dessas funções é em soluções de EDO's retornadas por
+@code{odelin} e @code{contrib_ode}.  A definição e o uso dessas
+funções pode mudar em futuras versões do maxima.
+
+Veja também @code{gauss_b}, @code{dgauss_a} e @code{gauss_b}.
+
+@end deffn
+
+@deffn {Função} gauss_b (@var{a}, @var{b}, @var{c}, @var{x})
+Veja @code{gauss_a}.
+@end deffn
+
+@deffn {Função} dgauss_a (@var{a}, @var{b}, @var{c}, @var{x})
+A derivada em relação a x de @code{gauss_a(a,b,c,x)}.
+@end deffn
+
+@deffn {Função} dgauss_b (@var{a}, @var{b}, @var{c}, @var{x})
+A derivada em relação a x de @code{gauss_b(a,b,c,x)}.
+@end deffn
+
+
+@deffn {Função} kummer_m (@var{a}, @var{b}, @var{x})
+
+A função  M de Kummer, como definida em Abramowitz e Stegun,
+@i{Handbook of Mathematical Functions}, Section 13.1.2.
+
+O único uso dessas funções é em soluções de EDO's retornadas por
+@code{odelin} e @code{contrib_ode}.  A definição e o uso dessas
+funções pode mudar em futuras versões do maxima.
+
+Veja também @code{kummer_u}, @code{dkummer_m} e @code{dkummer_u}.
+@end deffn
+
+@deffn {Função} kummer_u (@var{a}, @var{b}, @var{x})
+
+A função U de Kummer, como definida em Abramowitz e Stegun,
+@i{Handbook of Mathematical Functions}, Section 13.1.3.
+
+Veja @code{kummer_m}.
+@end deffn
+
+@deffn {Função} dkummer_m (@var{a}, @var{b}, @var{x})
+A derivada com relação a x de @code{kummer_m(a,b,x)}.
+@end deffn
+
+@deffn {Função} dkummer_u (@var{a}, @var{b}, @var{x})
+A derivada com relação a x de  @code{kummer_u(a,b,x)}.
+@end deffn
+
+
+
+@node Possibilidades de melhorias em contrib_ode, Casos de teste para contrib_ode, Funções e Variáveis Definidas para contrib_ode, contrib_ode
+@section Possibilidades de melhorias em contrib_ode
+
+
+Essas rotinas aida estão sendo aperfeiçoadas.  É necessário ainda:
+
+@itemize @bullet
+
+@item
+Extender o método FACTOR @code{ode1_factor} para trabalhar com raízes multiplas.
+
+@item
+Extender o método FACTOR  @code{ode1_factor} para tentar resolver fatores
+  de mais alta ordem.  Atualmente somente tenta resolver fatores lineares.
+
+@item
+Corrigir a rotina de LAGRANGE @code{ode1_lagrange} para preferiraízes reais a
+  raízes complexas.
+
+@item
+Aumentar a quantidade de métodos adicionais para equações de Riccati.
+
+@item
+Melhorar a detecção de equações de Abel do segundo tipo.  O modelo
+  existente de coincidência é fraco.
+
+@item
+Trabalho sobre a rotina do grupo de simetria de Lie @code{ode1_lie}.  Existem poucos porém
+  grandes problemas com essa rotina: algumas partes precisam de implementação; alguns casos de teste
+  parecem executar indefinidamente; outros casos de teste abortam inesplicavelmente; outros ainda retorna "soluções"
+  muito complexas.  Seria surpreendente se estivesse pronto para se liberar uma versão estável.
+
+@item
+Adicionar mais casos de teste.
+
+@end itemize
+
+@node Casos de teste para contrib_ode, Referências bibliográficas para contrib_ode, Possibilidades de melhorias em contrib_ode, contrib_ode
+@section Casos de teste para contrib_ode
+
+
+Asrotinas foram tesadas sobre aproximadamente mil casos de teste
+por Murphy,
+Kamke, Zwillinger e outros.  Esses testes estão incluídos no subdiretório de testes.
+
+@itemize @bullet
+@item
+A rotina de Clairault @code{ode1_clairault} encontra todas as soluções conhecidas,
+  incluindo soluções singulares, das equações de Clairault em Murphy e
+  Kamke.
+
+@item
+As outras rotinas muitas vezes retornam uma solução simples quando existem
+  multiplas soluções.
+
+@item
+Algumas das "soluções" de @code{ode1_lie} são extremamente complexas e
+  impossíveis de verificar.
+
+@item
+Existe algumas interrupções inexplicávies de execução.
+
+@end itemize
+
+@node Referências bibliográficas para contrib_ode, ,Casos de teste para contrib_ode, contrib_ode
+@section Referências bibliográficas para contrib_ode
+
+
+@enumerate
+@item
+E Kamke, Differentialgleichungen Losungsmethoden und Losungen, Vol 1,
+    Geest & Portig, Leipzig, 1961
+
+@item
+G M Murphy, Ordinary Differential Equations and Their Solutions,
+    Van Nostrand, New York, 1960
+
+@item
+D Zwillinger, Handbook of Differential Equations, 3rd edition,
+    Academic Press, 1998
+
+@item
+F Schwarz, Symmetry Analysis of Abel's Equation, Studies in
+    Applied Mathematics, 100:269-294 (1998)
+
+@item
+F Schwarz, Algorithmic Solution of Abel's Equation,
+    Computing 61, 39-49 (1998)
+
+@item
+E. S. Cheb-Terrab, A. D. Roche, Symmetries and First Order
+    EDO Patterns, Computer Physics Communications 113 (1998), p 239.
+    (http://lie.uwaterloo.ca/papers/ode_vii.pdf)
+
+@item
+E. S. Cheb-Terrab, T. Koloknikov,  First Order EDO's,
+    Symmetries and Linear Transformations, European Journal of
+    Applied Mathematics, Vol. 14, No. 2, pp. 231-246 (2003).
+    (http://arxiv.org/abs/math-ph/0007023)
+    (http://lie.uwaterloo.ca/papers/ode_iv.pdf)
+
+@item
+G W Bluman, S C Anco, Symmetry and Integration Methods for
+    Differential Equations, Springer, (2002)
+
+@item 
+M Bronstein, S Lafaille,
+Solutions of linear ordinary equações diferenciais in terms
+of special functions,
+Proceedings of ISSAC 2002, Lille, ACM Press, 23-28. 
+(http://www-sop.inria.fr/cafe/Manuel.Bronstein/publications/issac2002.pdf)
+
+
+@end enumerate
+

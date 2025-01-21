@@ -1,0 +1,144 @@
+@menu
+* Introduction to mnewton::
+* Functions and Variables for mnewton::
+@end menu
+
+@c -----------------------------------------------------------------------------
+@node Introduction to mnewton, Functions and Variables for mnewton, Package mnewton, Package mnewton
+@section Introduction to mnewton
+@c -----------------------------------------------------------------------------
+
+@code{mnewton} is an implementation of Newton's method for solving nonlinear
+equations in one or more variables.
+
+@opencatbox{Categories:}
+@category{Numerical methods}
+@category{Share packages}
+@category{Package mnewton}
+@closecatbox
+
+@c -----------------------------------------------------------------------------
+@node Functions and Variables for mnewton,  , Introduction to mnewton, Package mnewton
+@section Functions and Variables for mnewton
+@c -----------------------------------------------------------------------------
+
+@c -----------------------------------------------------------------------------
+@anchor{newtonepsilon}
+@defvr {Option variable} newtonepsilon
+Default value: @code{10.0^(-fpprec/2)}
+
+Precision to determine when the @code{mnewton} function has converged towards
+the solution.
+
+When @code{newtonepsilon} is a bigfloat,
+@code{mnewton} computations are done with bigfloats;
+otherwise, ordinary floats are used.
+
+See also @mrefdot{mnewton}
+
+@opencatbox{Categories:}
+@category{Package mnewton}
+@closecatbox
+@end defvr
+
+@c -----------------------------------------------------------------------------
+@anchor{newtonmaxiter}
+@defvr {Option variable} newtonmaxiter
+Default value: @code{50}
+
+Maximum number of iterations to stop the @code{mnewton} function
+if it does not converge or if it converges too slowly.
+
+See also @mrefdot{mnewton}
+
+@opencatbox{Categories:}
+@category{Package mnewton}
+@closecatbox
+@end defvr
+
+@c -----------------------------------------------------------------------------
+@anchor{newtondebug}
+@defvr {Option variable} newtondebug
+Default value: @code{false}
+
+When @code{newtondebug} is @code{true}, 
+@code{mnewton} prints out debugging information while solving a problem.
+
+@opencatbox{Categories:}
+@category{Package mnewton}
+@closecatbox
+@end defvr
+
+@c -----------------------------------------------------------------------------
+@anchor{mnewton}
+@deffn {Function} mnewton @
+@fname{mnewton} (@var{FuncList}, @var{VarList}, @var{GuessList}) @
+@fname{mnewton} (@var{FuncList}, @var{VarList}, @var{GuessList}, @var{DF})
+
+Approximate solution of multiple nonlinear equations by Newton's method.
+
+@var{FuncList} is a list of functions to solve,
+@var{VarList} is a list of variable names, and
+@var{GuessList} is a list of initial approximations.
+The optional argument @var{DF} is the Jacobian matrix of the list of functions;
+if not supplied, it is calculated automatically from @var{FuncList}.
+
+@var{FuncList} may be specified as a list of equations,
+in which case the function to be solved is the left-hand side of each equation minus the right-hand side.
+
+If there is only a single function, variable, and initial point,
+they may be specified as a single expression, variable, and initial value;
+they need not be lists of one element.
+
+A variable may be a simple symbol or a subscripted symbol.
+
+The solution, if any, is returned as a list of one element,
+which is a list of equations, one for each variable,
+specifying an approximate solution;
+this is the same format as returned by @code{solve}.
+If the solution is not found, @code{[]} is returned.
+
+Functions and initial points may contain complex numbers,
+and solutions likewise may contain complex numbers.
+
+@code{mnewton} is governed by global variables @mref{newtonepsilon} and
+@mrefcomma{newtonmaxiter} and the global flag @mrefdot{newtondebug}
+
+@code{load("mnewton")} loads this function.
+
+See also @mrefcomma{realroots} @mrefcomma{allroots} @mref{find_root} and
+@mrefdot{newton}
+
+Examples:
+
+@example
+(%i1) load("mnewton")$
+
+(%i2) mnewton([x1+3*log(x1)-x2^2, 2*x1^2-x1*x2-5*x1+1],
+              [x1, x2], [5, 5]);
+(%o2) [[x1 = 3.756834008012769, x2 = 2.779849592817897]]
+(%i3) mnewton([2*a^a-5],[a],[1]);
+(%o3)             [[a = 1.70927556786144]]
+(%i4) mnewton([2*3^u-v/u-5, u+2^v-4], [u, v], [2, 2]);
+(%o4) [[u = 1.066618389595407, v = 1.552564766841786]]
+@end example
+
+The variable @code{newtonepsilon} controls the precision of the
+approximations.  It also controls if computations are performed with
+floats or bigfloats.
+
+@example
+(%i1) load("mnewton")$
+
+(%i2) (fpprec : 25, newtonepsilon : bfloat(10^(-fpprec+5)))$
+
+(%i3) mnewton([2*3^u-v/u-5, u+2^v-4], [u, v], [2, 2]);
+(%o3) [[u = 1.066618389595406772591173b0, 
+                               v = 1.552564766841786450100418b0]]
+@end example
+
+@opencatbox{Categories:}
+@category{Package mnewton}
+@closecatbox
+@end deffn
+
