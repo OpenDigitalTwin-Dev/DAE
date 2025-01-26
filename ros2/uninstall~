@@ -1,0 +1,4 @@
+rm -rf ros2/ros2_jazzy/install
+rm -rf ros2/ros2_jazzy/build
+rm -rf ros2/ros2_jazzy/log
+

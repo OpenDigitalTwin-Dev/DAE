@@ -1,0 +1,58 @@
+# >>> there are two source compilation, it is for the tutorial and the other one
+# >>> is for moveit2, you first find the one for moveit2 from moveit2 github as the following
+# >>> Install
+# >>>  Binary Install
+# >>>  Source Install
+# >>> at the bottom of source install, you could find the compilation for tutorial
+# >>> Check out the MoveIt 2 Tutorials on how to get started with simple demo packages.
+
+# >>>
+
+sudo apt install -y \
+  build-essential \
+  cmake \
+  git \
+  python3-colcon-common-extensions \
+  python3-flake8 \
+  python3-rosdep \
+  python3-setuptools \
+  python3-vcstool \
+  wget
+
+# >>>
+
+sudo apt update
+sudo apt dist-upgrade
+rosdep update
+
+# >>> this is very important you can't use the install/local_setup.bash or setup.bash
+
+source /opt/ros/jazzy/setup.bash
+
+# >>>
+
+export COLCON_WS=./ws_moveit2/
+mkdir -p $COLCON_WS/src
+cd $COLCON_WS/src
+
+# >>>
+
+#git clone https://github.com/moveit/moveit2.git -b $ROS_DISTRO
+#for repo in moveit2/moveit2.repos $(f="moveit2/moveit2_$ROS_DISTRO.repos"; test -r $f && echo $f); do vcs import < "$repo"; done
+rosdep install -r --from-paths . --ignore-src --rosdistro jazzy -y
+
+# >>>
+
+sudo apt install ros-jazzy-rmw-cyclonedds-cpp
+export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+
+# >>>
+
+cd ..
+colcon build --event-handlers desktop_notification- status- --cmake-args -DCMAKE_BUILD_TYPE=Release
+
+# >>>
+
+source ./install/setup.bash
+
+cd ..

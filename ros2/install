@@ -1,0 +1,7 @@
+cd ros2
+./install
+cd ..
+
+cd moveit2
+./install
+cd ..

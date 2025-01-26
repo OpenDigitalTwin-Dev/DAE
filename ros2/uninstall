@@ -1,0 +1,8 @@
+rm -rf ./ros2/ros2_jazzy/install
+rm -rf ./ros2/ros2_jazzy/build
+rm -rf ./ros2/ros2_jazzy/log
+
+rm -rf ./moveit2/ws_moveit2/install
+rm -rf ./moveit2/ws_moveit2/build
+rm -rf ./moveit2/ws_moveit2/log
+
