@@ -19,8 +19,8 @@ sudo add-apt-repository universe
 # >>>
 
 sudo apt update && sudo apt install curl -y
-# sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
-sudo cp ros.key /usr/share/keyrings/ros-archive-keyring.gpg
+#sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+sudo cp rosdistro/ros.key /usr/share/keyrings/ros-archive-keyring.gpg
 
 # >>>
 
@@ -61,13 +61,15 @@ sudo apt upgrade
 #sudo cp -r ../releases/ /etc/ros/
 #echo "check 2"
 
+sudo cp ../20-default.list /etc/ros/rosdep/sources.list.d/20-default.list
+
 sudo rosdep init
 rosdep update
-#rosdep install --from-paths src --ignore-src -y --skip-keys "fastcdr rti-connext-dds-6.0.1 urdfdom_headers"
+rosdep install --from-paths src --ignore-src -y --skip-keys "fastcdr rti-connext-dds-6.0.1 urdfdom_headers"
 
 # >>>
 
-#colcon build --symlink-install
+colcon build --symlink-install
 
 #source ./install/local_setup.bash
 
