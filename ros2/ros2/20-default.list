@@ -10,8 +10,8 @@
 # newer distributions (Groovy, Hydro, ...) must not be listed anymore, they are being fetched from the rosdistro index.yaml instead
 
 
-yaml file:///home/jiping/FENGSim/toolkit/DAE/ros2/ros2/rosdistro/rosdep/osx-homebrew.yaml osx
-yaml file:///home/jiping/FENGSim/toolkit/DAE/ros2/ros2/rosdistro/rosdep/base.yaml
-yaml file:///home/jiping/FENGSim/toolkit/DAE/ros2/ros2/rosdistro/rosdep/python.yaml
-yaml file:///home/jiping/FENGSim/toolkit/DAE/ros2/ros2/rosdistro/rosdep/ruby.yaml
-gbpdistro file:///home/jiping/FENGSim/toolkit/DAE/ros2/ros2/rosdistro/releases/fuerte.yaml fuerte
+yaml file:///test/toolkit/DAE/ros2/ros2/rosdistro/rosdep/osx-homebrew.yaml osx
+yaml file:///test/toolkit/DAE/ros2/ros2/rosdistro/rosdep/base.yaml
+yaml file:///test/toolkit/DAE/ros2/ros2/rosdistro/rosdep/python.yaml
+yaml file:///test/toolkit/DAE/ros2/ros2/rosdistro/rosdep/ruby.yaml
+gbpdistro file:///test/toolkit/DAE/ros2/ros2/rosdistro/releases/fuerte.yaml fuerte
