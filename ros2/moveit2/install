@@ -1,10 +1,11 @@
 # >>> there are two source compilation, it is for the tutorial and the other one
 # >>> is for moveit2, you first find the one for moveit2 from moveit2 github as the following
 # >>> Install
-# >>>  Binary Install
-# >>>  Source Install
+# >>>    Binary Install
+# >>>    Source Install
 # >>> at the bottom of source install, you could find the compilation for tutorial
 # >>> Check out the MoveIt 2 Tutorials on how to get started with simple demo packages.
+# >>> we mush install ros2 firstly
 
 # >>>
 
@@ -26,6 +27,7 @@ sudo apt dist-upgrade
 rosdep update
 
 # >>> this is very important you can't use the install/local_setup.bash or setup.bash
+# >>> moveit2 install from http://packages.ros.org/ros2/ubuntu to get /opt/ros/jazzy
 
 source /opt/ros/jazzy/setup.bash
 
