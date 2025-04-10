@@ -1,0 +1,3 @@
+rm -rf ws_moveit2/build
+rm -rf ws_moveit2/install
+rm -rf ws_moveit2/log
