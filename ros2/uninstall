@@ -6,3 +6,7 @@ rm -rf ./moveit2/ws_moveit2/install
 rm -rf ./moveit2/ws_moveit2/build
 rm -rf ./moveit2/ws_moveit2/log
 
+rm -rf ./moveit2_tutorials/install
+rm -rf ./moveit2_tutorials/build
+rm -rf ./moveit2_tutorials/log
+

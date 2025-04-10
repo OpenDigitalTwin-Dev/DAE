@@ -5,3 +5,7 @@ cd ..
 cd moveit2
 ./install
 cd ..
+
+cd moveit2_tutorials/
+./install
+cd ..
