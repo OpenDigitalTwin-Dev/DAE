@@ -63,7 +63,7 @@ __version__ = '1.0.1'
 
 # index information
 
-DEFAULT_INDEX_URL = 'file:///test/toolkit/DAE/ros2/ros2/rosdistro/index-v4.yaml'
+DEFAULT_INDEX_URL = 'file:///workspace/toolkit/DAE/ros2/ros2/rosdistro/index-v4.yaml'
 
 
 def get_index_url():
