@@ -63,7 +63,7 @@ __version__ = '1.0.1'
 
 # index information
 
-DEFAULT_INDEX_URL = 'file:///home/test/FENGSim/toolkit/DAE/ros2/ros2/rosdistro/index-v4.yaml'
+DEFAULT_INDEX_URL = 'file:///etc/ros/rosdep/sources.list.d/index-v4.yaml'
 
 
 def get_index_url():
