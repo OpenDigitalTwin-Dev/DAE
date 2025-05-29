@@ -62,9 +62,13 @@ sudo apt upgrade
 #echo "check 2"
 
 sudo mkdir -p /etc/ros/rosdep/sources.list.d/
-#sudo cp ../yaml/* /etc/ros/rosdep/sources.list.d/
 sudo cp ../20-default.list /etc/ros/rosdep/sources.list.d/20-default.list
 sudo cp ../__init__.py /usr/lib/python3/dist-packages/rosdistro/__init__.py
+
+sudo sed -i "s|/home/test|$HOME|g" /etc/ros/rosdep/sources.list.d/20-default.list
+
+sudo sed -i "s|/home/test|$HOME|g" /usr/lib/python3/dist-packages/rosdistro/__init__.py
+
 
 sudo rosdep init
 rosdep update
