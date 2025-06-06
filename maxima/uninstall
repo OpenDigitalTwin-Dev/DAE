@@ -3,3 +3,4 @@ make clean
 cd ..
 rm -rf build
 rm -rf ../install/maxima_install
+rm -rf bin

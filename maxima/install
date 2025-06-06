@@ -1,6 +1,8 @@
 # >>> should use ubuntu 24.04, ubuntu 22.04 gcl has some problems
 
-sudo apt -y install autoconf gcl texinfo
+sudo apt -y install autoconf gcl texinfo unzip
+
+unzip bin -d $PWD
 
 ./bootstrap
 mkdir build
