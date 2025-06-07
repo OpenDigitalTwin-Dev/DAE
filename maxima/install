@@ -1,12 +1,13 @@
 # >>> should use ubuntu 24.04, ubuntu 22.04 gcl has some problems
 
-sudo apt -y install autoconf gcl texinfo unzip clisp
+sudo apt -y install autoconf gcl texinfo unzip clisp make gcc g++ locales
+sudo locale-gen en_US en_US.UTF-8
+sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
 
 unzip bin -d $PWD
 
 ./bootstrap
-mkdir build
-cd build
-./../configure --prefix=$PWD/../../install/maxima_install
+./configure --prefix=$PWD/../../install/maxima_install
 make -j4
 make install
