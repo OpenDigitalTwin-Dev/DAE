@@ -1,4 +1,4 @@
-# >>> should use ubuntu 24.04, ubuntu 22.04 gcl has some problems, ubuntu 24.04 gcl version is old and use clisp instead
+# >>> should use ubuntu 24.04, ubuntu 22.04 gcl has some problems, ubuntu 22.04 gcl version is old and could use clisp instead
 
 sudo apt -y install autoconf gcl texinfo unzip clisp make gcc g++ locales
 sudo locale-gen en_US en_US.UTF-8
