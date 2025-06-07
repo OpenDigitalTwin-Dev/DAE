@@ -11,3 +11,7 @@ unzip bin -d $PWD
 ./configure --prefix=$PWD/../install/maxima_install
 make -j4
 make install
+
+export XMAXIMA_MAXIMA=$PWD/../install/maxima_install/bin/maxima
+cd ../install/maxima_install/bin
+./xmaxima
