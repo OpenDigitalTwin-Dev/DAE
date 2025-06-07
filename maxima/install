@@ -8,6 +8,6 @@ export LANG=en_US.UTF-8
 unzip bin -d $PWD
 
 ./bootstrap
-./configure --prefix=$PWD/../../install/maxima_install
+./configure --prefix=$PWD/../install/maxima_install
 make -j4
 make install
