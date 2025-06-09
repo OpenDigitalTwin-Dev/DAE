@@ -1,6 +1,7 @@
 # >>> should use ubuntu 24.04, ubuntu 22.04 gcl has some problems, ubuntu 22.04 gcl version is old and could use clisp instead
 
-sudo apt -y install autoconf gcl texinfo unzip clisp make gcc g++ locales
+sudo apt -y install autoconf gcl texinfo unzip clisp make gcc g++ locales rlwrap
+
 sudo locale-gen en_US en_US.UTF-8
 sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
 export LANG=en_US.UTF-8
