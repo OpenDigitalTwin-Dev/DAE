@@ -1,0 +1,77 @@
+cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
+project(m++_api)
+
+set(CMAKE_CXX_COMPILER /usr/bin/g++-10)
+
+find_package(MPI)
+if(MPI_FOUND)
+  message("MPI FOUND")
+  message(${MPI_LIBRARIES})
+  include_directories(${MPI_INCLUDE_DIRS})
+  link_directories(${MPI_LIBRARY_DIRS})
+  add_definitions(${MPI_DEFINITIONS})
+endif()
+
+include_directories("/usr/include/x86_64-linux-gnu/openmpi/")
+
+include_directories("/usr/include/superlu")
+include_directories("/usr/include/")
+include_directories("M++/src")
+include_directories("Solid/src")
+include_directories(${CMAKE_BINARY_DIR}/../extern/ALE/install/mesquite/include)
+include_directories(${CMAKE_BINARY_DIR}/../extern/ALE/install/zoltan/include)
+include_directories(${CMAKE_BINARY_DIR}/../extern/ALE/install/metis/include)
+include_directories(${CMAKE_BINARY_DIR}/../extern/ALE/install/mstk/include)
+include_directories(${CMAKE_BINARY_DIR}/../extern/ALE/install/jali/include)
+include_directories(${CMAKE_BINARY_DIR}/../extern/ALE/install/wonton/include)
+include_directories(${CMAKE_BINARY_DIR}/../extern/ALE/install/portage/include)
+
+aux_source_directory(Solid/src solver_DIR_SRCS)
+aux_source_directory(Maxwell/src solver_DIR_em)
+add_executable (multix ${solver_DIR_SRCS} ${solver_DIR_em} Main.C M++/src/Identify.C M++/src/MatrixGraph.C M++/src/Algebra.C M++/src/Shape.C M++/src/Point.C M++/src/Parallel.C M++/src/Time.C M++/src/ctools.C M++/src/IO.C M++/src/Mesh.C M++/src/Cell.C M++/src/Distribution.C M++/src/Plot.C M++/src/Quadrature.C M++/src/DoF.C M++/src/Sparse.C M++/src/Interface.C M++/src/Discretization.C M++/src/LinearSolver.C M++/src/DD.C M++/src/Preconditioner.C M++/src/TimeSeries.C M++/src/ESolver.C M++/src/Transfer.C M++/src/Element.C M++/src/FaceElement.C M++/src/Newton.C M++/src/Newmark.C M++/src/Euler.C M++/src/Small.C M++/src/Schur.C)
+
+target_link_libraries (multix ${MPI_LIBRARIES})
+target_link_libraries (multix /usr/lib/x86_64-linux-gnu/libblas.so)
+target_link_libraries (multix /usr/lib/x86_64-linux-gnu/liblapack.so)
+target_link_libraries (multix /usr/lib/x86_64-linux-gnu/libsuperlu.so)
+
+target_link_libraries (multix ${CMAKE_BINARY_DIR}/../extern/ALE/install/mesquite/lib/libmesquite.a)
+target_link_libraries (multix /usr/lib/x86_64-linux-gnu/libexoIIv2c.so)
+
+target_link_libraries (multix /usr/lib/x86_64-linux-gnu/libtinyxml2.so)
+
+# must keep this order
+target_link_libraries (multix ${CMAKE_BINARY_DIR}/../extern/ALE/install/portage/lib/libportage_search.a)
+target_link_libraries (multix ${CMAKE_BINARY_DIR}/../extern/ALE/install/wonton/lib/libwonton_support.a)
+target_link_libraries (multix ${CMAKE_BINARY_DIR}/../extern/ALE/install/wonton/lib/libr3d.a)
+target_link_libraries (multix ${CMAKE_BINARY_DIR}/../extern/ALE/install/jali/lib/libjali_state.a)
+target_link_libraries (multix ${CMAKE_BINARY_DIR}/../extern/ALE/install/jali/lib/libjali_mesh.a)
+target_link_libraries (multix ${CMAKE_BINARY_DIR}/../extern/ALE/install/jali/lib/libjali_mesh_factory.a)
+target_link_libraries (multix ${CMAKE_BINARY_DIR}/../extern/ALE/install/jali/lib/libjali_mstk_mesh.a)
+target_link_libraries (multix ${CMAKE_BINARY_DIR}/../extern/ALE/install/jali/lib/libjali_simple_mesh.a)
+target_link_libraries (multix ${CMAKE_BINARY_DIR}/../extern/ALE/install/jali/lib/libjali_geometry.a)
+target_link_libraries (multix ${CMAKE_BINARY_DIR}/../extern/ALE/install/jali/lib/libjali_error_handling.a)
+target_link_libraries (multix ${CMAKE_BINARY_DIR}/../extern/ALE/install/mstk/lib/libmstk.a)
+target_link_libraries (multix ${CMAKE_BINARY_DIR}/../extern/ALE/install/zoltan/lib/libzoltan.a)
+target_link_libraries (multix ${CMAKE_BINARY_DIR}/../extern/ALE/install/metis/lib/libmetis.so)
+
+set_target_properties(multix PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+
+# must use .a lib, for example libmetis.so will has problems can't find libmetis
+#install(TARGETS multix DESTINATION install/bin)
+
+#find_package(CGAL)
+#if(CGAL_FOUND)
+ # message("CGAL FOUND")
+  #include_directories(${CGAL_INCLUDE_DIRS})
+  #link_directories(${CGAL_LIBRARY_DIRS})
+  #add_definitions(${CGAL_DEFINITIONS})
+  #foreach(mm ${CGAL_CONFIGURED_LIBRARIES})
+  # message(${mm})
+  #endforeach()
+#endif()
+
+#aux_source_directory(mesh/src mesh_DIR_SRCS)
+#add_executable (M++Mesh ${mesh_DIR_SRCS})
+#target_link_libraries (M++Mesh /usr/local/lib/libCGAL.so /usr/local/lib/libCGAL_Core.so /usr/lib/x86_64-linux-gnu/libgmp.so)
+#set_target_properties(M++Mesh PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
