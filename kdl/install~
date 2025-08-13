@@ -1,4 +1,0 @@
-cd orocos_kdl/
-mkdir build
-cd build
-cmake .. -DCMAKE_INSTALL_PREFIX=$PWD/../../install/kdl_install
