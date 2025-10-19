@@ -4,6 +4,6 @@ sudo apt -y install automake autoconf libbison-dev libtool flex
 ./autogen.sh
 mkdir build
 cd build
-../configure --with-ngshared --enable-cider --prefix=$PWD/../../install/ngspice_install CFLAGS="-g -m64 -O0 -Wall" LDFLAGS="-m64 -g"
+../configure --with-x --enable-cider --disable-debug CFLAGS="-m64 -O2" LDFLAGS="-m64 -s" --prefix=$PWD/../../install/ngspice_install
 make -j4
 make install
